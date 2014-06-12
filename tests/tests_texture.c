@@ -3,11 +3,11 @@
 
 START_TEST (test_texture_ref)
 {
-	struct texture *t1 = texture_create(NULL, "t1");
+	struct hyd_tex *t1 = hyd_tex_create(NULL, "t1");
 	ck_assert_int_eq(*t1->ref_count, 0);
-	struct texture *ref1 = texture_copy(t1);
+	struct hyd_tex *ref1 = hyd_tex_copy(t1);
 	ck_assert_int_eq(*t1->ref_count, 1);
-	struct texture *ref2 = texture_copy(t1);
+	struct hyd_tex *ref2 = hyd_tex_copy(t1);
 	ck_assert_int_eq(*t1->ref_count, 2);
 
 	ck_assert_str_eq(ref1->name, "t1");
@@ -15,12 +15,12 @@ START_TEST (test_texture_ref)
 	ck_assert_int_eq(*ref1->ref_count, 2);
 	ck_assert_int_eq(*ref2->ref_count, 2);
 
-	texture_destroy(ref1);
+	hyd_tex_destroy(ref1);
 	ck_assert_int_eq(*t1->ref_count, 1);
-	texture_destroy(ref2);
+	hyd_tex_destroy(ref2);
 	ck_assert_int_eq(*t1->ref_count, 0);
 	
-	texture_destroy(t1);
+	hyd_tex_destroy(t1);
 }
 END_TEST
 

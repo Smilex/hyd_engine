@@ -2,16 +2,16 @@
  * \file mod.h
  */
 
-#ifndef OPENHYDORAH_MOD_H
-#define OPENHYDORAH_MOD_H
+#ifndef HYD_MOD_H
+#define HYD_MOD_H
 
 #include <stdint.h>
 
 /**
- * \struct mod_info
+ * \struct hyd_mod_info
  * \brief Contains information for a mod
  */
-struct mod_info {
+struct hyd_mod_info {
 	char *name;
 	char *description;
 	char *filename;
@@ -19,14 +19,14 @@ struct mod_info {
 };
 
 /**
- * \struct mod
+ * \struct hyd_mod
  *
  * A mod is external code that
  * acts on specific calls
  * required by the engine
  */
-struct mod {
-	struct mod_info *info;
+struct hyd_mod {
+	struct hyd_mod_info *info;
 	void (*update)(void*, uint32_t);
 	void (*init)(void*);
 	void (*destroy)(void*);
@@ -43,12 +43,12 @@ struct mod {
  *
  * \return The new mod_info or NULL on error.
  */
-struct mod_info *mod_info_get(const char *filename);
+struct hyd_mod_info *hyd_mod_info_get(const char *filename);
 
 /**
  * \param[in] info The mod_info to destroy
  */
-void mod_info_destroy(struct mod_info *info);
+void hyd_mod_info_destroy(struct hyd_mod_info *info);
 
 /**
  * Creates the mod and informs the mod of initilization
@@ -57,7 +57,7 @@ void mod_info_destroy(struct mod_info *info);
  *
  * \return The new Mod
  */
-struct mod *mod_create(struct mod_info *info);
+struct hyd_mod *hyd_mod_create(struct hyd_mod_info *info);
 
 /**
  * Destroys the mod, along with the ModInfo.
@@ -65,7 +65,7 @@ struct mod *mod_create(struct mod_info *info);
  *
  * \param[in] mod The Mod to destroy
  */
-void mod_destroy(struct mod *mod);
+void hyd_mod_destroy(struct hyd_mod *mod);
 
 /**
  * Calls the mod's update function
@@ -73,6 +73,6 @@ void mod_destroy(struct mod *mod);
  * \param[in] mod The mod to update
  * \param[in] dt The delta time since last called
  */
-void mod_update(struct mod *mod, uint32_t dt);
+void hyd_mod_update(struct hyd_mod *mod, uint32_t dt);
 
 #endif

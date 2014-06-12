@@ -2,8 +2,8 @@
  * \file entity.h
  */
 
-#ifndef OPENHYDORAH_OBJECT_H
-#define OPENHYDORAH_OBJECT_H
+#ifndef HYD_OBJECT_H
+#define HYD_OBJECT_H
 
 #include "sprite.h"
 #include <SDL.h>
@@ -14,7 +14,7 @@
 #include "collision.h"
 
 /**
- * \struct entity
+ * \struct hyd_ent
  *
  * An entity is a game object that has a
  * sprite, collision data and a location in the game.
@@ -30,16 +30,16 @@
  * but child entities inherit transformation data from their
  * parents.
  */
-struct entity {
-	struct sprite *sprite;
+struct hyd_ent {
+	struct hyd_spr *spr;
 	char *name;
-	struct vec2 position;
-	struct entity *parent;
+	struct hyd_v2 pos;
+	struct hyd_ent *parent;
 
-	struct list children;
-	struct list branch;
-	struct list properties;
-	struct list col_objs;
+	struct hyd_list children;
+	struct hyd_list branch;
+	struct hyd_list properties;
+	struct hyd_list coll_objs;
 };
 
 /**
@@ -51,8 +51,8 @@ struct entity {
  *
  * \returns Pointer to the new entity. NULL if error.
  */
-struct entity *entity_create(struct sprite *sprite, const char *name,
-		struct entity *parent
+struct hyd_ent *hyd_ent_create(struct hyd_spr *sprite, const char *name,
+		struct hyd_ent *parent
 		);
 
 /**
@@ -63,10 +63,10 @@ struct entity *entity_create(struct sprite *sprite, const char *name,
  * \param[in] parent The entity's parent
  * \param[in] renderer The renderer to use for texture loading
  *
- * \return The new Object or NULL on error.
+ * \return The new entity or NULL on error.
  */
-struct entity *entity_create_json(json_t *root, struct list *textures,
-		struct entity *parent, SDL_Renderer *renderer);
+struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_list *textures,
+		struct hyd_ent *parent, SDL_Renderer *renderer);
 
 /**
  * \brief Creates a entity hierarchy from a JSON array
@@ -79,8 +79,8 @@ struct entity *entity_create_json(json_t *root, struct list *textures,
  *
  * \return 0 on success, non-zero on failure.
  */
-uint8_t entity_list_create_json(struct list *ent_list, json_t *root,
-		struct list *textures, struct entity *parent,
+uint8_t hyd_ent_list_create_json(struct hyd_list *ent_list, json_t *root,
+		struct hyd_list *textures, struct hyd_ent *parent,
 		SDL_Renderer *renderer);
 
 /**
@@ -93,8 +93,8 @@ uint8_t entity_list_create_json(struct list *ent_list, json_t *root,
  *
  * \return The new entity
  */
-struct entity *entity_create_file(const char *filename,
-		struct list *textures, struct entity *parent,
+struct hyd_ent *hyd_ent_create_file(const char *filename,
+		struct hyd_list *textures, struct hyd_ent *parent,
 		SDL_Renderer *renderer);
 
 /**
@@ -102,7 +102,7 @@ struct entity *entity_create_file(const char *filename,
  * \param[in] entity The entity to draw
  * \param[in] renderer The renderer to use
  */
-void entity_draw(struct entity *entity, SDL_Renderer *renderer);
+void hyd_ent_draw(struct hyd_ent *entity, SDL_Renderer *renderer);
 
 /**
  *
@@ -111,7 +111,7 @@ void entity_draw(struct entity *entity, SDL_Renderer *renderer);
  *
  * \param[in] entity The entity to destroy
  */
-void entity_destroy(struct entity *entity);
+void hyd_ent_destroy(struct hyd_ent *entity);
 
 /**
  * \brief Finds entities with name
@@ -121,7 +121,7 @@ void entity_destroy(struct entity *entity);
  *
  * \return The entities with \em name.
  */
-struct list entity_list_find(struct list entities, const char *name);
+struct hyd_list hyd_ent_list_find(struct hyd_list entities, const char *name);
 
 /**
  * \brief Finds first entity with name
@@ -131,24 +131,24 @@ struct list entity_list_find(struct list entities, const char *name);
  *
  * \return The first entity with \em name or NULL if not found.
  */
-struct entity *entity_list_find_first(struct list *entities, const char *name);
+struct hyd_ent *hyd_ent_list_find_first(struct hyd_list *entities, const char *name);
 
 /* GETTERS */
-struct sprite *entity_get_sprite(struct entity *entity);
-const char *entity_get_name(struct entity *entity);
-struct entity *entity_get_parent(struct entity *entity);
-float entity_get_position_x(struct entity *entity);
-float entity_get_position_y(struct entity *entity);
-float entity_get_number_property(struct entity *ent, const char *name);
-uint8_t entity_get_bool_property(struct entity *ent, const char *name);
-const char *entity_get_string_property(struct entity *ent, const char *name);
-struct list *entity_get_collision_objects(struct entity *ent);
+struct hyd_spr *hyd_ent_get_sprite(struct hyd_ent *entity);
+const char *hyd_ent_get_name(struct hyd_ent *entity);
+struct hyd_ent *hyd_ent_get_parent(struct hyd_ent *entity);
+float hyd_ent_get_position_x(struct hyd_ent *entity);
+float hyd_ent_get_position_y(struct hyd_ent *entity);
+float hyd_ent_get_number_property(struct hyd_ent *ent, const char *name);
+uint8_t hyd_ent_get_bool_property(struct hyd_ent *ent, const char *name);
+const char *hyd_ent_get_string_property(struct hyd_ent *ent, const char *name);
+struct hyd_list *hyd_ent_get_coll_objs(struct hyd_ent *ent);
 
 /* SETTERS */
-void entity_set_position_x(struct entity *entity, float x);
-void entity_set_position_y(struct entity *entity, float y);
-void entity_set_number_property(struct entity *ent, float value, const char *name);
-void entity_set_bool_property(struct entity *ent, uint8_t value, const char *name);
-void entity_set_string_property(struct entity *ent, const char *value, const char *name);
+void hyd_ent_set_position_x(struct hyd_ent *entity, float x);
+void hyd_ent_set_position_y(struct hyd_ent *entity, float y);
+void hyd_ent_set_number_property(struct hyd_ent *ent, float value, const char *name);
+void hyd_ent_set_bool_property(struct hyd_ent *ent, uint8_t value, const char *name);
+void hyd_ent_set_string_property(struct hyd_ent *ent, const char *value, const char *name);
 
 #endif

@@ -2,25 +2,25 @@
  * \file texture.h
  */
 
-#ifndef OPENHYDORAH_TEXTURE_H
-#define OPENHYDORAH_TEXTURE_H
+#ifndef HYD_TEXTURE_H
+#define HYD_TEXTURE_H
 
 #include <SDL.h>
 #include <SDL_image.h>
 #include "list.h"
 
 /**
- * \struct texture
+ * \struct hyd_tex
  *
  * A texture should represent visual data,
  * either from a file, or memory data.
  */
-struct texture {
+struct hyd_tex {
 	SDL_Texture *ptr;
 	uint32_t *ref_count;
 	char *name;
 
-	struct list list;
+	struct hyd_list list;
 };
 
 /**
@@ -29,7 +29,7 @@ struct texture {
  *
  * \return The new texture
  */
-struct texture *texture_create(SDL_Texture *ptr, const char *name);
+struct hyd_tex *hyd_tex_create(SDL_Texture *ptr, const char *name);
 
 /**
  * \brief Creates a new texture using data from the specified file
@@ -39,7 +39,7 @@ struct texture *texture_create(SDL_Texture *ptr, const char *name);
  *
  * \return The new texture, or NULL if there was an error
  */
-struct texture *texture_create_file(const char *filename, SDL_Renderer *renderer);
+struct hyd_tex *hyd_tex_create_file(const char *filename, SDL_Renderer *renderer);
 
 /**
  * \brief Copy a texture and increment the ref count
@@ -48,17 +48,17 @@ struct texture *texture_create_file(const char *filename, SDL_Renderer *renderer
  *
  * \return The new copy of the texture
  */
-struct texture *texture_copy(struct texture *texture);
+struct hyd_tex *hyd_tex_copy(struct hyd_tex *texture);
 
 /**
  * \param[in] texture The texture to destroy
  */
-void texture_destroy(struct texture *texture);
+void hyd_tex_destroy(struct hyd_tex *texture);
 
 /**
  * \param[in] textures The texture list to destroy
  */
-void texture_list_destroy(struct list *textures);
+void hyd_tex_list_destroy(struct hyd_list *textures);
 
 /**
  * \param[in] textures The texture list to search through
@@ -66,6 +66,6 @@ void texture_list_destroy(struct list *textures);
  *
  * \return The texture if found, NULL otherwise
  */
-struct texture *texture_list_find(struct list *textures, const char *name);
+struct hyd_tex *hyd_tex_list_find(struct hyd_list *textures, const char *name);
 
 #endif

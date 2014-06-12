@@ -7,33 +7,33 @@
  * http://www.makelinux.net/ldd3/chp-11-sect-5
  */
 
-#ifndef OPENHYDORAH_LIST_H
-#define OPENHYDORAH_LIST_H
+#ifndef HYD_LIST_H
+#define HYD_LIST_H
 
-struct list {
-	struct list *prev;
-	struct list *next;
+struct hyd_list {
+	struct hyd_list *prev;
+	struct hyd_list *next;
 };
 
 /**
  * \param[in] list The list to initialize
  *
  */
-void list_init(struct list *list);
+void hyd_list_init(struct hyd_list *list);
 
 /**
  * \param[in] new The list to add to head
  * \param[in] head The list to append to
  *
  */
-void list_append(struct list *new, struct list *head);
+void hyd_list_append(struct hyd_list *n, struct hyd_list *h);
 
 /**
  * \brief Links the prev and next of the list together
  *
  * \param[in] list The list to remove
  */
-void list_remove(struct list *list);
+void hyd_list_remove(struct hyd_list *list);
 
 /**
  * \brief Iterate over a list
@@ -41,7 +41,7 @@ void list_remove(struct list *list);
  * \param[in] iter The &struct list iterator
  * \param[in] head The list to iterate
  */
-#define list_for_each(iter, head) \
+#define hyd_list_for_each(iter, head) \
 	for (iter = (head)->next; iter != (head); iter = iter->next)
 
 /**
@@ -51,7 +51,7 @@ void list_remove(struct list *list);
  * \param[in] n The &struct list variable to use for temporary storage
  * \param[in] head The list to iterate
  */
-#define list_for_each_safe(iter, n, head) \
+#define hyd_list_for_each_safe(iter, n, head) \
 	for (iter = (head)->next, n = iter->next; iter != (head); \
 			iter = n, n = iter->next)
 
@@ -64,7 +64,7 @@ void list_remove(struct list *list);
  *
  * \return Pointer to the entry
  */
-#define list_entry(ptr, type, member) ({ \
+#define hyd_list_entry(ptr, type, member) ({ \
 		const typeof(((type *) 0)->member) *__mptr = (ptr); \
 		(type *)((char *)__mptr - ((size_t) &((type *) 0)->member)); })
 
@@ -76,10 +76,10 @@ void list_remove(struct list *list);
  * \param[in] member The name of the list member of the entry
  *
  */
-#define list_for_each_entry(iter, head, member) \
-	for (iter = list_entry((head)->next, typeof(*iter), member); \
+#define hyd_list_for_each_entry(iter, head, member) \
+	for (iter = hyd_list_entry((head)->next, typeof(*iter), member); \
 			&iter->member != (head); \
-			iter = list_entry(iter->member.next, typeof(*iter), member))
+			iter = hyd_list_entry(iter->member.next, typeof(*iter), member))
 
 /**
  * \brief Iterate over the entries of a list safely, so that entries
@@ -90,10 +90,10 @@ void list_remove(struct list *list);
  * \param[in] head The list to iterate
  * \param[in] member The name of the list member of the entry
  */
-#define list_for_each_entry_safe(iter, n, head, member) \
-	for (iter = list_entry((head)->next, typeof(*iter), member), \
-			n = list_entry(iter->member.next, typeof(*iter), member); \
+#define hyd_list_for_each_entry_safe(iter, n, head, member) \
+	for (iter = hyd_list_entry((head)->next, typeof(*iter), member), \
+			n = hyd_list_entry(iter->member.next, typeof(*iter), member); \
 			&iter->member != (head); \
-			iter = n, n = list_entry(iter->member.next, typeof(*iter), member)) \
+			iter = n, n = hyd_list_entry(iter->member.next, typeof(*iter), member)) \
 
 #endif

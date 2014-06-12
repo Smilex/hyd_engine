@@ -3,34 +3,34 @@
 
 START_TEST (test_property_number)
 {
-	struct property *p = property_create_number(1.0f, "p");
+	struct hyd_property *p = hyd_property_create_number(1.0f, "p");
 
 	ck_assert_str_eq(p->name, "p");
 	ck_assert_int_eq((int)p->value.n, 1);
 
-	property_destroy(p);
+	hyd_property_destroy(p);
 }
 END_TEST
 
 START_TEST (test_property_bool)
 {
-	struct property *p = property_create_bool(1, "p");
+	struct hyd_property *p = hyd_property_create_bool(1, "p");
 
 	ck_assert_str_eq(p->name, "p");
 	ck_assert_int_eq(p->value.b, 1);
 
-	property_destroy(p);
+	hyd_property_destroy(p);
 }
 END_TEST
 
 START_TEST (test_property_string)
 {
-	struct property *p = property_create_string("value", "p");
+	struct hyd_property *p = hyd_property_create_string("value", "p");
 
 	ck_assert_str_eq(p->name, "p");
 	ck_assert_str_eq(p->value.s, "value");
 
-	property_destroy(p);
+	hyd_property_destroy(p);
 }
 END_TEST
 

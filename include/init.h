@@ -3,8 +3,8 @@
  * Contains functions for engine initialization
  */
 
-#ifndef OPENHYDORAH_INIT_H
-#define OPENHYDORAH_INIT_H
+#ifndef HYD_INIT_H
+#define HYD_INIT_H
 
 #include <SDL.h>
 #include <physfs.h>
@@ -19,17 +19,7 @@
  *
  * \return Non zero if there was an error.
  */
-int init_sdl(SDL_Window **window, SDL_Renderer **renderer,
+int hyd_init_sdl(SDL_Window **window, SDL_Renderer **renderer,
 		const int width, const int height);
-
-/**
- * \brief Initializes PHYSFS
- *
- * \param[in] arg0 The first argument returned to main's argv.
- * Pass NULL if Windows
- *
- * \return Non zero if there was an error.
- */
-int init_fs(const char *arg0);
 
 #endif

@@ -5,12 +5,12 @@
 #include <math.h>
 #include <stdlib.h>
 
-struct entity *entity_create(struct sprite *sprite, const char *name,
-		struct entity *parent
+struct hyd_ent *hyd_ent_create(struct hyd_spr *sprite, const char *name,
+		struct hyd_ent *parent
 		)
 {
-	struct entity *ent = malloc(sizeof(*ent));
-	ent->sprite = sprite;
+	struct hyd_ent *ent = malloc(sizeof(*ent));
+	ent->spr = sprite;
 	if (name != NULL) {
 		size_t len = strlen(name);
 		ent->name = malloc(len + 1);
@@ -18,78 +18,78 @@ struct entity *entity_create(struct sprite *sprite, const char *name,
 	} else
 		ent->name = NULL;
 
-	list_init(&ent->children);
-	list_init(&ent->branch);
-	list_init(&ent->properties);
-	list_init(&ent->col_objs);
+	hyd_list_init(&ent->children);
+	hyd_list_init(&ent->branch);
+	hyd_list_init(&ent->properties);
+	hyd_list_init(&ent->coll_objs);
 
-	ent->position.x = 0.0f;
-	ent->position.y = 0.0f;
+	ent->pos.x = 0.0f;
+	ent->pos.y = 0.0f;
 	ent->parent = parent;
 	if (parent != NULL) {
-		list_append(&ent->branch, &ent->parent->children);
+		hyd_list_append(&ent->branch, &ent->parent->children);
 	}
 
 	return ent;
 }
 
-void entity_draw(struct entity *entity, SDL_Renderer *renderer)
+void hyd_ent_draw(struct hyd_ent *entity, SDL_Renderer *renderer)
 {
 	if (entity == NULL)
 		return;
 
 	SDL_Point position;
-	position.x = round(entity->position.x);
-	position.y = round(entity->position.y);
-	sprite_draw_point(entity->sprite, position, renderer);
+	position.x = round(entity->pos.x);
+	position.y = round(entity->pos.y);
+	hyd_spr_draw_point(entity->spr, position, renderer);
 
-	struct entity *iter;
+	struct hyd_ent *iter;
 
-	list_for_each_entry(iter, &entity->children, children)
+	hyd_list_for_each_entry(iter, &entity->children, children)
 	{
-		entity_draw(iter, renderer);
+		hyd_ent_draw(iter, renderer);
 	}
 
-	struct collision_object *col_iter;
-	list_for_each_entry(col_iter, &entity->col_objs, list)
+	struct hyd_coll_obj *col_iter;
+	hyd_list_for_each_entry(col_iter, &entity->coll_objs, list)
 	{
-		collision_object_draw(col_iter, renderer);
+		hyd_coll_obj_draw(col_iter, renderer);
 	}
 }
 
-void entity_destroy(struct entity *entity)
+void hyd_ent_destroy(struct hyd_ent *entity)
 {
 	if (entity == NULL)
 		return;
 
-	struct entity *child_iter;
-	struct entity *child_next;
-	list_for_each_entry_safe(child_iter, child_next, &entity->children, branch)
+	struct hyd_ent *child_iter;
+	struct hyd_ent *child_next;
+	hyd_list_for_each_entry_safe(child_iter, child_next, &entity->children, branch)
 	{
-		entity_destroy(child_iter);
+		hyd_ent_destroy(child_iter);
 	}
 
-	struct property *p_iter;
-	struct property *p_next;
-	list_for_each_entry_safe(p_iter, p_next, &entity->properties, list)
+	struct hyd_property *p_iter;
+	struct hyd_property *p_next;
+	hyd_list_for_each_entry_safe(p_iter, p_next, &entity->properties, list)
 	{
-		property_destroy(p_iter);
+		hyd_property_destroy(p_iter);
 	}
 
-	struct collision_object *col_iter;
-	struct collision_object *col_next;
-	list_for_each_entry_safe(col_iter, col_next, &entity->col_objs, list)
+	struct hyd_coll_obj *col_iter;
+	struct hyd_coll_obj *col_next;
+	hyd_list_for_each_entry_safe(col_iter, col_next, &entity->coll_objs, list)
 	{
-		collision_object_destroy(col_iter);
+		hyd_coll_obj_destroy(col_iter);
 	}
 
-	sprite_destroy(entity->sprite);
+	hyd_spr_destroy(entity->spr);
 	free(entity->name);
 	free(entity);
 }
 
-uint8_t entity_list_create_json(struct list *ent_list, json_t *root,
-		struct list *textures, struct entity *parent, SDL_Renderer *renderer)
+uint8_t hyd_ent_list_create_json(struct hyd_list *ent_list, json_t *root,
+		struct hyd_list *textures, struct hyd_ent *parent, SDL_Renderer *renderer)
 {
 	if (!json_is_array(root)) {
 		SDL_LogError(
@@ -100,12 +100,12 @@ uint8_t entity_list_create_json(struct list *ent_list, json_t *root,
 	}
 
 	uint32_t i = 0;
-	struct entity *ent;
+	struct hyd_ent *ent;
 	json_t *arr_json = NULL;
 	json_t *obj_json = NULL;
 
 	for (i = 0; i < json_array_size(root); i++) {
-		struct vec2 position = {0, };
+		struct hyd_v2 position = {0, };
 
 		arr_json = json_array_get(root, i);
 		if (!json_is_object(arr_json)) {
@@ -118,45 +118,45 @@ uint8_t entity_list_create_json(struct list *ent_list, json_t *root,
 
 		obj_json = json_object_get(arr_json, "entity");
 		if (json_is_string(obj_json)) {
-			ent = entity_create_file(json_string_value(obj_json),
+			ent = hyd_ent_create_file(json_string_value(obj_json),
 						textures, parent, renderer);
 
-			list_append(&ent->branch, ent_list);
+			hyd_list_append(&ent->branch, ent_list);
 		} else if (json_is_object(obj_json)) {
-			ent = entity_create_json(obj_json,
+			ent = hyd_ent_create_json(obj_json,
 					textures, parent, renderer);
 
-			list_append(&ent->branch, ent_list);
+			hyd_list_append(&ent->branch, ent_list);
 		}
 		else
 			continue;
 
 		obj_json = json_object_get(arr_json, "x");
 		if (json_is_number(obj_json))
-			entity_set_position_x(ent, json_number_value(obj_json));
+			hyd_ent_set_position_x(ent, json_number_value(obj_json));
 
 		obj_json = json_object_get(arr_json, "y");
 		if (json_is_number(obj_json))
-			entity_set_position_y(ent, json_number_value(obj_json));
+			hyd_ent_set_position_y(ent, json_number_value(obj_json));
 
 		obj_json = json_object_get(arr_json, "sprite");
 		if (json_is_string(obj_json)) {
-			if (ent->sprite != NULL)
-				sprite_destroy(ent->sprite);
-			ent->sprite = sprite_create_file(json_string_value(obj_json),
+			if (ent->spr != NULL)
+				hyd_spr_destroy(ent->spr);
+			ent->spr = hyd_spr_create_file(json_string_value(obj_json),
 					textures, renderer);
 		}
 
 		obj_json = json_object_get(arr_json, "properties");
 		if (json_is_object(obj_json))
-			property_list_create_json(&ent->properties, obj_json);
+			hyd_property_list_create_json(&ent->properties, obj_json);
 	}
 
 	return 0;
 }
 
-struct entity *entity_create_json(json_t *root, struct list *textures,
-		struct entity *parent, SDL_Renderer *renderer)
+struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_list *textures,
+		struct hyd_ent *parent, SDL_Renderer *renderer)
 {
 	if (!json_is_object(root)) {
 		SDL_LogError(
@@ -169,8 +169,8 @@ struct entity *entity_create_json(json_t *root, struct list *textures,
 	json_t *iter_json = NULL;
 
 	const char *name = NULL;
-	struct entity *ent = NULL;
-	struct sprite *sprite = NULL;
+	struct hyd_ent *ent = NULL;
+	struct hyd_spr *sprite = NULL;
 
 	iter_json = json_object_get(root, "name");
 	if (json_is_string(iter_json))
@@ -178,38 +178,38 @@ struct entity *entity_create_json(json_t *root, struct list *textures,
 
 	iter_json = json_object_get(root, "sprite");
 	if (json_is_string(iter_json))
-		sprite = sprite_create_file(json_string_value(iter_json),
+		sprite = hyd_spr_create_file(json_string_value(iter_json),
 				textures, renderer);
 
-	ent = entity_create(sprite, name, parent);
+	ent = hyd_ent_create(sprite, name, parent);
 
 	iter_json = json_object_get(root, "children");
 	if (json_is_array(iter_json))
-		entity_list_create_json(&ent->children,
+		hyd_ent_list_create_json(&ent->children,
 				iter_json, textures, ent, renderer);
 
 	iter_json = json_object_get(root, "properties");
 	if (json_is_object(iter_json))
-		property_list_create_json(&ent->properties, iter_json);
+		hyd_property_list_create_json(&ent->properties, iter_json);
 
 	iter_json = json_object_get(root, "collisions");
 	if (json_is_array(iter_json))
-		collision_object_list_create_json(&ent->col_objs, iter_json,
-				&ent->position);
+		hyd_coll_obj_list_create_json(&ent->coll_objs, iter_json,
+				&ent->pos);
 
 	return ent;
 }
 
-struct entity *entity_create_file(const char *filename,
-		struct list *textures, struct entity *parent, SDL_Renderer *renderer)
+struct hyd_ent *hyd_ent_create_file(const char *filename,
+		struct hyd_list *textures, struct hyd_ent *parent, SDL_Renderer *renderer)
 {
 	uint8_t *buf = NULL;
 	PHYSFS_sint64 read_length = 0;
 	json_t *root_node = NULL;
 	json_error_t error;
-	struct entity *ent = NULL;
+	struct hyd_ent *ent = NULL;
 
-	read_length = fs_read_buffer(filename, &buf);
+	read_length = hyd_fs_read_buffer(filename, &buf);
 	if (read_length == 0) {
 		SDL_LogError(
 				SDL_LOG_CATEGORY_APPLICATION,
@@ -233,15 +233,15 @@ struct entity *entity_create_file(const char *filename,
 		return NULL;
 	}
 
-	ent = entity_create_json(root_node, textures, parent, renderer);
+	ent = hyd_ent_create_json(root_node, textures, parent, renderer);
 	json_decref(root_node);
 	return ent;
 }
 
-struct entity *entity_list_find_first(struct list *entities, const char *name)
+struct hyd_ent *hyd_ent_list_find_first(struct hyd_list *entities, const char *name)
 {
-	struct entity *iter;
-	list_for_each_entry(iter, entities, branch)
+	struct hyd_ent *iter;
+	hyd_list_for_each_entry(iter, entities, branch)
 	{
 		if (strcmp(iter->name, name) == 0)
 			return iter;
@@ -250,10 +250,10 @@ struct entity *entity_list_find_first(struct list *entities, const char *name)
 	return NULL;
 }
 
-float entity_get_number_property(struct entity *ent, const char *name)
+float hyd_ent_get_number_property(struct hyd_ent *ent, const char *name)
 {
-	struct property *iter;
-	list_for_each_entry(iter, &ent->properties, list)
+	struct hyd_property *iter;
+	hyd_list_for_each_entry(iter, &ent->properties, list)
 	{
 		if (strcmp(iter->name, name) == 0)
 			return iter->value.n;
@@ -262,10 +262,10 @@ float entity_get_number_property(struct entity *ent, const char *name)
 	return 0.0f;
 }
 
-uint8_t entity_get_bool_property(struct entity *ent, const char *name)
+uint8_t hyd_ent_get_bool_property(struct hyd_ent *ent, const char *name)
 {
-	struct property *iter;
-	list_for_each_entry(iter, &ent->properties, list)
+	struct hyd_property *iter;
+	hyd_list_for_each_entry(iter, &ent->properties, list)
 	{
 		if (strcmp(iter->name, name) == 0)
 			return iter->value.b;
@@ -274,10 +274,10 @@ uint8_t entity_get_bool_property(struct entity *ent, const char *name)
 	return 0;
 }
 
-const char *entity_get_string_property(struct entity *ent, const char *name)
+const char *hyd_ent_get_string_property(struct hyd_ent *ent, const char *name)
 {
-	struct property *iter;
-	list_for_each_entry(iter, &ent->properties, list)
+	struct hyd_property *iter;
+	hyd_list_for_each_entry(iter, &ent->properties, list)
 	{
 		if (strcmp(iter->name, name) == 0)
 			return iter->value.s;
@@ -286,50 +286,50 @@ const char *entity_get_string_property(struct entity *ent, const char *name)
 	return "";
 }
 
-struct sprite *entity_get_sprite(struct entity *entity)
+struct hyd_spr *hyd_ent_get_sprite(struct hyd_ent *entity)
 {
-	return entity->sprite;
+	return entity->spr;
 }
 
-const char *entity_get_name(struct entity *entity)
+const char *hyd_ent_get_name(struct hyd_ent *entity)
 {
 	return entity->name;
 }
 
-struct entity *entity_get_parent(struct entity *entity)
+struct hyd_ent *hyd_ent_get_parent(struct hyd_ent *entity)
 {
 	return entity->parent;
 }
 
-float entity_get_position_x(struct entity *entity)
+float hyd_ent_get_position_x(struct hyd_ent *entity)
 {
-	return entity->position.x;
+	return entity->pos.x;
 }
 
-float entity_get_position_y(struct entity *entity)
+float hyd_ent_get_position_y(struct hyd_ent *entity)
 {
-	return entity->position.y;
+	return entity->pos.y;
 }
 
-struct list *entity_get_collision_objects(struct entity *ent)
+struct hyd_list *hyd_ent_get_coll_objs(struct hyd_ent *ent)
 {
-	return &ent->col_objs;
+	return &ent->coll_objs;
 }
 
-void entity_set_position_x(struct entity *entity, float x)
+void hyd_ent_set_position_x(struct hyd_ent *entity, float x)
 {
-	entity->position.x = x;
+	entity->pos.x = x;
 }
 
-void entity_set_position_y(struct entity *entity, float y)
+void hyd_ent_set_position_y(struct hyd_ent *entity, float y)
 {
-	entity->position.y = y;
+	entity->pos.y = y;
 }
 
-void entity_set_number_property(struct entity *ent, float value, const char *name)
+void hyd_ent_set_number_property(struct hyd_ent *ent, float value, const char *name)
 {
-	struct property *iter;
-	list_for_each_entry(iter, &ent->properties, list)
+	struct hyd_property *iter;
+	hyd_list_for_each_entry(iter, &ent->properties, list)
 	{
 		if (strcmp(iter->name, name) == 0) {
 			iter->type = NUMBER;
@@ -338,14 +338,14 @@ void entity_set_number_property(struct entity *ent, float value, const char *nam
 		}
 	}
 
-	list_append(&property_create_number(value, name)->list,
+	hyd_list_append(&hyd_property_create_number(value, name)->list,
 			&ent->properties);
 }
 
-void entity_set_bool_property(struct entity *ent, uint8_t value, const char *name)
+void hyd_ent_set_bool_property(struct hyd_ent *ent, uint8_t value, const char *name)
 {
-	struct property *iter;
-	list_for_each_entry(iter, &ent->properties, list)
+	struct hyd_property *iter;
+	hyd_list_for_each_entry(iter, &ent->properties, list)
 	{
 		if (strcmp(iter->name, name) == 0) {
 			iter->type = BOOL;
@@ -354,14 +354,14 @@ void entity_set_bool_property(struct entity *ent, uint8_t value, const char *nam
 		}
 	}
 
-	list_append(&property_create_bool(value, name)->list,
+	hyd_list_append(&hyd_property_create_bool(value, name)->list,
 			&ent->properties);
 }
 
-void entity_set_string_property(struct entity *ent, const char *value, const char *name)
+void hyd_ent_set_string_property(struct hyd_ent *ent, const char *value, const char *name)
 {
-	struct property *iter;
-	list_for_each_entry(iter, &ent->properties, list)
+	struct hyd_property *iter;
+	hyd_list_for_each_entry(iter, &ent->properties, list)
 	{
 		if (strcmp(iter->name, name) == 0) {
 			iter->type = STRING;
@@ -372,6 +372,6 @@ void entity_set_string_property(struct entity *ent, const char *value, const cha
 		}
 	}
 
-	list_append(&property_create_string(value, name)->list,
+	hyd_list_append(&hyd_property_create_string(value, name)->list,
 			&ent->properties);
 }

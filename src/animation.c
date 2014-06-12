@@ -4,11 +4,11 @@
 #include <string.h>
 #include <SDL.h>
 
-struct animation *animation_create(const char *name, struct frame **frames,
+struct hyd_anim *hyd_anim_create(const char *name, struct hyd_frame **frames,
 		uint32_t num_frames)
 {
-	struct animation *animation = malloc(sizeof(*animation));
-	if (animation == NULL)
+	struct hyd_anim *anim = malloc(sizeof(*anim));
+	if (anim == NULL)
 	{
 		SDL_LogError(
 				SDL_LOG_CATEGORY_APPLICATION,
@@ -17,16 +17,16 @@ struct animation *animation_create(const char *name, struct frame **frames,
 		return NULL;
 	}
 
-	animation->name = malloc(strlen(name) + 1);
-	strcpy(animation->name, name);
+	anim->name = malloc(strlen(name) + 1);
+	strcpy(anim->name, name);
 
-	animation->frames = frames;
-	animation->num_frames = num_frames;
+	anim->frames = frames;
+	anim->num_frames = num_frames;
 
-	return animation;
+	return anim;
 }
 
-struct animation *animation_create_json(json_t *root, struct frame **frames,
+struct hyd_anim *hyd_anim_create_json(json_t *root, struct hyd_frame **frames,
 		uint32_t num_frames)
 {
 	if (!json_is_object(root))
@@ -40,7 +40,7 @@ struct animation *animation_create_json(json_t *root, struct frame **frames,
 
 	json_t *iter_json;
 	const char *name;
-	struct frame **sel_frames; // frames that the animation will use
+	struct hyd_frame **sel_frames; // frames that the animation will use
 	uint32_t num_sel_frames;
 	uint32_t i;
 
@@ -72,14 +72,14 @@ struct animation *animation_create_json(json_t *root, struct frame **frames,
 		json_t *name_json;
 		name_json = json_array_get(iter_json, i);
 
-		sel_frames[i] = frame_array_find(frames, num_frames,
+		sel_frames[i] = hyd_frame_array_find(frames, num_frames,
 				json_string_value(name_json));
 	}
 
-	return animation_create(name, sel_frames, num_sel_frames);
+	return hyd_anim_create(name, sel_frames, num_sel_frames);
 }
 
-struct animation **animation_array_create_json(json_t *root, struct frame **frames,
+struct hyd_anim **hyd_anim_array_create_json(json_t *root, struct hyd_frame **frames,
 		uint32_t num_frames, uint32_t *num)
 {
 	if (!json_is_array(root))
@@ -95,7 +95,7 @@ struct animation **animation_array_create_json(json_t *root, struct frame **fram
 	if (*num == 0)
 		return NULL;
 
-	struct animation **animations = calloc(*num, sizeof(**animations));
+	struct hyd_anim **animations = calloc(*num, sizeof(**animations));
 	uint32_t i;
 
 	for (i = 0; i < *num; i++)
@@ -112,13 +112,13 @@ struct animation **animation_array_create_json(json_t *root, struct frame **fram
 			continue;
 		}
 
-		animations[i] = animation_create_json(anim_node, frames, num_frames);
+		animations[i] = hyd_anim_create_json(anim_node, frames, num_frames);
 	}
 
 	return animations;
 }
 
-void animation_destroy(struct animation *animation)
+void hyd_anim_destroy(struct hyd_anim *animation)
 {
 	free(animation->frames);
 	free(animation->name);

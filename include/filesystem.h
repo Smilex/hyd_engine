@@ -2,8 +2,8 @@
  * \file filesystem.h
  */
 
-#ifndef OPENHYDORAH_FILESYSTEM_H
-#define OPENHYDORAH_FILESYSTEM_H
+#ifndef HYD_FILESYSTEM_H
+#define HYD_FILESYSTEM_H
 
 #include <physfs.h>
 #include <stdint.h>
@@ -16,6 +16,6 @@
  *
  * \return Amount of bytes read. If 0, then \em buf is invalid
  */
-PHYSFS_sint64 fs_read_buffer(const char *filename, uint8_t **buf);
+PHYSFS_sint64 hyd_fs_read_buffer(const char *filename, uint8_t **buf);
 
 #endif
