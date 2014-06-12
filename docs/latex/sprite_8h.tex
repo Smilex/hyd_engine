@@ -1,0 +1,153 @@
+\hypertarget{sprite_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/sprite.h File Reference}
+\label{sprite_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/sprite.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/sprite.\-h}}
+}
+{\ttfamily \#include $<$S\-D\-L.\-h$>$}\\*
+{\ttfamily \#include $<$stdint.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}texture.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}frame.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}animation.\-h\char`\"{}}\\*
+{\ttfamily \#include $<$jansson.\-h$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structsprite}{sprite}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structsprite}{sprite} $\ast$ \hyperlink{sprite_8h_ad08ec17220def3de946c6b10365704d3}{sprite\-\_\-create} (struct \hyperlink{structtexture}{texture} $\ast$\hyperlink{structtexture}{texture}, struct \hyperlink{structframe}{frame} $\ast$$\ast$frames, uint32\-\_\-t num\-\_\-frames, struct \hyperlink{structanimation}{animation} $\ast$$\ast$animations, uint32\-\_\-t num\-\_\-animations)
+\item 
+struct \hyperlink{structsprite}{sprite} $\ast$ \hyperlink{sprite_8h_a8e8cf40e91bdca1422ed5d73900e206a}{sprite\-\_\-create\-\_\-json} (json\-\_\-t $\ast$root, struct \hyperlink{structlist}{list} $\ast$textures, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Creates a sprite from a J\-S\-O\-N object. \end{DoxyCompactList}\item 
+struct \hyperlink{structsprite}{sprite} $\ast$ \hyperlink{sprite_8h_af700dfc7d11ac1124438a4c6ac545adf}{sprite\-\_\-create\-\_\-file} (const char $\ast$filename, struct \hyperlink{structlist}{list} $\ast$textures, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Creates a sprite from a file. \end{DoxyCompactList}\item 
+void \hyperlink{sprite_8h_a60cc00b2cb2816ee967503c275602dde}{sprite\-\_\-destroy} (struct \hyperlink{structsprite}{sprite} $\ast$\hyperlink{structsprite}{sprite})
+\item 
+void \hyperlink{sprite_8h_a0ed71f1c32d8123c517147b4d78a6789}{sprite\-\_\-list\-\_\-destroy} (struct \hyperlink{structlist}{list} $\ast$sprites)
+\item 
+void \hyperlink{sprite_8h_a445b3bbf584d56bb3e98c881e48f425d}{sprite\-\_\-draw\-\_\-point} (struct \hyperlink{structsprite}{sprite} $\ast$\hyperlink{structsprite}{sprite}, S\-D\-L\-\_\-\-Point point, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Draws the sprite at the specified point. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{sprite_8h_ad08ec17220def3de946c6b10365704d3}{\index{sprite.\-h@{sprite.\-h}!sprite\-\_\-create@{sprite\-\_\-create}}
+\index{sprite\-\_\-create@{sprite\-\_\-create}!sprite.h@{sprite.\-h}}
+\subsubsection[{sprite\-\_\-create}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf sprite}$\ast$ sprite\-\_\-create (
+\begin{DoxyParamCaption}
+\item[{struct {\bf texture} $\ast$}]{texture, }
+\item[{struct {\bf frame} $\ast$$\ast$}]{frames, }
+\item[{uint32\-\_\-t}]{num\-\_\-frames, }
+\item[{struct {\bf animation} $\ast$$\ast$}]{animations, }
+\item[{uint32\-\_\-t}]{num\-\_\-animations}
+\end{DoxyParamCaption}
+)}}\label{sprite_8h_ad08ec17220def3de946c6b10365704d3}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em texture} & The sprite's texture \\
+\hline
+\mbox{\tt in}  & {\em frames} & The sprite's frames \\
+\hline
+\mbox{\tt in}  & {\em default\-Frame} & The frame to use by default. If N\-U\-L\-L, then it's the first in {\itshape frames} \\
+\hline
+\mbox{\tt in}  & {\em animations} & The sprite's animations\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new sprite or N\-U\-L\-L on error. 
+\end{DoxyReturn}
+\hypertarget{sprite_8h_af700dfc7d11ac1124438a4c6ac545adf}{\index{sprite.\-h@{sprite.\-h}!sprite\-\_\-create\-\_\-file@{sprite\-\_\-create\-\_\-file}}
+\index{sprite\-\_\-create\-\_\-file@{sprite\-\_\-create\-\_\-file}!sprite.h@{sprite.\-h}}
+\subsubsection[{sprite\-\_\-create\-\_\-file}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf sprite}$\ast$ sprite\-\_\-create\-\_\-file (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{filename, }
+\item[{struct {\bf list} $\ast$}]{textures, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{sprite_8h_af700dfc7d11ac1124438a4c6ac545adf}
+
+
+Creates a sprite from a file. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em filename} & The file to read from \\
+\hline
+\mbox{\tt out}  & {\em textures} & The list to add the sprite textures to \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use for texture loading\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new sprite or N\-U\-L\-L on error 
+\end{DoxyReturn}
+\hypertarget{sprite_8h_a8e8cf40e91bdca1422ed5d73900e206a}{\index{sprite.\-h@{sprite.\-h}!sprite\-\_\-create\-\_\-json@{sprite\-\_\-create\-\_\-json}}
+\index{sprite\-\_\-create\-\_\-json@{sprite\-\_\-create\-\_\-json}!sprite.h@{sprite.\-h}}
+\subsubsection[{sprite\-\_\-create\-\_\-json}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf sprite}$\ast$ sprite\-\_\-create\-\_\-json (
+\begin{DoxyParamCaption}
+\item[{json\-\_\-t $\ast$}]{root, }
+\item[{struct {\bf list} $\ast$}]{textures, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{sprite_8h_a8e8cf40e91bdca1422ed5d73900e206a}
+
+
+Creates a sprite from a J\-S\-O\-N object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em root} & The J\-S\-O\-N object \\
+\hline
+\mbox{\tt out}  & {\em textures} & The list to add the sprite textures to \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use for texture loading\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new sprite or N\-U\-L\-L on error 
+\end{DoxyReturn}
+\hypertarget{sprite_8h_a60cc00b2cb2816ee967503c275602dde}{\index{sprite.\-h@{sprite.\-h}!sprite\-\_\-destroy@{sprite\-\_\-destroy}}
+\index{sprite\-\_\-destroy@{sprite\-\_\-destroy}!sprite.h@{sprite.\-h}}
+\subsubsection[{sprite\-\_\-destroy}]{\setlength{\rightskip}{0pt plus 5cm}void sprite\-\_\-destroy (
+\begin{DoxyParamCaption}
+\item[{struct {\bf sprite} $\ast$}]{sprite}
+\end{DoxyParamCaption}
+)}}\label{sprite_8h_a60cc00b2cb2816ee967503c275602dde}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em sprite} & The sprite to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{sprite_8h_a445b3bbf584d56bb3e98c881e48f425d}{\index{sprite.\-h@{sprite.\-h}!sprite\-\_\-draw\-\_\-point@{sprite\-\_\-draw\-\_\-point}}
+\index{sprite\-\_\-draw\-\_\-point@{sprite\-\_\-draw\-\_\-point}!sprite.h@{sprite.\-h}}
+\subsubsection[{sprite\-\_\-draw\-\_\-point}]{\setlength{\rightskip}{0pt plus 5cm}void sprite\-\_\-draw\-\_\-point (
+\begin{DoxyParamCaption}
+\item[{struct {\bf sprite} $\ast$}]{sprite, }
+\item[{S\-D\-L\-\_\-\-Point}]{point, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{sprite_8h_a445b3bbf584d56bb3e98c881e48f425d}
+
+
+Draws the sprite at the specified point. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em sprite} & Sprite to draw \\
+\hline
+\mbox{\tt in}  & {\em point} & The point to draw at \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use \\
+\hline
+\end{DoxyParams}
+\hypertarget{sprite_8h_a0ed71f1c32d8123c517147b4d78a6789}{\index{sprite.\-h@{sprite.\-h}!sprite\-\_\-list\-\_\-destroy@{sprite\-\_\-list\-\_\-destroy}}
+\index{sprite\-\_\-list\-\_\-destroy@{sprite\-\_\-list\-\_\-destroy}!sprite.h@{sprite.\-h}}
+\subsubsection[{sprite\-\_\-list\-\_\-destroy}]{\setlength{\rightskip}{0pt plus 5cm}void sprite\-\_\-list\-\_\-destroy (
+\begin{DoxyParamCaption}
+\item[{struct {\bf list} $\ast$}]{sprites}
+\end{DoxyParamCaption}
+)}}\label{sprite_8h_a0ed71f1c32d8123c517147b4d78a6789}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em sprites} & The list of sprites to destroy \\
+\hline
+\end{DoxyParams}

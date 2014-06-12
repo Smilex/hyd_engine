@@ -1,0 +1,219 @@
+\hypertarget{list_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/list.h File Reference}
+\label{list_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/list.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/list.\-h}}
+}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structlist}{list}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{list_8h_af5855b42646914398dd92f34e653d713}{list\-\_\-for\-\_\-each}(iter, head)~for (iter = (head)-\/$>$next; iter != (head); iter = iter-\/$>$next)
+\begin{DoxyCompactList}\small\item\em Iterate over a list. \end{DoxyCompactList}\item 
+\#define \hyperlink{list_8h_ab228ec9f7556f22b9091d3948fb2f07f}{list\-\_\-for\-\_\-each\-\_\-safe}(iter, n, head)
+\begin{DoxyCompactList}\small\item\em Iterate over a list safely, so that entries can be removed. \end{DoxyCompactList}\item 
+\#define \hyperlink{list_8h_a26c976b7f654e70df318c1843e5094de}{list\-\_\-entry}(ptr, type, member)
+\begin{DoxyCompactList}\small\item\em Get the struct for this entry. \end{DoxyCompactList}\item 
+\#define \hyperlink{list_8h_ad8b845bb4de138f8badabf2374d3f30b}{list\-\_\-for\-\_\-each\-\_\-entry}(iter, head, member)
+\begin{DoxyCompactList}\small\item\em Iterate over the entries of a list. \end{DoxyCompactList}\item 
+\#define \hyperlink{list_8h_aa40a88129a14e1fc5e25bd738d95b67c}{list\-\_\-for\-\_\-each\-\_\-entry\-\_\-safe}(iter, n, head, member)
+\begin{DoxyCompactList}\small\item\em Iterate over the entries of a list safely, so that entries can be removed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{list_8h_a8aa862d10f52f7b0348fce990c7c12db}{list\-\_\-init} (struct \hyperlink{structlist}{list} $\ast$\hyperlink{structlist}{list})
+\item 
+void \hyperlink{list_8h_abec6aaedd79120e624e94da6114a9684}{list\-\_\-append} (struct \hyperlink{structlist}{list} $\ast$new, struct \hyperlink{structlist}{list} $\ast$head)
+\item 
+void \hyperlink{list_8h_a3bf60257776f4e6eea3797b550b77db5}{list\-\_\-remove} (struct \hyperlink{structlist}{list} $\ast$\hyperlink{structlist}{list})
+\begin{DoxyCompactList}\small\item\em Links the prev and next of the list together. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This has been heavily inspired by \href{http://kernelnewbies.org/FAQ/LinkedLists}{\tt http\-://kernelnewbies.\-org/\-F\-A\-Q/\-Linked\-Lists} and \href{http://www.makelinux.net/ldd3/chp-11-sect-5}{\tt http\-://www.\-makelinux.\-net/ldd3/chp-\/11-\/sect-\/5} 
+
+\subsection{Macro Definition Documentation}
+\hypertarget{list_8h_a26c976b7f654e70df318c1843e5094de}{\index{list.\-h@{list.\-h}!list\-\_\-entry@{list\-\_\-entry}}
+\index{list\-\_\-entry@{list\-\_\-entry}!list.h@{list.\-h}}
+\subsubsection[{list\-\_\-entry}]{\setlength{\rightskip}{0pt plus 5cm}\#define list\-\_\-entry(
+\begin{DoxyParamCaption}
+\item[{}]{ptr, }
+\item[{}]{type, }
+\item[{}]{member}
+\end{DoxyParamCaption}
+)}}\label{list_8h_a26c976b7f654e70df318c1843e5094de}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+(\{ \(\backslash\)
+        const typeof(((type *) 0)->member) *\_\_mptr = (ptr); \(\backslash\)
+        (type *)((\textcolor{keywordtype}{char} *)\_\_mptr - ((size\_t) &((type *) 0)->member)); \})
+\end{DoxyCode}
+
+
+Get the struct for this entry. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em ptr} & The \&struct list iterator \\
+\hline
+\mbox{\tt in}  & {\em type} & The type of the entry \\
+\hline
+\mbox{\tt in}  & {\em member} & The name of the list member of the entry\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the entry 
+\end{DoxyReturn}
+\hypertarget{list_8h_af5855b42646914398dd92f34e653d713}{\index{list.\-h@{list.\-h}!list\-\_\-for\-\_\-each@{list\-\_\-for\-\_\-each}}
+\index{list\-\_\-for\-\_\-each@{list\-\_\-for\-\_\-each}!list.h@{list.\-h}}
+\subsubsection[{list\-\_\-for\-\_\-each}]{\setlength{\rightskip}{0pt plus 5cm}\#define list\-\_\-for\-\_\-each(
+\begin{DoxyParamCaption}
+\item[{}]{iter, }
+\item[{}]{head}
+\end{DoxyParamCaption}
+)~for (iter = (head)-\/$>$next; iter != (head); iter = iter-\/$>$next)}}\label{list_8h_af5855b42646914398dd92f34e653d713}
+
+
+Iterate over a list. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em iter} & The \&struct list iterator \\
+\hline
+\mbox{\tt in}  & {\em head} & The list to iterate \\
+\hline
+\end{DoxyParams}
+\hypertarget{list_8h_ad8b845bb4de138f8badabf2374d3f30b}{\index{list.\-h@{list.\-h}!list\-\_\-for\-\_\-each\-\_\-entry@{list\-\_\-for\-\_\-each\-\_\-entry}}
+\index{list\-\_\-for\-\_\-each\-\_\-entry@{list\-\_\-for\-\_\-each\-\_\-entry}!list.h@{list.\-h}}
+\subsubsection[{list\-\_\-for\-\_\-each\-\_\-entry}]{\setlength{\rightskip}{0pt plus 5cm}\#define list\-\_\-for\-\_\-each\-\_\-entry(
+\begin{DoxyParamCaption}
+\item[{}]{iter, }
+\item[{}]{head, }
+\item[{}]{member}
+\end{DoxyParamCaption}
+)}}\label{list_8h_ad8b845bb4de138f8badabf2374d3f30b}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{for} (iter = \hyperlink{list_8h_a26c976b7f654e70df318c1843e5094de}{list\_entry}((head)->next, typeof(*iter), member); \(\backslash\)
+            &iter->member != (head); \(\backslash\)
+            iter = \hyperlink{list_8h_a26c976b7f654e70df318c1843e5094de}{list\_entry}(iter->member.next, typeof(*iter), member))
+\end{DoxyCode}
+
+
+Iterate over the entries of a list. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em iter} & The iterator as a type $\ast$ of the entries \\
+\hline
+\mbox{\tt in}  & {\em head} & The list to iterate over \\
+\hline
+\mbox{\tt in}  & {\em member} & The name of the list member of the entry \\
+\hline
+\end{DoxyParams}
+\hypertarget{list_8h_aa40a88129a14e1fc5e25bd738d95b67c}{\index{list.\-h@{list.\-h}!list\-\_\-for\-\_\-each\-\_\-entry\-\_\-safe@{list\-\_\-for\-\_\-each\-\_\-entry\-\_\-safe}}
+\index{list\-\_\-for\-\_\-each\-\_\-entry\-\_\-safe@{list\-\_\-for\-\_\-each\-\_\-entry\-\_\-safe}!list.h@{list.\-h}}
+\subsubsection[{list\-\_\-for\-\_\-each\-\_\-entry\-\_\-safe}]{\setlength{\rightskip}{0pt plus 5cm}\#define list\-\_\-for\-\_\-each\-\_\-entry\-\_\-safe(
+\begin{DoxyParamCaption}
+\item[{}]{iter, }
+\item[{}]{n, }
+\item[{}]{head, }
+\item[{}]{member}
+\end{DoxyParamCaption}
+)}}\label{list_8h_aa40a88129a14e1fc5e25bd738d95b67c}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{for} (iter = \hyperlink{list_8h_a26c976b7f654e70df318c1843e5094de}{list\_entry}((head)->next, typeof(*iter), member), \(\backslash\)
+            n = \hyperlink{list_8h_a26c976b7f654e70df318c1843e5094de}{list\_entry}(iter->member.next, typeof(*iter), member); \(\backslash\)
+            &iter->member != (head); \(\backslash\)
+            iter = n, n = \hyperlink{list_8h_a26c976b7f654e70df318c1843e5094de}{list\_entry}(iter->member.next, typeof(*iter), member)) \(\backslash\)
+\end{DoxyCode}
+
+
+Iterate over the entries of a list safely, so that entries can be removed. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em iter} & The iterator as a type $\ast$ of the entries \\
+\hline
+\mbox{\tt in}  & {\em n} & The type $\ast$ variable to use for temporary storage \\
+\hline
+\mbox{\tt in}  & {\em head} & The list to iterate \\
+\hline
+\mbox{\tt in}  & {\em member} & The name of the list member of the entry \\
+\hline
+\end{DoxyParams}
+\hypertarget{list_8h_ab228ec9f7556f22b9091d3948fb2f07f}{\index{list.\-h@{list.\-h}!list\-\_\-for\-\_\-each\-\_\-safe@{list\-\_\-for\-\_\-each\-\_\-safe}}
+\index{list\-\_\-for\-\_\-each\-\_\-safe@{list\-\_\-for\-\_\-each\-\_\-safe}!list.h@{list.\-h}}
+\subsubsection[{list\-\_\-for\-\_\-each\-\_\-safe}]{\setlength{\rightskip}{0pt plus 5cm}\#define list\-\_\-for\-\_\-each\-\_\-safe(
+\begin{DoxyParamCaption}
+\item[{}]{iter, }
+\item[{}]{n, }
+\item[{}]{head}
+\end{DoxyParamCaption}
+)}}\label{list_8h_ab228ec9f7556f22b9091d3948fb2f07f}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{for} (iter = (head)->next, n = iter->next; iter != (head); \(\backslash\)
+            iter = n, n = iter->next)
+\end{DoxyCode}
+
+
+Iterate over a list safely, so that entries can be removed. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em iter} & The \&struct list iterator \\
+\hline
+\mbox{\tt in}  & {\em n} & The \&struct list variable to use for temporary storage \\
+\hline
+\mbox{\tt in}  & {\em head} & The list to iterate \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Function Documentation}
+\hypertarget{list_8h_abec6aaedd79120e624e94da6114a9684}{\index{list.\-h@{list.\-h}!list\-\_\-append@{list\-\_\-append}}
+\index{list\-\_\-append@{list\-\_\-append}!list.h@{list.\-h}}
+\subsubsection[{list\-\_\-append}]{\setlength{\rightskip}{0pt plus 5cm}void list\-\_\-append (
+\begin{DoxyParamCaption}
+\item[{struct {\bf list} $\ast$}]{new, }
+\item[{struct {\bf list} $\ast$}]{head}
+\end{DoxyParamCaption}
+)}}\label{list_8h_abec6aaedd79120e624e94da6114a9684}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em new} & The list to add to head \\
+\hline
+\mbox{\tt in}  & {\em head} & The list to append to \\
+\hline
+\end{DoxyParams}
+\hypertarget{list_8h_a8aa862d10f52f7b0348fce990c7c12db}{\index{list.\-h@{list.\-h}!list\-\_\-init@{list\-\_\-init}}
+\index{list\-\_\-init@{list\-\_\-init}!list.h@{list.\-h}}
+\subsubsection[{list\-\_\-init}]{\setlength{\rightskip}{0pt plus 5cm}void list\-\_\-init (
+\begin{DoxyParamCaption}
+\item[{struct {\bf list} $\ast$}]{list}
+\end{DoxyParamCaption}
+)}}\label{list_8h_a8aa862d10f52f7b0348fce990c7c12db}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em list} & The list to initialize \\
+\hline
+\end{DoxyParams}
+\hypertarget{list_8h_a3bf60257776f4e6eea3797b550b77db5}{\index{list.\-h@{list.\-h}!list\-\_\-remove@{list\-\_\-remove}}
+\index{list\-\_\-remove@{list\-\_\-remove}!list.h@{list.\-h}}
+\subsubsection[{list\-\_\-remove}]{\setlength{\rightskip}{0pt plus 5cm}void list\-\_\-remove (
+\begin{DoxyParamCaption}
+\item[{struct {\bf list} $\ast$}]{list}
+\end{DoxyParamCaption}
+)}}\label{list_8h_a3bf60257776f4e6eea3797b550b77db5}
+
+
+Links the prev and next of the list together. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em list} & The list to remove \\
+\hline
+\end{DoxyParams}

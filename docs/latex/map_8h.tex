@@ -1,0 +1,126 @@
+\hypertarget{map_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/map.h File Reference}
+\label{map_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/map.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/map.\-h}}
+}
+{\ttfamily \#include \char`\"{}texture.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}list.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}entity.\-h\char`\"{}}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structmap}{map}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structmap}{map} $\ast$ \hyperlink{map_8h_ac00408b74ac39b7981a2b1e2c5f67fc1}{map\-\_\-create} (void)
+\item 
+struct \hyperlink{structmap}{map} $\ast$ \hyperlink{map_8h_a54630450a711950537ff18f891df7c9d}{map\-\_\-create\-\_\-json} (json\-\_\-t $\ast$root, struct \hyperlink{structlist}{list} $\ast$textures)
+\begin{DoxyCompactList}\small\item\em Creates a new map from a J\-S\-O\-N object. \end{DoxyCompactList}\item 
+struct \hyperlink{structmap}{map} $\ast$ \hyperlink{map_8h_ae15ac48d240f3694d0e67eb35498094a}{map\-\_\-create\-\_\-file} (const char $\ast$filename, struct \hyperlink{structlist}{list} $\ast$textures)
+\begin{DoxyCompactList}\small\item\em Creates a new Map from file. \end{DoxyCompactList}\item 
+void \hyperlink{map_8h_a0b7d4ab29383d6183dd7ce1c95b38865}{map\-\_\-destroy} (struct \hyperlink{structmap}{map} $\ast$\hyperlink{structmap}{map})
+\begin{DoxyCompactList}\small\item\em Destroys the map and its objects. \end{DoxyCompactList}\item 
+void \hyperlink{map_8h_a981650ae884b2f6ce4f4416ecb40ec7a}{map\-\_\-draw} (struct \hyperlink{structmap}{map} $\ast$\hyperlink{structmap}{map}, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Draws the map. \end{DoxyCompactList}\item 
+\hypertarget{map_8h_a5fb611dd7ba91375fde285ee7f3ff592}{struct \hyperlink{structlist}{list} $\ast$ {\bfseries map\-\_\-get\-\_\-entities} (struct \hyperlink{structmap}{map} $\ast$\hyperlink{structmap}{map})}\label{map_8h_a5fb611dd7ba91375fde285ee7f3ff592}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{map_8h_ac00408b74ac39b7981a2b1e2c5f67fc1}{\index{map.\-h@{map.\-h}!map\-\_\-create@{map\-\_\-create}}
+\index{map\-\_\-create@{map\-\_\-create}!map.h@{map.\-h}}
+\subsubsection[{map\-\_\-create}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf map}$\ast$ map\-\_\-create (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{map_8h_ac00408b74ac39b7981a2b1e2c5f67fc1}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em entities} & The map's entities\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new Map 
+\end{DoxyReturn}
+\hypertarget{map_8h_ae15ac48d240f3694d0e67eb35498094a}{\index{map.\-h@{map.\-h}!map\-\_\-create\-\_\-file@{map\-\_\-create\-\_\-file}}
+\index{map\-\_\-create\-\_\-file@{map\-\_\-create\-\_\-file}!map.h@{map.\-h}}
+\subsubsection[{map\-\_\-create\-\_\-file}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf map}$\ast$ map\-\_\-create\-\_\-file (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{filename, }
+\item[{struct {\bf list} $\ast$}]{textures}
+\end{DoxyParamCaption}
+)}}\label{map_8h_ae15ac48d240f3694d0e67eb35498094a}
+
+
+Creates a new Map from file. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em filename} & Path to file to read \\
+\hline
+\mbox{\tt out}  & {\em textures} & The list to add the sprites' textures\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new Map 
+\end{DoxyReturn}
+\hypertarget{map_8h_a54630450a711950537ff18f891df7c9d}{\index{map.\-h@{map.\-h}!map\-\_\-create\-\_\-json@{map\-\_\-create\-\_\-json}}
+\index{map\-\_\-create\-\_\-json@{map\-\_\-create\-\_\-json}!map.h@{map.\-h}}
+\subsubsection[{map\-\_\-create\-\_\-json}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf map}$\ast$ map\-\_\-create\-\_\-json (
+\begin{DoxyParamCaption}
+\item[{json\-\_\-t $\ast$}]{root, }
+\item[{struct {\bf list} $\ast$}]{textures}
+\end{DoxyParamCaption}
+)}}\label{map_8h_a54630450a711950537ff18f891df7c9d}
+
+
+Creates a new map from a J\-S\-O\-N object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em root} & The J\-S\-O\-N object \\
+\hline
+\mbox{\tt out}  & {\em textures} & The list to add the sprites' textures\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new Map 
+\end{DoxyReturn}
+\hypertarget{map_8h_a0b7d4ab29383d6183dd7ce1c95b38865}{\index{map.\-h@{map.\-h}!map\-\_\-destroy@{map\-\_\-destroy}}
+\index{map\-\_\-destroy@{map\-\_\-destroy}!map.h@{map.\-h}}
+\subsubsection[{map\-\_\-destroy}]{\setlength{\rightskip}{0pt plus 5cm}void map\-\_\-destroy (
+\begin{DoxyParamCaption}
+\item[{struct {\bf map} $\ast$}]{map}
+\end{DoxyParamCaption}
+)}}\label{map_8h_a0b7d4ab29383d6183dd7ce1c95b38865}
+
+
+Destroys the map and its objects. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em map} & The map to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{map_8h_a981650ae884b2f6ce4f4416ecb40ec7a}{\index{map.\-h@{map.\-h}!map\-\_\-draw@{map\-\_\-draw}}
+\index{map\-\_\-draw@{map\-\_\-draw}!map.h@{map.\-h}}
+\subsubsection[{map\-\_\-draw}]{\setlength{\rightskip}{0pt plus 5cm}void map\-\_\-draw (
+\begin{DoxyParamCaption}
+\item[{struct {\bf map} $\ast$}]{map, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{map_8h_a981650ae884b2f6ce4f4416ecb40ec7a}
+
+
+Draws the map. 
+
+This draws everything in the map
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em map} & The map to draw \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use \\
+\hline
+\end{DoxyParams}

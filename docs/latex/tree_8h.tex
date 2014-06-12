@@ -1,0 +1,40 @@
+\hypertarget{tree_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/tree.h File Reference}
+\label{tree_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/tree.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/tree.\-h}}
+}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structtree}{tree}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{tree_8h_a8c541df1a621a9e445f59c1464269590}{T\-R\-E\-E\-\_\-\-I\-N\-I\-T}(name, parent)~\{ parent, \&(name), \&(name) \}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{tree_8h_a8c541df1a621a9e445f59c1464269590}{\index{tree.\-h@{tree.\-h}!T\-R\-E\-E\-\_\-\-I\-N\-I\-T@{T\-R\-E\-E\-\_\-\-I\-N\-I\-T}}
+\index{T\-R\-E\-E\-\_\-\-I\-N\-I\-T@{T\-R\-E\-E\-\_\-\-I\-N\-I\-T}!tree.h@{tree.\-h}}
+\subsubsection[{T\-R\-E\-E\-\_\-\-I\-N\-I\-T}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\-R\-E\-E\-\_\-\-I\-N\-I\-T(
+\begin{DoxyParamCaption}
+\item[{}]{name, }
+\item[{}]{parent}
+\end{DoxyParamCaption}
+)~\{ parent, \&(name), \&(name) \}}}\label{tree_8h_a8c541df1a621a9e445f59c1464269590}
+U\-S\-A\-G\-E\-: 
+\begin{DoxyCode}
+\textcolor{keyword}{struct }\hyperlink{structtree}{tree} t = \hyperlink{tree_8h_a8c541df1a621a9e445f59c1464269590}{TREE\_INIT}(t, NULL)
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em name} & The tree member of a struct \\
+\hline
+\mbox{\tt in}  & {\em parent} & The tree's parent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An initializer for the tree struct 
+\end{DoxyReturn}

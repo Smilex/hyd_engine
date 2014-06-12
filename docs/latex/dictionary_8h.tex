@@ -1,0 +1,88 @@
+\hypertarget{dictionary_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/dictionary.h File Reference}
+\label{dictionary_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/dictionary.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/dictionary.\-h}}
+}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structdict}{dict}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{dictionary_8h_a910f6f09dc991f01f4adaa6c84bf333f}{dict\-\_\-init} (struct \hyperlink{structdict}{dict} $\ast$\hyperlink{structdict}{dict}, const char $\ast$key)
+\item 
+void \hyperlink{dictionary_8h_a285797f381023300dc4e6cfe0ecb0cdc}{dict\-\_\-append} (struct \hyperlink{structdict}{dict} $\ast$new, struct \hyperlink{structdict}{dict} $\ast$head)
+\item 
+struct \hyperlink{structdict}{dict} $\ast$ \hyperlink{dictionary_8h_acf798d83a931031822e85bbdb74b8f92}{dict\-\_\-find} (const char $\ast$key, struct \hyperlink{structdict}{dict} $\ast$head)
+\item 
+struct \hyperlink{structdict}{dict} $\ast$ \hyperlink{dictionary_8h_a69d0517f81db9be138f6443405f18f2d}{dict\-\_\-find\-\_\-entry} (const char $\ast$key, struct \hyperlink{structdict}{dict} $\ast$head)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{dictionary_8h_a285797f381023300dc4e6cfe0ecb0cdc}{\index{dictionary.\-h@{dictionary.\-h}!dict\-\_\-append@{dict\-\_\-append}}
+\index{dict\-\_\-append@{dict\-\_\-append}!dictionary.h@{dictionary.\-h}}
+\subsubsection[{dict\-\_\-append}]{\setlength{\rightskip}{0pt plus 5cm}void dict\-\_\-append (
+\begin{DoxyParamCaption}
+\item[{struct {\bf dict} $\ast$}]{new, }
+\item[{struct {\bf dict} $\ast$}]{head}
+\end{DoxyParamCaption}
+)}}\label{dictionary_8h_a285797f381023300dc4e6cfe0ecb0cdc}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em new} & The dictionary to add to head \\
+\hline
+\mbox{\tt in}  & {\em head} & The dictionary to append to \\
+\hline
+\end{DoxyParams}
+\hypertarget{dictionary_8h_acf798d83a931031822e85bbdb74b8f92}{\index{dictionary.\-h@{dictionary.\-h}!dict\-\_\-find@{dict\-\_\-find}}
+\index{dict\-\_\-find@{dict\-\_\-find}!dictionary.h@{dictionary.\-h}}
+\subsubsection[{dict\-\_\-find}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf dict}$\ast$ dict\-\_\-find (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{key, }
+\item[{struct {\bf dict} $\ast$}]{head}
+\end{DoxyParamCaption}
+)}}\label{dictionary_8h_acf798d83a931031822e85bbdb74b8f92}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em key} & The key to search for \\
+\hline
+\mbox{\tt in}  & {\em head} & The dictionary to search through\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The dictionary, associated with key, if found. N\-U\-L\-L otherwise. 
+\end{DoxyReturn}
+\hypertarget{dictionary_8h_a69d0517f81db9be138f6443405f18f2d}{\index{dictionary.\-h@{dictionary.\-h}!dict\-\_\-find\-\_\-entry@{dict\-\_\-find\-\_\-entry}}
+\index{dict\-\_\-find\-\_\-entry@{dict\-\_\-find\-\_\-entry}!dictionary.h@{dictionary.\-h}}
+\subsubsection[{dict\-\_\-find\-\_\-entry}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf dict}$\ast$ dict\-\_\-find\-\_\-entry (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{key, }
+\item[{struct {\bf dict} $\ast$}]{head}
+\end{DoxyParamCaption}
+)}}\label{dictionary_8h_a69d0517f81db9be138f6443405f18f2d}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em key} & The key to search for \\
+\hline
+\mbox{\tt in}  & {\em head} & The dictionary to search through\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The dictionary entry, associated with key, if found. N\-U\-L\-L otherwise. 
+\end{DoxyReturn}
+\hypertarget{dictionary_8h_a910f6f09dc991f01f4adaa6c84bf333f}{\index{dictionary.\-h@{dictionary.\-h}!dict\-\_\-init@{dict\-\_\-init}}
+\index{dict\-\_\-init@{dict\-\_\-init}!dictionary.h@{dictionary.\-h}}
+\subsubsection[{dict\-\_\-init}]{\setlength{\rightskip}{0pt plus 5cm}void dict\-\_\-init (
+\begin{DoxyParamCaption}
+\item[{struct {\bf dict} $\ast$}]{dict, }
+\item[{const char $\ast$}]{key}
+\end{DoxyParamCaption}
+)}}\label{dictionary_8h_a910f6f09dc991f01f4adaa6c84bf333f}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em dict} & The dictionary to initialize \\
+\hline
+\mbox{\tt in}  & {\em key} & The key associated with the dictionary \\
+\hline
+\end{DoxyParams}

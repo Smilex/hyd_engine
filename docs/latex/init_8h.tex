@@ -1,0 +1,65 @@
+\hypertarget{init_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/init.h File Reference}
+\label{init_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/init.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/init.\-h}}
+}
+{\ttfamily \#include $<$S\-D\-L.\-h$>$}\\*
+{\ttfamily \#include $<$physfs.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{init_8h_a331a47f99a55baaa4657b515c065481e}{init\-\_\-sdl} (S\-D\-L\-\_\-\-Window $\ast$$\ast$window, S\-D\-L\-\_\-\-Renderer $\ast$$\ast$renderer, const int width, const int height)
+\begin{DoxyCompactList}\small\item\em Initializes S\-D\-L. \end{DoxyCompactList}\item 
+int \hyperlink{init_8h_ab7b2f8af051af2876c0c7f73cac10b56}{init\-\_\-fs} (const char $\ast$arg0)
+\begin{DoxyCompactList}\small\item\em Initializes P\-H\-Y\-S\-F\-S. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Contains functions for engine initialization 
+
+\subsection{Function Documentation}
+\hypertarget{init_8h_ab7b2f8af051af2876c0c7f73cac10b56}{\index{init.\-h@{init.\-h}!init\-\_\-fs@{init\-\_\-fs}}
+\index{init\-\_\-fs@{init\-\_\-fs}!init.h@{init.\-h}}
+\subsubsection[{init\-\_\-fs}]{\setlength{\rightskip}{0pt plus 5cm}int init\-\_\-fs (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{arg0}
+\end{DoxyParamCaption}
+)}}\label{init_8h_ab7b2f8af051af2876c0c7f73cac10b56}
+
+
+Initializes P\-H\-Y\-S\-F\-S. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em arg0} & The first argument returned to main's argv. Pass N\-U\-L\-L if Windows\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Non zero if there was an error. 
+\end{DoxyReturn}
+\hypertarget{init_8h_a331a47f99a55baaa4657b515c065481e}{\index{init.\-h@{init.\-h}!init\-\_\-sdl@{init\-\_\-sdl}}
+\index{init\-\_\-sdl@{init\-\_\-sdl}!init.h@{init.\-h}}
+\subsubsection[{init\-\_\-sdl}]{\setlength{\rightskip}{0pt plus 5cm}int init\-\_\-sdl (
+\begin{DoxyParamCaption}
+\item[{S\-D\-L\-\_\-\-Window $\ast$$\ast$}]{window, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$$\ast$}]{renderer, }
+\item[{const int}]{width, }
+\item[{const int}]{height}
+\end{DoxyParamCaption}
+)}}\label{init_8h_a331a47f99a55baaa4657b515c065481e}
+
+
+Initializes S\-D\-L. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em window} & Returns the created window \\
+\hline
+\mbox{\tt out}  & {\em renderer} & Returns the created renderer \\
+\hline
+\mbox{\tt in}  & {\em width} & The window width \\
+\hline
+\mbox{\tt in}  & {\em height} & The window height\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Non zero if there was an error. 
+\end{DoxyReturn}

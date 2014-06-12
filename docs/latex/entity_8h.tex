@@ -1,0 +1,248 @@
+\hypertarget{entity_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/entity.h File Reference}
+\label{entity_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/entity.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/entity.\-h}}
+}
+{\ttfamily \#include \char`\"{}sprite.\-h\char`\"{}}\\*
+{\ttfamily \#include $<$S\-D\-L.\-h$>$}\\*
+{\ttfamily \#include $<$jansson.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}list.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}vector.\-h\char`\"{}}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structentity}{entity}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structentity}{entity} $\ast$ \hyperlink{entity_8h_ad06d77219647b9765ec8a1c41f1a2c78}{entity\-\_\-create} (struct \hyperlink{structsprite}{sprite} $\ast$\hyperlink{structsprite}{sprite}, const char $\ast$name, struct \hyperlink{structvec2}{vec2} position, struct \hyperlink{structentity}{entity} $\ast$parent)
+\item 
+struct \hyperlink{structentity}{entity} $\ast$ \hyperlink{entity_8h_a2ce4c14c74e4e8ed6c577d7c81f3a37e}{entity\-\_\-create\-\_\-json} (json\-\_\-t $\ast$root, struct \hyperlink{structvec2}{vec2} position, struct \hyperlink{structlist}{list} $\ast$textures, struct \hyperlink{structentity}{entity} $\ast$parent, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Creates an entity from a J\-S\-O\-N object. \end{DoxyCompactList}\item 
+uint8\-\_\-t \hyperlink{entity_8h_af290375f7837d30bc3a93625f8affaeb}{entity\-\_\-list\-\_\-create\-\_\-json} (struct \hyperlink{structlist}{list} $\ast$ent\-\_\-list, json\-\_\-t $\ast$root, struct \hyperlink{structlist}{list} $\ast$textures, struct \hyperlink{structentity}{entity} $\ast$parent, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Creates a entity hierarchy from a J\-S\-O\-N array. \end{DoxyCompactList}\item 
+struct \hyperlink{structentity}{entity} $\ast$ \hyperlink{entity_8h_a8290ebc4896fe0c64fdeb203d017f5a0}{entity\-\_\-create\-\_\-file} (const char $\ast$filename, struct \hyperlink{structvec2}{vec2} position, struct \hyperlink{structlist}{list} $\ast$textures, struct \hyperlink{structentity}{entity} $\ast$parent, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Creates an entity from a file. \end{DoxyCompactList}\item 
+void \hyperlink{entity_8h_acb16329cd0132ed67e1fc9bfcc569348}{entity\-\_\-draw} (struct \hyperlink{structentity}{entity} $\ast$\hyperlink{structentity}{entity}, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\item 
+void \hyperlink{entity_8h_af9866c1fbb2ed7180bb48561c70a2321}{entity\-\_\-destroy} (struct \hyperlink{structentity}{entity} $\ast$\hyperlink{structentity}{entity})
+\item 
+struct \hyperlink{structlist}{list} \hyperlink{entity_8h_a80c8c24f26e50d6b6a2993e2048f3215}{entity\-\_\-list\-\_\-find} (struct \hyperlink{structlist}{list} entities, const char $\ast$name)
+\begin{DoxyCompactList}\small\item\em Finds entities with name. \end{DoxyCompactList}\item 
+struct \hyperlink{structentity}{entity} $\ast$ \hyperlink{entity_8h_a14830f9374e105657ab5212808d8d054}{entity\-\_\-list\-\_\-find\-\_\-first} (struct \hyperlink{structlist}{list} $\ast$entities, const char $\ast$name)
+\begin{DoxyCompactList}\small\item\em Finds first entity with name. \end{DoxyCompactList}\item 
+\hypertarget{entity_8h_a51561416a03741d2c1a5fb71109e809d}{struct \hyperlink{structsprite}{sprite} $\ast$ {\bfseries entity\-\_\-get\-\_\-sprite} (struct \hyperlink{structentity}{entity} $\ast$\hyperlink{structentity}{entity})}\label{entity_8h_a51561416a03741d2c1a5fb71109e809d}
+
+\item 
+\hypertarget{entity_8h_acb92304e446787107e36047b124e6c42}{const char $\ast$ {\bfseries entity\-\_\-get\-\_\-name} (struct \hyperlink{structentity}{entity} $\ast$\hyperlink{structentity}{entity})}\label{entity_8h_acb92304e446787107e36047b124e6c42}
+
+\item 
+\hypertarget{entity_8h_a9741dbbb0ef7ca8ff5da9a7884d98900}{struct \hyperlink{structentity}{entity} $\ast$ {\bfseries entity\-\_\-get\-\_\-parent} (struct \hyperlink{structentity}{entity} $\ast$\hyperlink{structentity}{entity})}\label{entity_8h_a9741dbbb0ef7ca8ff5da9a7884d98900}
+
+\item 
+\hypertarget{entity_8h_a41ea4e35b8bc189d34ad1f78674dbb8f}{float {\bfseries entity\-\_\-get\-\_\-position\-\_\-x} (struct \hyperlink{structentity}{entity} $\ast$\hyperlink{structentity}{entity})}\label{entity_8h_a41ea4e35b8bc189d34ad1f78674dbb8f}
+
+\item 
+\hypertarget{entity_8h_adf39f6250ed69bd6116410310e0da952}{float {\bfseries entity\-\_\-get\-\_\-position\-\_\-y} (struct \hyperlink{structentity}{entity} $\ast$\hyperlink{structentity}{entity})}\label{entity_8h_adf39f6250ed69bd6116410310e0da952}
+
+\item 
+\hypertarget{entity_8h_ac1e8cbaa72e0fb8c582f2c6eeb28c8e2}{void {\bfseries entity\-\_\-set\-\_\-position\-\_\-x} (struct \hyperlink{structentity}{entity} $\ast$\hyperlink{structentity}{entity}, float x)}\label{entity_8h_ac1e8cbaa72e0fb8c582f2c6eeb28c8e2}
+
+\item 
+\hypertarget{entity_8h_a3223a0603b748db267e77e39db51b95f}{void {\bfseries entity\-\_\-set\-\_\-position\-\_\-y} (struct \hyperlink{structentity}{entity} $\ast$\hyperlink{structentity}{entity}, float y)}\label{entity_8h_a3223a0603b748db267e77e39db51b95f}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{entity_8h_ad06d77219647b9765ec8a1c41f1a2c78}{\index{entity.\-h@{entity.\-h}!entity\-\_\-create@{entity\-\_\-create}}
+\index{entity\-\_\-create@{entity\-\_\-create}!entity.h@{entity.\-h}}
+\subsubsection[{entity\-\_\-create}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf entity}$\ast$ entity\-\_\-create (
+\begin{DoxyParamCaption}
+\item[{struct {\bf sprite} $\ast$}]{sprite, }
+\item[{const char $\ast$}]{name, }
+\item[{struct {\bf vec2}}]{position, }
+\item[{struct {\bf entity} $\ast$}]{parent}
+\end{DoxyParamCaption}
+)}}\label{entity_8h_ad06d77219647b9765ec8a1c41f1a2c78}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em sprite} & The entity's sprite \\
+\hline
+\mbox{\tt in}  & {\em name} & The entity's name. Pass N\-U\-L\-L if you don't intend to search for it \\
+\hline
+\mbox{\tt in}  & {\em position} & The position of the entity \\
+\hline
+\mbox{\tt in}  & {\em parent} & The entity's parent \\
+\hline
+\mbox{\tt in}  & {\em children} & The entity's children\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the new entity. N\-U\-L\-L if error. 
+\end{DoxyReturn}
+\hypertarget{entity_8h_a8290ebc4896fe0c64fdeb203d017f5a0}{\index{entity.\-h@{entity.\-h}!entity\-\_\-create\-\_\-file@{entity\-\_\-create\-\_\-file}}
+\index{entity\-\_\-create\-\_\-file@{entity\-\_\-create\-\_\-file}!entity.h@{entity.\-h}}
+\subsubsection[{entity\-\_\-create\-\_\-file}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf entity}$\ast$ entity\-\_\-create\-\_\-file (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{filename, }
+\item[{struct {\bf vec2}}]{position, }
+\item[{struct {\bf list} $\ast$}]{textures, }
+\item[{struct {\bf entity} $\ast$}]{parent, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{entity_8h_a8290ebc4896fe0c64fdeb203d017f5a0}
+
+
+Creates an entity from a file. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em filename} & Path to the file to read \\
+\hline
+\mbox{\tt in}  & {\em position} & The position of the entity \\
+\hline
+\mbox{\tt out}  & {\em textures} & The list to add the sprite's texture to \\
+\hline
+\mbox{\tt in}  & {\em parent} & The entity's parent \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use for texture loading\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new entity 
+\end{DoxyReturn}
+\hypertarget{entity_8h_a2ce4c14c74e4e8ed6c577d7c81f3a37e}{\index{entity.\-h@{entity.\-h}!entity\-\_\-create\-\_\-json@{entity\-\_\-create\-\_\-json}}
+\index{entity\-\_\-create\-\_\-json@{entity\-\_\-create\-\_\-json}!entity.h@{entity.\-h}}
+\subsubsection[{entity\-\_\-create\-\_\-json}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf entity}$\ast$ entity\-\_\-create\-\_\-json (
+\begin{DoxyParamCaption}
+\item[{json\-\_\-t $\ast$}]{root, }
+\item[{struct {\bf vec2}}]{position, }
+\item[{struct {\bf list} $\ast$}]{textures, }
+\item[{struct {\bf entity} $\ast$}]{parent, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{entity_8h_a2ce4c14c74e4e8ed6c577d7c81f3a37e}
+
+
+Creates an entity from a J\-S\-O\-N object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em root} & The J\-S\-O\-N object \\
+\hline
+\mbox{\tt in}  & {\em position} & The position of the entity \\
+\hline
+\mbox{\tt out}  & {\em textures} & The list to add the sprite's texture to \\
+\hline
+\mbox{\tt in}  & {\em parent} & The entity's parent \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use for texture loading\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new Object or N\-U\-L\-L on error. 
+\end{DoxyReturn}
+\hypertarget{entity_8h_af9866c1fbb2ed7180bb48561c70a2321}{\index{entity.\-h@{entity.\-h}!entity\-\_\-destroy@{entity\-\_\-destroy}}
+\index{entity\-\_\-destroy@{entity\-\_\-destroy}!entity.h@{entity.\-h}}
+\subsubsection[{entity\-\_\-destroy}]{\setlength{\rightskip}{0pt plus 5cm}void entity\-\_\-destroy (
+\begin{DoxyParamCaption}
+\item[{struct {\bf entity} $\ast$}]{entity}
+\end{DoxyParamCaption}
+)}}\label{entity_8h_af9866c1fbb2ed7180bb48561c70a2321}
+Destroys the entity and its children. Not its siblings.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em entity} & The entity to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{entity_8h_acb16329cd0132ed67e1fc9bfcc569348}{\index{entity.\-h@{entity.\-h}!entity\-\_\-draw@{entity\-\_\-draw}}
+\index{entity\-\_\-draw@{entity\-\_\-draw}!entity.h@{entity.\-h}}
+\subsubsection[{entity\-\_\-draw}]{\setlength{\rightskip}{0pt plus 5cm}void entity\-\_\-draw (
+\begin{DoxyParamCaption}
+\item[{struct {\bf entity} $\ast$}]{entity, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{entity_8h_acb16329cd0132ed67e1fc9bfcc569348}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em entity} & The entity to draw \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use \\
+\hline
+\end{DoxyParams}
+\hypertarget{entity_8h_af290375f7837d30bc3a93625f8affaeb}{\index{entity.\-h@{entity.\-h}!entity\-\_\-list\-\_\-create\-\_\-json@{entity\-\_\-list\-\_\-create\-\_\-json}}
+\index{entity\-\_\-list\-\_\-create\-\_\-json@{entity\-\_\-list\-\_\-create\-\_\-json}!entity.h@{entity.\-h}}
+\subsubsection[{entity\-\_\-list\-\_\-create\-\_\-json}]{\setlength{\rightskip}{0pt plus 5cm}uint8\-\_\-t entity\-\_\-list\-\_\-create\-\_\-json (
+\begin{DoxyParamCaption}
+\item[{struct {\bf list} $\ast$}]{ent\-\_\-list, }
+\item[{json\-\_\-t $\ast$}]{root, }
+\item[{struct {\bf list} $\ast$}]{textures, }
+\item[{struct {\bf entity} $\ast$}]{parent, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{entity_8h_af290375f7837d30bc3a93625f8affaeb}
+
+
+Creates a entity hierarchy from a J\-S\-O\-N array. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em ent\-\_\-list} & The list to add the created entities to \\
+\hline
+\mbox{\tt in}  & {\em root} & The J\-S\-O\-N array \\
+\hline
+\mbox{\tt out}  & {\em textures} & The list to add the sprite's texture to \\
+\hline
+\mbox{\tt in}  & {\em parent} & The entity's parent \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use for texture loading\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, non-\/zero on failure. 
+\end{DoxyReturn}
+\hypertarget{entity_8h_a80c8c24f26e50d6b6a2993e2048f3215}{\index{entity.\-h@{entity.\-h}!entity\-\_\-list\-\_\-find@{entity\-\_\-list\-\_\-find}}
+\index{entity\-\_\-list\-\_\-find@{entity\-\_\-list\-\_\-find}!entity.h@{entity.\-h}}
+\subsubsection[{entity\-\_\-list\-\_\-find}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf list} entity\-\_\-list\-\_\-find (
+\begin{DoxyParamCaption}
+\item[{struct {\bf list}}]{entities, }
+\item[{const char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{entity_8h_a80c8c24f26e50d6b6a2993e2048f3215}
+
+
+Finds entities with name. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em entities} & The entity list to search through \\
+\hline
+\mbox{\tt in}  & {\em name} & The name to search for\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The entities with {\itshape name}. 
+\end{DoxyReturn}
+\hypertarget{entity_8h_a14830f9374e105657ab5212808d8d054}{\index{entity.\-h@{entity.\-h}!entity\-\_\-list\-\_\-find\-\_\-first@{entity\-\_\-list\-\_\-find\-\_\-first}}
+\index{entity\-\_\-list\-\_\-find\-\_\-first@{entity\-\_\-list\-\_\-find\-\_\-first}!entity.h@{entity.\-h}}
+\subsubsection[{entity\-\_\-list\-\_\-find\-\_\-first}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf entity}$\ast$ entity\-\_\-list\-\_\-find\-\_\-first (
+\begin{DoxyParamCaption}
+\item[{struct {\bf list} $\ast$}]{entities, }
+\item[{const char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{entity_8h_a14830f9374e105657ab5212808d8d054}
+
+
+Finds first entity with name. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em entities} & The entity list to search through \\
+\hline
+\mbox{\tt in}  & {\em name} & The name to search for\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The first entity with {\itshape name} or N\-U\-L\-L if not found. 
+\end{DoxyReturn}

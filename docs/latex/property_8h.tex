@@ -1,0 +1,248 @@
+\hypertarget{property_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/property.h File Reference}
+\label{property_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/property.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/property.\-h}}
+}
+{\ttfamily \#include $<$S\-D\-L.\-h$>$}\\*
+{\ttfamily \#include $<$stdint.\-h$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structSNumberProperty}{S\-Number\-Property}
+\begin{DoxyCompactList}\small\item\em Defines a number property. \end{DoxyCompactList}\item 
+struct \hyperlink{structSStringProperty}{S\-String\-Property}
+\begin{DoxyCompactList}\small\item\em Defines a string property. \end{DoxyCompactList}\item 
+struct \hyperlink{structSBoolProperty}{S\-Bool\-Property}
+\begin{DoxyCompactList}\small\item\em Defines a boolean property. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{property_8h_a79591db79426a802eb0afc3dc2082e80}{typedef struct \hyperlink{structSNumberProperty}{S\-Number\-Property} {\bfseries Number\-Property}}\label{property_8h_a79591db79426a802eb0afc3dc2082e80}
+
+\item 
+\hypertarget{property_8h_a0046bea2ecc30d9b221b2147f34a1de4}{typedef struct \hyperlink{structSStringProperty}{S\-String\-Property} {\bfseries String\-Property}}\label{property_8h_a0046bea2ecc30d9b221b2147f34a1de4}
+
+\item 
+\hypertarget{property_8h_a78793f095da3d704d83298e57e90c5d6}{typedef struct \hyperlink{structSBoolProperty}{S\-Bool\-Property} {\bfseries Bool\-Property}}\label{property_8h_a78793f095da3d704d83298e57e90c5d6}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{property_8h_a8a965bc653726e23cce3c8985112a9c2}{Destroy\-Number\-Property} (\hyperlink{structSNumberProperty}{Number\-Property} $\ast$property)
+\begin{DoxyCompactList}\small\item\em Deallocate and cleanup number property. \end{DoxyCompactList}\item 
+void \hyperlink{property_8h_a982224ab295ee9940826201252803eba}{Destroy\-String\-Property} (\hyperlink{structSStringProperty}{String\-Property} $\ast$property)
+\begin{DoxyCompactList}\small\item\em Deallocate and cleanup string property. \end{DoxyCompactList}\item 
+void \hyperlink{property_8h_a1352abe7bc029a97796d67b1be087199}{Destroy\-Bool\-Property} (\hyperlink{structSBoolProperty}{Bool\-Property} $\ast$property)
+\begin{DoxyCompactList}\small\item\em Deallocate and cleanup bool property. \end{DoxyCompactList}\item 
+S\-D\-L\-\_\-bool \hyperlink{property_8h_ae55c67e4cf8ccdb4878c2c8ed22862df}{Set\-Number\-Property} (\hyperlink{structSNumberProperty}{Number\-Property} $\ast$$\ast$property, const char $\ast$name, double value)
+\begin{DoxyCompactList}\small\item\em Set a number value to property. \end{DoxyCompactList}\item 
+S\-D\-L\-\_\-bool \hyperlink{property_8h_ad11f45989c4ed9d9a1b2c40abb733301}{Set\-String\-Property} (\hyperlink{structSStringProperty}{String\-Property} $\ast$$\ast$property, const char $\ast$name, const char $\ast$value)
+\begin{DoxyCompactList}\small\item\em Set a string value to property. \end{DoxyCompactList}\item 
+S\-D\-L\-\_\-bool \hyperlink{property_8h_ab95fc26e8f9f97df92f2aae36c0d71f5}{Set\-Bool\-Property} (\hyperlink{structSBoolProperty}{Bool\-Property} $\ast$$\ast$property, const char $\ast$name, S\-D\-L\-\_\-bool value)
+\begin{DoxyCompactList}\small\item\em Set a boolean value to property. \end{DoxyCompactList}\item 
+double \hyperlink{property_8h_abc62e1f8c24022ba9c040309ce783269}{Get\-Number\-Property} (\hyperlink{structSNumberProperty}{Number\-Property} $\ast$property, const char $\ast$name)
+\begin{DoxyCompactList}\small\item\em Get a number value from property. \end{DoxyCompactList}\item 
+const char $\ast$ \hyperlink{property_8h_ac39bd44c03ac40da07da564aade15f48}{Get\-String\-Property} (\hyperlink{structSStringProperty}{String\-Property} $\ast$property, const char $\ast$name)
+\begin{DoxyCompactList}\small\item\em Get a string value from property. \end{DoxyCompactList}\item 
+S\-D\-L\-\_\-bool \hyperlink{property_8h_ad0a7716e1b2f153f33240e6211440600}{Get\-Bool\-Property} (\hyperlink{structSBoolProperty}{Bool\-Property} $\ast$property, const char $\ast$name)
+\begin{DoxyCompactList}\small\item\em Get a boolean value from property. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Contains structs and functions for Properties Properties are lists of values associated with a name 
+
+\subsection{Function Documentation}
+\hypertarget{property_8h_a1352abe7bc029a97796d67b1be087199}{\index{property.\-h@{property.\-h}!Destroy\-Bool\-Property@{Destroy\-Bool\-Property}}
+\index{Destroy\-Bool\-Property@{Destroy\-Bool\-Property}!property.h@{property.\-h}}
+\subsubsection[{Destroy\-Bool\-Property}]{\setlength{\rightskip}{0pt plus 5cm}void Destroy\-Bool\-Property (
+\begin{DoxyParamCaption}
+\item[{{\bf Bool\-Property} $\ast$}]{property}
+\end{DoxyParamCaption}
+)}}\label{property_8h_a1352abe7bc029a97796d67b1be087199}
+
+
+Deallocate and cleanup bool property. 
+
+Destroys the entire property list
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em property} & The property list to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{property_8h_a8a965bc653726e23cce3c8985112a9c2}{\index{property.\-h@{property.\-h}!Destroy\-Number\-Property@{Destroy\-Number\-Property}}
+\index{Destroy\-Number\-Property@{Destroy\-Number\-Property}!property.h@{property.\-h}}
+\subsubsection[{Destroy\-Number\-Property}]{\setlength{\rightskip}{0pt plus 5cm}void Destroy\-Number\-Property (
+\begin{DoxyParamCaption}
+\item[{{\bf Number\-Property} $\ast$}]{property}
+\end{DoxyParamCaption}
+)}}\label{property_8h_a8a965bc653726e23cce3c8985112a9c2}
+
+
+Deallocate and cleanup number property. 
+
+Destroys the entire property list
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em property} & The property list to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{property_8h_a982224ab295ee9940826201252803eba}{\index{property.\-h@{property.\-h}!Destroy\-String\-Property@{Destroy\-String\-Property}}
+\index{Destroy\-String\-Property@{Destroy\-String\-Property}!property.h@{property.\-h}}
+\subsubsection[{Destroy\-String\-Property}]{\setlength{\rightskip}{0pt plus 5cm}void Destroy\-String\-Property (
+\begin{DoxyParamCaption}
+\item[{{\bf String\-Property} $\ast$}]{property}
+\end{DoxyParamCaption}
+)}}\label{property_8h_a982224ab295ee9940826201252803eba}
+
+
+Deallocate and cleanup string property. 
+
+Destroys the entire property list
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em property} & The property list to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{property_8h_ad0a7716e1b2f153f33240e6211440600}{\index{property.\-h@{property.\-h}!Get\-Bool\-Property@{Get\-Bool\-Property}}
+\index{Get\-Bool\-Property@{Get\-Bool\-Property}!property.h@{property.\-h}}
+\subsubsection[{Get\-Bool\-Property}]{\setlength{\rightskip}{0pt plus 5cm}S\-D\-L\-\_\-bool Get\-Bool\-Property (
+\begin{DoxyParamCaption}
+\item[{{\bf Bool\-Property} $\ast$}]{property, }
+\item[{const char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{property_8h_ad0a7716e1b2f153f33240e6211440600}
+
+
+Get a boolean value from property. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em property} & The property list to read from \\
+\hline
+\mbox{\tt in}  & {\em name} & The name of the property\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The value or False if not found. 
+\end{DoxyReturn}
+\hypertarget{property_8h_abc62e1f8c24022ba9c040309ce783269}{\index{property.\-h@{property.\-h}!Get\-Number\-Property@{Get\-Number\-Property}}
+\index{Get\-Number\-Property@{Get\-Number\-Property}!property.h@{property.\-h}}
+\subsubsection[{Get\-Number\-Property}]{\setlength{\rightskip}{0pt plus 5cm}double Get\-Number\-Property (
+\begin{DoxyParamCaption}
+\item[{{\bf Number\-Property} $\ast$}]{property, }
+\item[{const char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{property_8h_abc62e1f8c24022ba9c040309ce783269}
+
+
+Get a number value from property. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em property} & The property list to read from \\
+\hline
+\mbox{\tt in}  & {\em name} & The name of the property\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The value or 0 if not found. 
+\end{DoxyReturn}
+\hypertarget{property_8h_ac39bd44c03ac40da07da564aade15f48}{\index{property.\-h@{property.\-h}!Get\-String\-Property@{Get\-String\-Property}}
+\index{Get\-String\-Property@{Get\-String\-Property}!property.h@{property.\-h}}
+\subsubsection[{Get\-String\-Property}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ Get\-String\-Property (
+\begin{DoxyParamCaption}
+\item[{{\bf String\-Property} $\ast$}]{property, }
+\item[{const char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{property_8h_ac39bd44c03ac40da07da564aade15f48}
+
+
+Get a string value from property. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em property} & The property list to read from \\
+\hline
+\mbox{\tt in}  & {\em name} & The name of the property\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The value or an empty string if not found. 
+\end{DoxyReturn}
+\hypertarget{property_8h_ab95fc26e8f9f97df92f2aae36c0d71f5}{\index{property.\-h@{property.\-h}!Set\-Bool\-Property@{Set\-Bool\-Property}}
+\index{Set\-Bool\-Property@{Set\-Bool\-Property}!property.h@{property.\-h}}
+\subsubsection[{Set\-Bool\-Property}]{\setlength{\rightskip}{0pt plus 5cm}S\-D\-L\-\_\-bool Set\-Bool\-Property (
+\begin{DoxyParamCaption}
+\item[{{\bf Bool\-Property} $\ast$$\ast$}]{property, }
+\item[{const char $\ast$}]{name, }
+\item[{S\-D\-L\-\_\-bool}]{value}
+\end{DoxyParamCaption}
+)}}\label{property_8h_ab95fc26e8f9f97df92f2aae36c0d71f5}
+
+
+Set a boolean value to property. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em property} & The property list to add to \\
+\hline
+\mbox{\tt in}  & {\em name} & The name of the property \\
+\hline
+\mbox{\tt in}  & {\em value} & The value of the property\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if successful, False otherwise. 
+\end{DoxyReturn}
+\hypertarget{property_8h_ae55c67e4cf8ccdb4878c2c8ed22862df}{\index{property.\-h@{property.\-h}!Set\-Number\-Property@{Set\-Number\-Property}}
+\index{Set\-Number\-Property@{Set\-Number\-Property}!property.h@{property.\-h}}
+\subsubsection[{Set\-Number\-Property}]{\setlength{\rightskip}{0pt plus 5cm}S\-D\-L\-\_\-bool Set\-Number\-Property (
+\begin{DoxyParamCaption}
+\item[{{\bf Number\-Property} $\ast$$\ast$}]{property, }
+\item[{const char $\ast$}]{name, }
+\item[{double}]{value}
+\end{DoxyParamCaption}
+)}}\label{property_8h_ae55c67e4cf8ccdb4878c2c8ed22862df}
+
+
+Set a number value to property. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em property} & The property list to add to \\
+\hline
+\mbox{\tt in}  & {\em name} & The name of the property \\
+\hline
+\mbox{\tt in}  & {\em value} & The value of the property\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if successful, False otherwise. 
+\end{DoxyReturn}
+\hypertarget{property_8h_ad11f45989c4ed9d9a1b2c40abb733301}{\index{property.\-h@{property.\-h}!Set\-String\-Property@{Set\-String\-Property}}
+\index{Set\-String\-Property@{Set\-String\-Property}!property.h@{property.\-h}}
+\subsubsection[{Set\-String\-Property}]{\setlength{\rightskip}{0pt plus 5cm}S\-D\-L\-\_\-bool Set\-String\-Property (
+\begin{DoxyParamCaption}
+\item[{{\bf String\-Property} $\ast$$\ast$}]{property, }
+\item[{const char $\ast$}]{name, }
+\item[{const char $\ast$}]{value}
+\end{DoxyParamCaption}
+)}}\label{property_8h_ad11f45989c4ed9d9a1b2c40abb733301}
+
+
+Set a string value to property. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em property} & The property list to add to \\
+\hline
+\mbox{\tt in}  & {\em name} & The name of the property \\
+\hline
+\mbox{\tt in}  & {\em value} & The value of the property\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if successful, False otherwise. 
+\end{DoxyReturn}

@@ -1,0 +1,128 @@
+\hypertarget{scene_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/scene.h File Reference}
+\label{scene_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/scene.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/scene.\-h}}
+}
+{\ttfamily \#include \char`\"{}texture.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}list.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}entity.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}sprite.\-h\char`\"{}}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structscene}{scene}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structscene}{scene} $\ast$ \hyperlink{scene_8h_a720c1f6568c3f5432228b17ad8f28dd2}{scene\-\_\-create} (void)
+\item 
+struct \hyperlink{structscene}{scene} $\ast$ \hyperlink{scene_8h_affc2e451550e447b9ec9aae8d8e4de3a}{scene\-\_\-create\-\_\-json} (json\-\_\-t $\ast$root, struct \hyperlink{structlist}{list} $\ast$textures, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Creates a new scene from a J\-S\-O\-N object. \end{DoxyCompactList}\item 
+struct \hyperlink{structscene}{scene} $\ast$ \hyperlink{scene_8h_afb786b2645991f7c6014be11d63492d8}{scene\-\_\-create\-\_\-file} (const char $\ast$filename, struct \hyperlink{structlist}{list} $\ast$textures, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Creates a new scene from file. \end{DoxyCompactList}\item 
+void \hyperlink{scene_8h_aa431b0c85ed32ecc82f1ab9199fb3fbb}{scene\-\_\-destroy} (struct \hyperlink{structscene}{scene} $\ast$\hyperlink{structscene}{scene})
+\begin{DoxyCompactList}\small\item\em Destroys the scene and its objects. \end{DoxyCompactList}\item 
+void \hyperlink{scene_8h_a89c019b3e6c8c196cd0586b7c351f82a}{scene\-\_\-draw} (struct \hyperlink{structscene}{scene} $\ast$\hyperlink{structscene}{scene}, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Draws the scene. \end{DoxyCompactList}\item 
+\hypertarget{scene_8h_ad3c1f826e254feddfdbfd24e9cabd42f}{struct \hyperlink{structlist}{list} $\ast$ {\bfseries scene\-\_\-get\-\_\-entities} (struct \hyperlink{structscene}{scene} $\ast$\hyperlink{structscene}{scene})}\label{scene_8h_ad3c1f826e254feddfdbfd24e9cabd42f}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{scene_8h_a720c1f6568c3f5432228b17ad8f28dd2}{\index{scene.\-h@{scene.\-h}!scene\-\_\-create@{scene\-\_\-create}}
+\index{scene\-\_\-create@{scene\-\_\-create}!scene.h@{scene.\-h}}
+\subsubsection[{scene\-\_\-create}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf scene}$\ast$ scene\-\_\-create (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{scene_8h_a720c1f6568c3f5432228b17ad8f28dd2}
+\begin{DoxyReturn}{Returns}
+The new scene 
+\end{DoxyReturn}
+\hypertarget{scene_8h_afb786b2645991f7c6014be11d63492d8}{\index{scene.\-h@{scene.\-h}!scene\-\_\-create\-\_\-file@{scene\-\_\-create\-\_\-file}}
+\index{scene\-\_\-create\-\_\-file@{scene\-\_\-create\-\_\-file}!scene.h@{scene.\-h}}
+\subsubsection[{scene\-\_\-create\-\_\-file}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf scene}$\ast$ scene\-\_\-create\-\_\-file (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{filename, }
+\item[{struct {\bf list} $\ast$}]{textures, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{scene_8h_afb786b2645991f7c6014be11d63492d8}
+
+
+Creates a new scene from file. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em filename} & Path to file to read \\
+\hline
+\mbox{\tt out}  & {\em textures} & The list to add the sprites' textures \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use for texture loading\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new scene 
+\end{DoxyReturn}
+\hypertarget{scene_8h_affc2e451550e447b9ec9aae8d8e4de3a}{\index{scene.\-h@{scene.\-h}!scene\-\_\-create\-\_\-json@{scene\-\_\-create\-\_\-json}}
+\index{scene\-\_\-create\-\_\-json@{scene\-\_\-create\-\_\-json}!scene.h@{scene.\-h}}
+\subsubsection[{scene\-\_\-create\-\_\-json}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf scene}$\ast$ scene\-\_\-create\-\_\-json (
+\begin{DoxyParamCaption}
+\item[{json\-\_\-t $\ast$}]{root, }
+\item[{struct {\bf list} $\ast$}]{textures, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{scene_8h_affc2e451550e447b9ec9aae8d8e4de3a}
+
+
+Creates a new scene from a J\-S\-O\-N object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em root} & The J\-S\-O\-N object \\
+\hline
+\mbox{\tt out}  & {\em textures} & The list to add the sprites' textures \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use for texture loading\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new scene 
+\end{DoxyReturn}
+\hypertarget{scene_8h_aa431b0c85ed32ecc82f1ab9199fb3fbb}{\index{scene.\-h@{scene.\-h}!scene\-\_\-destroy@{scene\-\_\-destroy}}
+\index{scene\-\_\-destroy@{scene\-\_\-destroy}!scene.h@{scene.\-h}}
+\subsubsection[{scene\-\_\-destroy}]{\setlength{\rightskip}{0pt plus 5cm}void scene\-\_\-destroy (
+\begin{DoxyParamCaption}
+\item[{struct {\bf scene} $\ast$}]{scene}
+\end{DoxyParamCaption}
+)}}\label{scene_8h_aa431b0c85ed32ecc82f1ab9199fb3fbb}
+
+
+Destroys the scene and its objects. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em scene} & The scene to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{scene_8h_a89c019b3e6c8c196cd0586b7c351f82a}{\index{scene.\-h@{scene.\-h}!scene\-\_\-draw@{scene\-\_\-draw}}
+\index{scene\-\_\-draw@{scene\-\_\-draw}!scene.h@{scene.\-h}}
+\subsubsection[{scene\-\_\-draw}]{\setlength{\rightskip}{0pt plus 5cm}void scene\-\_\-draw (
+\begin{DoxyParamCaption}
+\item[{struct {\bf scene} $\ast$}]{scene, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{scene_8h_a89c019b3e6c8c196cd0586b7c351f82a}
+
+
+Draws the scene. 
+
+This draws everything in the scene
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em scene} & The scene to draw \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use \\
+\hline
+\end{DoxyParams}

@@ -1,0 +1,42 @@
+\hypertarget{structentity}{\section{entity Struct Reference}
+\label{structentity}\index{entity@{entity}}
+}
+
+
+{\ttfamily \#include $<$entity.\-h$>$}
+
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structentity_ad84926421be196f090af459f080cf1c9}{struct \hyperlink{structsprite}{sprite} $\ast$ {\bfseries sprite}}\label{structentity_ad84926421be196f090af459f080cf1c9}
+
+\item 
+\hypertarget{structentity_a69542ac90f210caa0904728e83446602}{char $\ast$ {\bfseries name}}\label{structentity_a69542ac90f210caa0904728e83446602}
+
+\item 
+\hypertarget{structentity_ae946379f1bae46e43d1141cee5e0b7e4}{struct \hyperlink{structvec2}{vec2} {\bfseries position}}\label{structentity_ae946379f1bae46e43d1141cee5e0b7e4}
+
+\item 
+\hypertarget{structentity_aa6d9285528547d69b3137b49299bb7c5}{struct \hyperlink{structentity}{entity} $\ast$ {\bfseries parent}}\label{structentity_aa6d9285528547d69b3137b49299bb7c5}
+
+\item 
+\hypertarget{structentity_a8d6e9d1ad9243a6e326de2caa12e2836}{struct \hyperlink{structlist}{list} {\bfseries children}}\label{structentity_a8d6e9d1ad9243a6e326de2caa12e2836}
+
+\item 
+\hypertarget{structentity_aeea1689a586e212b705dacfc4fd48931}{struct \hyperlink{structlist}{list} {\bfseries branch}}\label{structentity_aeea1689a586e212b705dacfc4fd48931}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+An entity is a game object that has a sprite, collision data and a location in the game.
+
+Entities are organized in a hierarchy, so that any entity can have a number of children and siblings.
+
+For example, an enemy in the game could consist of a root entity that is the body, and two child entities that are its weapons.
+
+Each of the entities should be able to move independently, but child entities inherit transformation data from their parents. 
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/\hyperlink{entity_8h}{entity.\-h}\end{DoxyCompactItemize}

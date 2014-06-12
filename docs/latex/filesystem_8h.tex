@@ -1,0 +1,35 @@
+\hypertarget{filesystem_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/filesystem.h File Reference}
+\label{filesystem_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/filesystem.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/filesystem.\-h}}
+}
+{\ttfamily \#include $<$physfs.\-h$>$}\\*
+{\ttfamily \#include $<$stdint.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+P\-H\-Y\-S\-F\-S\-\_\-sint64 \hyperlink{filesystem_8h_abd809c991bb4ad9221f7b9dcda90683d}{fs\-\_\-read\-\_\-buffer} (const char $\ast$filename, uint8\-\_\-t $\ast$$\ast$buf)
+\begin{DoxyCompactList}\small\item\em Reads entire file and returns the memory buffer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{filesystem_8h_abd809c991bb4ad9221f7b9dcda90683d}{\index{filesystem.\-h@{filesystem.\-h}!fs\-\_\-read\-\_\-buffer@{fs\-\_\-read\-\_\-buffer}}
+\index{fs\-\_\-read\-\_\-buffer@{fs\-\_\-read\-\_\-buffer}!filesystem.h@{filesystem.\-h}}
+\subsubsection[{fs\-\_\-read\-\_\-buffer}]{\setlength{\rightskip}{0pt plus 5cm}P\-H\-Y\-S\-F\-S\-\_\-sint64 fs\-\_\-read\-\_\-buffer (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{filename, }
+\item[{uint8\-\_\-t $\ast$$\ast$}]{buf}
+\end{DoxyParamCaption}
+)}}\label{filesystem_8h_abd809c991bb4ad9221f7b9dcda90683d}
+
+
+Reads entire file and returns the memory buffer. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em filename} & Path to the file to read \\
+\hline
+\mbox{\tt out}  & {\em buf} & The buffer to fill with data\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Amount of bytes read. If 0, then {\itshape buf} is invalid 
+\end{DoxyReturn}

@@ -1,0 +1,108 @@
+\hypertarget{mod_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/mod.h File Reference}
+\label{mod_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/mod.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/mod.\-h}}
+}
+{\ttfamily \#include $<$stdint.\-h$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structmod__info}{mod\-\_\-info}
+\begin{DoxyCompactList}\small\item\em Contains information for a mod. \end{DoxyCompactList}\item 
+struct \hyperlink{structmod}{mod}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structmod__info}{mod\-\_\-info} $\ast$ \hyperlink{mod_8h_a61930bc9eaca45087e600deff77c06f7}{mod\-\_\-info\-\_\-get} (const char $\ast$filename)
+\begin{DoxyCompactList}\small\item\em Queries a mod for information. \end{DoxyCompactList}\item 
+void \hyperlink{mod_8h_aa69dd12e1fa994b938f76e1d94f426b0}{mod\-\_\-info\-\_\-destroy} (struct \hyperlink{structmod__info}{mod\-\_\-info} $\ast$info)
+\item 
+struct \hyperlink{structmod}{mod} $\ast$ \hyperlink{mod_8h_a6bd49ae5d2b480802473e5a2417b0d96}{mod\-\_\-create} (struct \hyperlink{structmod__info}{mod\-\_\-info} $\ast$info)
+\item 
+void \hyperlink{mod_8h_a9f1e077b01a09364ae6652e8b4537579}{mod\-\_\-destroy} (struct \hyperlink{structmod}{mod} $\ast$\hyperlink{structmod}{mod})
+\item 
+void \hyperlink{mod_8h_ac2b5731b2a199e5d4d6a58d52f32f548}{mod\-\_\-update} (struct \hyperlink{structmod}{mod} $\ast$\hyperlink{structmod}{mod}, uint32\-\_\-t dt)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{mod_8h_a6bd49ae5d2b480802473e5a2417b0d96}{\index{mod.\-h@{mod.\-h}!mod\-\_\-create@{mod\-\_\-create}}
+\index{mod\-\_\-create@{mod\-\_\-create}!mod.h@{mod.\-h}}
+\subsubsection[{mod\-\_\-create}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf mod}$\ast$ mod\-\_\-create (
+\begin{DoxyParamCaption}
+\item[{struct {\bf mod\-\_\-info} $\ast$}]{info}
+\end{DoxyParamCaption}
+)}}\label{mod_8h_a6bd49ae5d2b480802473e5a2417b0d96}
+Creates the mod and informs the mod of initilization
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em info} & The mod's information\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new Mod 
+\end{DoxyReturn}
+\hypertarget{mod_8h_a9f1e077b01a09364ae6652e8b4537579}{\index{mod.\-h@{mod.\-h}!mod\-\_\-destroy@{mod\-\_\-destroy}}
+\index{mod\-\_\-destroy@{mod\-\_\-destroy}!mod.h@{mod.\-h}}
+\subsubsection[{mod\-\_\-destroy}]{\setlength{\rightskip}{0pt plus 5cm}void mod\-\_\-destroy (
+\begin{DoxyParamCaption}
+\item[{struct {\bf mod} $\ast$}]{mod}
+\end{DoxyParamCaption}
+)}}\label{mod_8h_a9f1e077b01a09364ae6652e8b4537579}
+Destroys the mod, along with the Mod\-Info. Also informs the mod of exit
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em mod} & The Mod to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{mod_8h_aa69dd12e1fa994b938f76e1d94f426b0}{\index{mod.\-h@{mod.\-h}!mod\-\_\-info\-\_\-destroy@{mod\-\_\-info\-\_\-destroy}}
+\index{mod\-\_\-info\-\_\-destroy@{mod\-\_\-info\-\_\-destroy}!mod.h@{mod.\-h}}
+\subsubsection[{mod\-\_\-info\-\_\-destroy}]{\setlength{\rightskip}{0pt plus 5cm}void mod\-\_\-info\-\_\-destroy (
+\begin{DoxyParamCaption}
+\item[{struct {\bf mod\-\_\-info} $\ast$}]{info}
+\end{DoxyParamCaption}
+)}}\label{mod_8h_aa69dd12e1fa994b938f76e1d94f426b0}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em info} & The \hyperlink{structmod__info}{mod\-\_\-info} to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{mod_8h_a61930bc9eaca45087e600deff77c06f7}{\index{mod.\-h@{mod.\-h}!mod\-\_\-info\-\_\-get@{mod\-\_\-info\-\_\-get}}
+\index{mod\-\_\-info\-\_\-get@{mod\-\_\-info\-\_\-get}!mod.h@{mod.\-h}}
+\subsubsection[{mod\-\_\-info\-\_\-get}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf mod\-\_\-info}$\ast$ mod\-\_\-info\-\_\-get (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{filename}
+\end{DoxyParamCaption}
+)}}\label{mod_8h_a61930bc9eaca45087e600deff77c06f7}
+
+
+Queries a mod for information. 
+
+Calls a function in the mod that is expected to return a specfic amount of information, required to fill \hyperlink{structmod__info}{mod\-\_\-info}.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em filename} & Path to the mod\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new \hyperlink{structmod__info}{mod\-\_\-info} or N\-U\-L\-L on error. 
+\end{DoxyReturn}
+\hypertarget{mod_8h_ac2b5731b2a199e5d4d6a58d52f32f548}{\index{mod.\-h@{mod.\-h}!mod\-\_\-update@{mod\-\_\-update}}
+\index{mod\-\_\-update@{mod\-\_\-update}!mod.h@{mod.\-h}}
+\subsubsection[{mod\-\_\-update}]{\setlength{\rightskip}{0pt plus 5cm}void mod\-\_\-update (
+\begin{DoxyParamCaption}
+\item[{struct {\bf mod} $\ast$}]{mod, }
+\item[{uint32\-\_\-t}]{dt}
+\end{DoxyParamCaption}
+)}}\label{mod_8h_ac2b5731b2a199e5d4d6a58d52f32f548}
+Calls the mod's update function
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em mod} & The mod to update \\
+\hline
+\mbox{\tt in}  & {\em dt} & The delta time since last called \\
+\hline
+\end{DoxyParams}

@@ -1,0 +1,52 @@
+\hypertarget{structSObject}{\section{S\-Object Struct Reference}
+\label{structSObject}\index{S\-Object@{S\-Object}}
+}
+
+
+Defines a game object.  
+
+
+
+
+{\ttfamily \#include $<$object.\-h$>$}
+
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structSObject_a6424528b589d7a8d60cb8999fd8fb5e7}{\hyperlink{structSSprite}{Sprite} $\ast$ {\bfseries sprite}}\label{structSObject_a6424528b589d7a8d60cb8999fd8fb5e7}
+
+\item 
+\hypertarget{structSObject_a8f2ae1a56f73fa95f8a89ba97d8849e2}{char $\ast$ {\bfseries name}}\label{structSObject_a8f2ae1a56f73fa95f8a89ba97d8849e2}
+
+\item 
+\hypertarget{structSObject_a0474139d7d390aa4765d3f5c9ece1f64}{S\-D\-L\-\_\-\-Point {\bfseries point}}\label{structSObject_a0474139d7d390aa4765d3f5c9ece1f64}
+
+\item 
+\hypertarget{structSObject_aae65de566b1cc893cc0a6508407f8831}{Collision\-Box {\bfseries collision}}\label{structSObject_aae65de566b1cc893cc0a6508407f8831}
+
+\item 
+\hypertarget{structSObject_acded767110b3756afe2ccdf4806dd798}{struct \hyperlink{structSObject}{S\-Object} $\ast$ {\bfseries children}}\label{structSObject_acded767110b3756afe2ccdf4806dd798}
+
+\item 
+\hypertarget{structSObject_af8173e9aa7de194334ed283c0d785b85}{struct \hyperlink{structSObject}{S\-Object} $\ast$ {\bfseries parent}}\label{structSObject_af8173e9aa7de194334ed283c0d785b85}
+
+\item 
+\hypertarget{structSObject_a982026419c015025155f5b983afaf942}{struct \hyperlink{structSObject}{S\-Object} $\ast$ {\bfseries next}}\label{structSObject_a982026419c015025155f5b983afaf942}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Defines a game object. 
+
+An Object is a game object that has a sprite, collision data and a location in the game.
+
+Objects are organized in a hierarchy, so that any object can have a number of children and siblings.
+
+For example, an enemy in the game could consist of a root Object that is the body, and two child objects that are its weapons.
+
+Each of the objects should be able to move independently, but child objects inherit transformation data from their parents. 
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/\hyperlink{object_8h}{object.\-h}\end{DoxyCompactItemize}

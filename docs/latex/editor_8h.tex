@@ -1,0 +1,225 @@
+\hypertarget{editor_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/editor.h File Reference}
+\label{editor_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/editor.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/editor.\-h}}
+}
+{\ttfamily \#include $<$S\-D\-L.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}object.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}map.\-h\char`\"{}}\\*
+{\ttfamily \#include $<$stdint.\-h$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structSEditor}{S\-Editor}
+\begin{DoxyCompactList}\small\item\em Defines the editor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{editor_8h_a70b1b05096b8a8b6a8b5bf412fc7000e}{typedef struct \hyperlink{structSEditor}{S\-Editor} {\bfseries Editor}}\label{editor_8h_a70b1b05096b8a8b6a8b5bf412fc7000e}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structSEditor}{Editor} $\ast$ \hyperlink{editor_8h_adbe21f5e54135641bc4c7d54ae51958f}{Create\-Editor} (\hyperlink{structSMap}{Map} $\ast$map)
+\begin{DoxyCompactList}\small\item\em Allocates memory for a new Editor and returns the pointer. \end{DoxyCompactList}\item 
+void \hyperlink{editor_8h_adee353054196f8ac5f13803f3c9b6ef8}{Show\-Editor} (\hyperlink{structSEditor}{Editor} $\ast$editor)
+\begin{DoxyCompactList}\small\item\em Set the Editor to draw itself. \end{DoxyCompactList}\item 
+void \hyperlink{editor_8h_ad5ddb6e99d0b998cf228f54109941e6e}{Hide\-Editor} (\hyperlink{structSEditor}{Editor} $\ast$editor)
+\begin{DoxyCompactList}\small\item\em Set the Editor stop drawing itself. \end{DoxyCompactList}\item 
+void \hyperlink{editor_8h_a621f2845d6d8e65c511de0ae733a48c4}{Draw\-Editor} (\hyperlink{structSEditor}{Editor} $\ast$editor, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Draws the editor. \end{DoxyCompactList}\item 
+void \hyperlink{editor_8h_a60f245aad2c803789636d30d9199da92}{Destroy\-Editor} (\hyperlink{structSEditor}{Editor} $\ast$editor)
+\begin{DoxyCompactList}\small\item\em Deallocates and cleans the Editor. \end{DoxyCompactList}\item 
+void \hyperlink{editor_8h_a07410e32dc2e98a6157b917c51b8b8d4}{Render\-Selection} (\hyperlink{structSObjectList}{Object\-List} $\ast$selection, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Draw an indicator of which objects are currently selected. \end{DoxyCompactList}\item 
+void \hyperlink{editor_8h_a6fe95f55b093d5846956680d6beb3b26}{Render\-Selection\-Objects} (\hyperlink{structSObject}{Object} $\ast$obj, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\item 
+void \hyperlink{editor_8h_a9b2345efbca3a3a00709b4e26fa71a84}{Handle\-Editor\-Events} (\hyperlink{structSEditor}{Editor} $\ast$editor, S\-D\-L\-\_\-\-Event $\ast$event)
+\begin{DoxyCompactList}\small\item\em Handle event for editor. \end{DoxyCompactList}\item 
+void \hyperlink{editor_8h_a68ed54402920174541e6777d2b78e2aa}{Render\-Editor\-Grid} (\hyperlink{structSEditor}{Editor} $\ast$editor, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Draws the grid for the editor. \end{DoxyCompactList}\item 
+void \hyperlink{editor_8h_a9c33abc6e9e00a541c13d5035aa04a63}{Render\-Selection\-Box} (\hyperlink{structSEditor}{Editor} $\ast$editor, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Draws the selection box. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Contains structs and functions for the in-\/game editor 
+
+\subsection{Function Documentation}
+\hypertarget{editor_8h_adbe21f5e54135641bc4c7d54ae51958f}{\index{editor.\-h@{editor.\-h}!Create\-Editor@{Create\-Editor}}
+\index{Create\-Editor@{Create\-Editor}!editor.h@{editor.\-h}}
+\subsubsection[{Create\-Editor}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Editor}$\ast$ Create\-Editor (
+\begin{DoxyParamCaption}
+\item[{{\bf Map} $\ast$}]{map}
+\end{DoxyParamCaption}
+)}}\label{editor_8h_adbe21f5e54135641bc4c7d54ae51958f}
+
+
+Allocates memory for a new Editor and returns the pointer. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em map} & The {\itshape Map} to edit\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the new Editor 
+\end{DoxyReturn}
+\hypertarget{editor_8h_a60f245aad2c803789636d30d9199da92}{\index{editor.\-h@{editor.\-h}!Destroy\-Editor@{Destroy\-Editor}}
+\index{Destroy\-Editor@{Destroy\-Editor}!editor.h@{editor.\-h}}
+\subsubsection[{Destroy\-Editor}]{\setlength{\rightskip}{0pt plus 5cm}void Destroy\-Editor (
+\begin{DoxyParamCaption}
+\item[{{\bf Editor} $\ast$}]{editor}
+\end{DoxyParamCaption}
+)}}\label{editor_8h_a60f245aad2c803789636d30d9199da92}
+
+
+Deallocates and cleans the Editor. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em editor} & The editor to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{editor_8h_a621f2845d6d8e65c511de0ae733a48c4}{\index{editor.\-h@{editor.\-h}!Draw\-Editor@{Draw\-Editor}}
+\index{Draw\-Editor@{Draw\-Editor}!editor.h@{editor.\-h}}
+\subsubsection[{Draw\-Editor}]{\setlength{\rightskip}{0pt plus 5cm}void Draw\-Editor (
+\begin{DoxyParamCaption}
+\item[{{\bf Editor} $\ast$}]{editor, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{editor_8h_a621f2845d6d8e65c511de0ae733a48c4}
+
+
+Draws the editor. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em editor} & The Editor to draw \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use \\
+\hline
+\end{DoxyParams}
+\hypertarget{editor_8h_a9b2345efbca3a3a00709b4e26fa71a84}{\index{editor.\-h@{editor.\-h}!Handle\-Editor\-Events@{Handle\-Editor\-Events}}
+\index{Handle\-Editor\-Events@{Handle\-Editor\-Events}!editor.h@{editor.\-h}}
+\subsubsection[{Handle\-Editor\-Events}]{\setlength{\rightskip}{0pt plus 5cm}void Handle\-Editor\-Events (
+\begin{DoxyParamCaption}
+\item[{{\bf Editor} $\ast$}]{editor, }
+\item[{S\-D\-L\-\_\-\-Event $\ast$}]{event}
+\end{DoxyParamCaption}
+)}}\label{editor_8h_a9b2345efbca3a3a00709b4e26fa71a84}
+
+
+Handle event for editor. 
+
+This should be called in the event loop
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em editor} & The Editor to handle event for \\
+\hline
+\mbox{\tt in}  & {\em event} & The event \\
+\hline
+\end{DoxyParams}
+\hypertarget{editor_8h_ad5ddb6e99d0b998cf228f54109941e6e}{\index{editor.\-h@{editor.\-h}!Hide\-Editor@{Hide\-Editor}}
+\index{Hide\-Editor@{Hide\-Editor}!editor.h@{editor.\-h}}
+\subsubsection[{Hide\-Editor}]{\setlength{\rightskip}{0pt plus 5cm}void Hide\-Editor (
+\begin{DoxyParamCaption}
+\item[{{\bf Editor} $\ast$}]{editor}
+\end{DoxyParamCaption}
+)}}\label{editor_8h_ad5ddb6e99d0b998cf228f54109941e6e}
+
+
+Set the Editor stop drawing itself. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em editor} & The Editor to hide \\
+\hline
+\end{DoxyParams}
+\hypertarget{editor_8h_a68ed54402920174541e6777d2b78e2aa}{\index{editor.\-h@{editor.\-h}!Render\-Editor\-Grid@{Render\-Editor\-Grid}}
+\index{Render\-Editor\-Grid@{Render\-Editor\-Grid}!editor.h@{editor.\-h}}
+\subsubsection[{Render\-Editor\-Grid}]{\setlength{\rightskip}{0pt plus 5cm}void Render\-Editor\-Grid (
+\begin{DoxyParamCaption}
+\item[{{\bf Editor} $\ast$}]{editor, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{editor_8h_a68ed54402920174541e6777d2b78e2aa}
+
+
+Draws the grid for the editor. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em editor} & The editor to draw for \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use \\
+\hline
+\end{DoxyParams}
+\hypertarget{editor_8h_a07410e32dc2e98a6157b917c51b8b8d4}{\index{editor.\-h@{editor.\-h}!Render\-Selection@{Render\-Selection}}
+\index{Render\-Selection@{Render\-Selection}!editor.h@{editor.\-h}}
+\subsubsection[{Render\-Selection}]{\setlength{\rightskip}{0pt plus 5cm}void Render\-Selection (
+\begin{DoxyParamCaption}
+\item[{{\bf Object\-List} $\ast$}]{selection, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{editor_8h_a07410e32dc2e98a6157b917c51b8b8d4}
+
+
+Draw an indicator of which objects are currently selected. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000001}{Todo}]Function is not well defined. Change!\end{DoxyRefDesc}
+
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em selection} & The list of objects that are selected \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use \\
+\hline
+\end{DoxyParams}
+\hypertarget{editor_8h_a9c33abc6e9e00a541c13d5035aa04a63}{\index{editor.\-h@{editor.\-h}!Render\-Selection\-Box@{Render\-Selection\-Box}}
+\index{Render\-Selection\-Box@{Render\-Selection\-Box}!editor.h@{editor.\-h}}
+\subsubsection[{Render\-Selection\-Box}]{\setlength{\rightskip}{0pt plus 5cm}void Render\-Selection\-Box (
+\begin{DoxyParamCaption}
+\item[{{\bf Editor} $\ast$}]{editor, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{editor_8h_a9c33abc6e9e00a541c13d5035aa04a63}
+
+
+Draws the selection box. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em editor} & The editor to draw for \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use \\
+\hline
+\end{DoxyParams}
+\hypertarget{editor_8h_a6fe95f55b093d5846956680d6beb3b26}{\index{editor.\-h@{editor.\-h}!Render\-Selection\-Objects@{Render\-Selection\-Objects}}
+\index{Render\-Selection\-Objects@{Render\-Selection\-Objects}!editor.h@{editor.\-h}}
+\subsubsection[{Render\-Selection\-Objects}]{\setlength{\rightskip}{0pt plus 5cm}void Render\-Selection\-Objects (
+\begin{DoxyParamCaption}
+\item[{{\bf Object} $\ast$}]{obj, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{editor_8h_a6fe95f55b093d5846956680d6beb3b26}
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000002}{Todo}]Function is not well defined. Change! \end{DoxyRefDesc}
+\hypertarget{editor_8h_adee353054196f8ac5f13803f3c9b6ef8}{\index{editor.\-h@{editor.\-h}!Show\-Editor@{Show\-Editor}}
+\index{Show\-Editor@{Show\-Editor}!editor.h@{editor.\-h}}
+\subsubsection[{Show\-Editor}]{\setlength{\rightskip}{0pt plus 5cm}void Show\-Editor (
+\begin{DoxyParamCaption}
+\item[{{\bf Editor} $\ast$}]{editor}
+\end{DoxyParamCaption}
+)}}\label{editor_8h_adee353054196f8ac5f13803f3c9b6ef8}
+
+
+Set the Editor to draw itself. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em editor} & The Editor to show \\
+\hline
+\end{DoxyParams}

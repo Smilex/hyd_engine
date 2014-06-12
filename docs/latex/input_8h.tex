@@ -1,0 +1,244 @@
+\hypertarget{input_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/input.h File Reference}
+\label{input_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/input.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/input.\-h}}
+}
+{\ttfamily \#include $<$S\-D\-L.\-h$>$}\\*
+{\ttfamily \#include $<$stdint.\-h$>$}\\*
+{\ttfamily \#include $<$jansson.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}list.\-h\char`\"{}}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structinput}{input}
+\item 
+struct \hyperlink{structinput__preset}{input\-\_\-preset}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{input_8h_aa5fdf27dad14624f967bf83ee9a1d9f1}{typedef void($\ast$ {\bfseries input\-\_\-callback} )(void $\ast$, const char $\ast$)}\label{input_8h_aa5fdf27dad14624f967bf83ee9a1d9f1}
+
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{input_8h_a0ae208dfa21925e3cb4a7c4ea17ea8ef}{input\-\_\-type} \{ {\bfseries K\-E\-Y}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structinput}{input} $\ast$ \hyperlink{input_8h_a0729adc3708746b5433d219a3b5fad47}{input\-\_\-create\-\_\-key} (const char $\ast$action, S\-D\-L\-\_\-\-Scancode code)
+\begin{DoxyCompactList}\small\item\em Creates an input as a keyboard key. \end{DoxyCompactList}\item 
+struct \hyperlink{structinput}{input} $\ast$ \hyperlink{input_8h_a7229ca8498577c04bca37e403ddf24df}{input\-\_\-create\-\_\-json} (const char $\ast$action, json\-\_\-t $\ast$root)
+\begin{DoxyCompactList}\small\item\em Creates an input from a json object. \end{DoxyCompactList}\item 
+struct \hyperlink{structinput__preset}{input\-\_\-preset} $\ast$ \hyperlink{input_8h_a6f63450edeae0929ed9b1179e0efed23}{input\-\_\-preset\-\_\-create} (const char $\ast$name)
+\item 
+uint8\-\_\-t \hyperlink{input_8h_adeb3b31a121e3e405fbfa631d1b1910c}{input\-\_\-preset\-\_\-list\-\_\-create\-\_\-file} (struct \hyperlink{structlist}{list} $\ast$\hyperlink{structlist}{list}, const char $\ast$filename)
+\begin{DoxyCompactList}\small\item\em Creates input presets from file. \end{DoxyCompactList}\item 
+struct \hyperlink{structinput__preset}{input\-\_\-preset} $\ast$ \hyperlink{input_8h_a9dad3583f64a862dfcbcfa8a4d9ae749}{input\-\_\-preset\-\_\-create\-\_\-json} (const char $\ast$name, json\-\_\-t $\ast$root)
+\begin{DoxyCompactList}\small\item\em Creates a input preset from a J\-S\-O\-N object. \end{DoxyCompactList}\item 
+uint16\-\_\-t \hyperlink{input_8h_a0f45ee4ed93569cfb05b0ad868c46ee0}{input\-\_\-preset\-\_\-get\-\_\-action\-\_\-value} (struct \hyperlink{structinput__preset}{input\-\_\-preset} $\ast$preset, const char $\ast$action)
+\begin{DoxyCompactList}\small\item\em Get the value of the input associated with the action. \end{DoxyCompactList}\item 
+void \hyperlink{input_8h_a00578780fd425a81ce06588004079861}{input\-\_\-preset\-\_\-add\-\_\-callback} (struct \hyperlink{structinput__preset}{input\-\_\-preset} $\ast$preset, const char $\ast$action, input\-\_\-callback callback)
+\begin{DoxyCompactList}\small\item\em Adds a callback to an action. \end{DoxyCompactList}\item 
+void \hyperlink{input_8h_a353e0c4eca1d0a37491d79b31872be5c}{input\-\_\-destroy} (struct \hyperlink{structinput}{input} $\ast$\hyperlink{structinput}{input})
+\item 
+void \hyperlink{input_8h_af512cce6fc53c98ada567a841ee0b6a4}{input\-\_\-preset\-\_\-destroy} (struct \hyperlink{structinput__preset}{input\-\_\-preset} $\ast$preset)
+\item 
+uint16\-\_\-t \hyperlink{input_8h_a86f585a612988121874d98f25767e1d5}{input\-\_\-get\-\_\-max\-\_\-value} (void)
+\begin{DoxyCompactList}\small\item\em Get the maximum possible value for any input. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Contains structs and functions for inputs 
+
+\subsection{Enumeration Type Documentation}
+\hypertarget{input_8h_a0ae208dfa21925e3cb4a7c4ea17ea8ef}{\index{input.\-h@{input.\-h}!input\-\_\-type@{input\-\_\-type}}
+\index{input\-\_\-type@{input\-\_\-type}!input.h@{input.\-h}}
+\subsubsection[{input\-\_\-type}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf input\-\_\-type}}}\label{input_8h_a0ae208dfa21925e3cb4a7c4ea17ea8ef}
+Defines the type of the input 
+
+\subsection{Function Documentation}
+\hypertarget{input_8h_a7229ca8498577c04bca37e403ddf24df}{\index{input.\-h@{input.\-h}!input\-\_\-create\-\_\-json@{input\-\_\-create\-\_\-json}}
+\index{input\-\_\-create\-\_\-json@{input\-\_\-create\-\_\-json}!input.h@{input.\-h}}
+\subsubsection[{input\-\_\-create\-\_\-json}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf input}$\ast$ input\-\_\-create\-\_\-json (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{action, }
+\item[{json\-\_\-t $\ast$}]{root}
+\end{DoxyParamCaption}
+)}}\label{input_8h_a7229ca8498577c04bca37e403ddf24df}
+
+
+Creates an input from a json object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em root} & The json object\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new input 
+\end{DoxyReturn}
+\hypertarget{input_8h_a0729adc3708746b5433d219a3b5fad47}{\index{input.\-h@{input.\-h}!input\-\_\-create\-\_\-key@{input\-\_\-create\-\_\-key}}
+\index{input\-\_\-create\-\_\-key@{input\-\_\-create\-\_\-key}!input.h@{input.\-h}}
+\subsubsection[{input\-\_\-create\-\_\-key}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf input}$\ast$ input\-\_\-create\-\_\-key (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{action, }
+\item[{S\-D\-L\-\_\-\-Scancode}]{code}
+\end{DoxyParamCaption}
+)}}\label{input_8h_a0729adc3708746b5433d219a3b5fad47}
+
+
+Creates an input as a keyboard key. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em action} & Name of the action \\
+\hline
+\mbox{\tt in}  & {\em code} & The key code\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new input. N\-U\-L\-L if error. 
+\end{DoxyReturn}
+\hypertarget{input_8h_a353e0c4eca1d0a37491d79b31872be5c}{\index{input.\-h@{input.\-h}!input\-\_\-destroy@{input\-\_\-destroy}}
+\index{input\-\_\-destroy@{input\-\_\-destroy}!input.h@{input.\-h}}
+\subsubsection[{input\-\_\-destroy}]{\setlength{\rightskip}{0pt plus 5cm}void input\-\_\-destroy (
+\begin{DoxyParamCaption}
+\item[{struct {\bf input} $\ast$}]{input}
+\end{DoxyParamCaption}
+)}}\label{input_8h_a353e0c4eca1d0a37491d79b31872be5c}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em input} & The input to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{input_8h_a86f585a612988121874d98f25767e1d5}{\index{input.\-h@{input.\-h}!input\-\_\-get\-\_\-max\-\_\-value@{input\-\_\-get\-\_\-max\-\_\-value}}
+\index{input\-\_\-get\-\_\-max\-\_\-value@{input\-\_\-get\-\_\-max\-\_\-value}!input.h@{input.\-h}}
+\subsubsection[{input\-\_\-get\-\_\-max\-\_\-value}]{\setlength{\rightskip}{0pt plus 5cm}uint16\-\_\-t input\-\_\-get\-\_\-max\-\_\-value (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{input_8h_a86f585a612988121874d98f25767e1d5}
+
+
+Get the maximum possible value for any input. 
+
+\begin{DoxyReturn}{Returns}
+The maximum value 
+\end{DoxyReturn}
+\hypertarget{input_8h_a00578780fd425a81ce06588004079861}{\index{input.\-h@{input.\-h}!input\-\_\-preset\-\_\-add\-\_\-callback@{input\-\_\-preset\-\_\-add\-\_\-callback}}
+\index{input\-\_\-preset\-\_\-add\-\_\-callback@{input\-\_\-preset\-\_\-add\-\_\-callback}!input.h@{input.\-h}}
+\subsubsection[{input\-\_\-preset\-\_\-add\-\_\-callback}]{\setlength{\rightskip}{0pt plus 5cm}void input\-\_\-preset\-\_\-add\-\_\-callback (
+\begin{DoxyParamCaption}
+\item[{struct {\bf input\-\_\-preset} $\ast$}]{preset, }
+\item[{const char $\ast$}]{action, }
+\item[{input\-\_\-callback}]{callback}
+\end{DoxyParamCaption}
+)}}\label{input_8h_a00578780fd425a81ce06588004079861}
+
+
+Adds a callback to an action. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em preset} & The input preset \\
+\hline
+\mbox{\tt in}  & {\em action} & The input action \\
+\hline
+\mbox{\tt in}  & {\em callback} & The callback \\
+\hline
+\end{DoxyParams}
+\hypertarget{input_8h_a6f63450edeae0929ed9b1179e0efed23}{\index{input.\-h@{input.\-h}!input\-\_\-preset\-\_\-create@{input\-\_\-preset\-\_\-create}}
+\index{input\-\_\-preset\-\_\-create@{input\-\_\-preset\-\_\-create}!input.h@{input.\-h}}
+\subsubsection[{input\-\_\-preset\-\_\-create}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf input\-\_\-preset}$\ast$ input\-\_\-preset\-\_\-create (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{input_8h_a6f63450edeae0929ed9b1179e0efed23}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em name} & The name of the preset\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new input preset. N\-U\-L\-L if error. 
+\end{DoxyReturn}
+\hypertarget{input_8h_a9dad3583f64a862dfcbcfa8a4d9ae749}{\index{input.\-h@{input.\-h}!input\-\_\-preset\-\_\-create\-\_\-json@{input\-\_\-preset\-\_\-create\-\_\-json}}
+\index{input\-\_\-preset\-\_\-create\-\_\-json@{input\-\_\-preset\-\_\-create\-\_\-json}!input.h@{input.\-h}}
+\subsubsection[{input\-\_\-preset\-\_\-create\-\_\-json}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf input\-\_\-preset}$\ast$ input\-\_\-preset\-\_\-create\-\_\-json (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{name, }
+\item[{json\-\_\-t $\ast$}]{root}
+\end{DoxyParamCaption}
+)}}\label{input_8h_a9dad3583f64a862dfcbcfa8a4d9ae749}
+
+
+Creates a input preset from a J\-S\-O\-N object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em name} & Name of the preset \\
+\hline
+\mbox{\tt in}  & {\em root} & The J\-S\-O\-N object\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new input preset 
+\end{DoxyReturn}
+\hypertarget{input_8h_af512cce6fc53c98ada567a841ee0b6a4}{\index{input.\-h@{input.\-h}!input\-\_\-preset\-\_\-destroy@{input\-\_\-preset\-\_\-destroy}}
+\index{input\-\_\-preset\-\_\-destroy@{input\-\_\-preset\-\_\-destroy}!input.h@{input.\-h}}
+\subsubsection[{input\-\_\-preset\-\_\-destroy}]{\setlength{\rightskip}{0pt plus 5cm}void input\-\_\-preset\-\_\-destroy (
+\begin{DoxyParamCaption}
+\item[{struct {\bf input\-\_\-preset} $\ast$}]{preset}
+\end{DoxyParamCaption}
+)}}\label{input_8h_af512cce6fc53c98ada567a841ee0b6a4}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em preset} & The input preset to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{input_8h_a0f45ee4ed93569cfb05b0ad868c46ee0}{\index{input.\-h@{input.\-h}!input\-\_\-preset\-\_\-get\-\_\-action\-\_\-value@{input\-\_\-preset\-\_\-get\-\_\-action\-\_\-value}}
+\index{input\-\_\-preset\-\_\-get\-\_\-action\-\_\-value@{input\-\_\-preset\-\_\-get\-\_\-action\-\_\-value}!input.h@{input.\-h}}
+\subsubsection[{input\-\_\-preset\-\_\-get\-\_\-action\-\_\-value}]{\setlength{\rightskip}{0pt plus 5cm}uint16\-\_\-t input\-\_\-preset\-\_\-get\-\_\-action\-\_\-value (
+\begin{DoxyParamCaption}
+\item[{struct {\bf input\-\_\-preset} $\ast$}]{preset, }
+\item[{const char $\ast$}]{action}
+\end{DoxyParamCaption}
+)}}\label{input_8h_a0f45ee4ed93569cfb05b0ad868c46ee0}
+
+
+Get the value of the input associated with the action. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em preset} & The input preset to look through \\
+\hline
+\mbox{\tt in}  & {\em action} & The action to look for\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The value or 0 if not found. 
+\end{DoxyReturn}
+\hypertarget{input_8h_adeb3b31a121e3e405fbfa631d1b1910c}{\index{input.\-h@{input.\-h}!input\-\_\-preset\-\_\-list\-\_\-create\-\_\-file@{input\-\_\-preset\-\_\-list\-\_\-create\-\_\-file}}
+\index{input\-\_\-preset\-\_\-list\-\_\-create\-\_\-file@{input\-\_\-preset\-\_\-list\-\_\-create\-\_\-file}!input.h@{input.\-h}}
+\subsubsection[{input\-\_\-preset\-\_\-list\-\_\-create\-\_\-file}]{\setlength{\rightskip}{0pt plus 5cm}uint8\-\_\-t input\-\_\-preset\-\_\-list\-\_\-create\-\_\-file (
+\begin{DoxyParamCaption}
+\item[{struct {\bf list} $\ast$}]{list, }
+\item[{const char $\ast$}]{filename}
+\end{DoxyParamCaption}
+)}}\label{input_8h_adeb3b31a121e3e405fbfa631d1b1910c}
+
+
+Creates input presets from file. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em list} & The list to append to \\
+\hline
+\mbox{\tt in}  & {\em filename} & Path to the file to read\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. Non-\/zero on error 
+\end{DoxyReturn}

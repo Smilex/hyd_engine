@@ -1,0 +1,343 @@
+\hypertarget{object_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/object.h File Reference}
+\label{object_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/object.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/object.\-h}}
+}
+{\ttfamily \#include \char`\"{}sprite.\-h\char`\"{}}\\*
+{\ttfamily \#include $<$S\-D\-L.\-h$>$}\\*
+{\ttfamily \#include $<$jansson.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}collision.\-h\char`\"{}}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structentity}{entity}
+\item 
+struct \hyperlink{structSObjectList}{S\-Object\-List}
+\begin{DoxyCompactList}\small\item\em Represents a list of Objects. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{object_8h_a087f4f3828d0c38d173b4557ea1d4021}{typedef struct \hyperlink{structSObjectList}{S\-Object\-List} {\bfseries Object\-List}}\label{object_8h_a087f4f3828d0c38d173b4557ea1d4021}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Object $\ast$ \hyperlink{object_8h_a541fd7ecce6898950590e2cb950edc48}{Create\-Object} (\hyperlink{structSSprite}{Sprite} $\ast$sprite, const char $\ast$name, S\-D\-L\-\_\-\-Point point, Collision\-Box collision, Object $\ast$parent, Object $\ast$children)
+\begin{DoxyCompactList}\small\item\em Allocates memory for a new Object and returns the pointer. \end{DoxyCompactList}\item 
+Object $\ast$ \hyperlink{object_8h_a5d391824ea3c17d74675c530f3803615}{Create\-Object\-From\-J\-S\-O\-N} (json\-\_\-t $\ast$root, S\-D\-L\-\_\-\-Point point, \hyperlink{structSTextureList}{Texture\-List} $\ast$$\ast$textures, Object $\ast$parent)
+\begin{DoxyCompactList}\small\item\em Creates an object from a J\-S\-O\-N object. \end{DoxyCompactList}\item 
+Object $\ast$ \hyperlink{object_8h_adbf2062fe54781027f56bc1455ad3db4}{Create\-Objects\-From\-J\-S\-O\-N} (json\-\_\-t $\ast$root, \hyperlink{structSTextureList}{Texture\-List} $\ast$$\ast$textures, Object $\ast$parent)
+\begin{DoxyCompactList}\small\item\em Creates a object hierarchy from a J\-S\-O\-N array. \end{DoxyCompactList}\item 
+Object $\ast$ \hyperlink{object_8h_abdd6b6a7aaf3f46f603338695f6f1ad9}{Create\-Object\-From\-File} (const char $\ast$filename, S\-D\-L\-\_\-\-Point point, \hyperlink{structSTextureList}{Texture\-List} $\ast$$\ast$textures, Object $\ast$parent)
+\begin{DoxyCompactList}\small\item\em Creates an object from a file. \end{DoxyCompactList}\item 
+void \hyperlink{object_8h_ad0878d5dde8b9e6598817d11051f80f0}{Draw\-Object} (Object $\ast$object, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Draws the Object. \end{DoxyCompactList}\item 
+void \hyperlink{object_8h_a95cad1d8486235e90c1b5110024dd238}{Draw\-Object\-Collisions} (Object $\ast$object, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Draws the Object's collision box. \end{DoxyCompactList}\item 
+void \hyperlink{object_8h_ae2524dcf97c8697badd16015254098e3}{Destroy\-Object} (Object $\ast$object)
+\begin{DoxyCompactList}\small\item\em Deallocates and cleans an Object. \end{DoxyCompactList}\item 
+void \hyperlink{object_8h_a8b0f3c0e32252cc3b30e9f6604ecba03}{Destroy\-Object\-List} (\hyperlink{structSObjectList}{Object\-List} $\ast$\hyperlink{structlist}{list})
+\begin{DoxyCompactList}\small\item\em Deallocates and cleans the list. \end{DoxyCompactList}\item 
+void \hyperlink{object_8h_adeb8dc9a1005700b812867d5c362dc24}{Add\-Child\-Object} (Object $\ast$parent, Object $\ast$child)
+\begin{DoxyCompactList}\small\item\em Adds a child to an object. \end{DoxyCompactList}\item 
+Object $\ast$ \hyperlink{object_8h_a82f72d195ed3decf622c2d0224d4bf14}{Find\-Object\-In\-Point} (Object $\ast$root, S\-D\-L\-\_\-\-Point point)
+\begin{DoxyCompactList}\small\item\em Finds one object in point. \end{DoxyCompactList}\item 
+Object $\ast$ \hyperlink{object_8h_a331cd928e81a8bdf9d9013cfbbf9d8d9}{Find\-Object\-By\-Name} (Object $\ast$root, const char $\ast$name)
+\begin{DoxyCompactList}\small\item\em Finds first object with name. \end{DoxyCompactList}\item 
+\hyperlink{structSObjectList}{Object\-List} $\ast$ \hyperlink{object_8h_a269eee0745375198a3263b31c00dc22b}{Find\-Objects\-In\-Rect} (Object $\ast$root, S\-D\-L\-\_\-\-Rect rect)
+\begin{DoxyCompactList}\small\item\em Finds objects in that collide with rectangle. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{object_8h_adeb8dc9a1005700b812867d5c362dc24}{\index{object.\-h@{object.\-h}!Add\-Child\-Object@{Add\-Child\-Object}}
+\index{Add\-Child\-Object@{Add\-Child\-Object}!object.h@{object.\-h}}
+\subsubsection[{Add\-Child\-Object}]{\setlength{\rightskip}{0pt plus 5cm}void Add\-Child\-Object (
+\begin{DoxyParamCaption}
+\item[{Object $\ast$}]{parent, }
+\item[{Object $\ast$}]{child}
+\end{DoxyParamCaption}
+)}}\label{object_8h_adeb8dc9a1005700b812867d5c362dc24}
+
+
+Adds a child to an object. 
+
+It adds the child unmodified, so its hierarchy is added as well.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em parent} & The Object to add to \\
+\hline
+\mbox{\tt in}  & {\em child} & The Object to add \\
+\hline
+\end{DoxyParams}
+\hypertarget{object_8h_a541fd7ecce6898950590e2cb950edc48}{\index{object.\-h@{object.\-h}!Create\-Object@{Create\-Object}}
+\index{Create\-Object@{Create\-Object}!object.h@{object.\-h}}
+\subsubsection[{Create\-Object}]{\setlength{\rightskip}{0pt plus 5cm}Object$\ast$ Create\-Object (
+\begin{DoxyParamCaption}
+\item[{{\bf Sprite} $\ast$}]{sprite, }
+\item[{const char $\ast$}]{name, }
+\item[{S\-D\-L\-\_\-\-Point}]{point, }
+\item[{Collision\-Box}]{collision, }
+\item[{Object $\ast$}]{parent, }
+\item[{Object $\ast$}]{children}
+\end{DoxyParamCaption}
+)}}\label{object_8h_a541fd7ecce6898950590e2cb950edc48}
+
+
+Allocates memory for a new Object and returns the pointer. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em sprite} & The object's sprite \\
+\hline
+\mbox{\tt in}  & {\em name} & The object's name. Pass N\-U\-L\-L if you don't intend to search for it \\
+\hline
+\mbox{\tt in}  & {\em point} & The object's position \\
+\hline
+\mbox{\tt in}  & {\em collision} & The object's collision box \\
+\hline
+\mbox{\tt in}  & {\em parent} & The object's parent \\
+\hline
+\mbox{\tt in}  & {\em children} & The object's children\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the new Object. N\-U\-L\-L if error. 
+\end{DoxyReturn}
+\hypertarget{object_8h_abdd6b6a7aaf3f46f603338695f6f1ad9}{\index{object.\-h@{object.\-h}!Create\-Object\-From\-File@{Create\-Object\-From\-File}}
+\index{Create\-Object\-From\-File@{Create\-Object\-From\-File}!object.h@{object.\-h}}
+\subsubsection[{Create\-Object\-From\-File}]{\setlength{\rightskip}{0pt plus 5cm}Object$\ast$ Create\-Object\-From\-File (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{filename, }
+\item[{S\-D\-L\-\_\-\-Point}]{point, }
+\item[{{\bf Texture\-List} $\ast$$\ast$}]{textures, }
+\item[{Object $\ast$}]{parent}
+\end{DoxyParamCaption}
+)}}\label{object_8h_abdd6b6a7aaf3f46f603338695f6f1ad9}
+
+
+Creates an object from a file. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em filename} & Path to the file to read \\
+\hline
+\mbox{\tt in}  & {\em point} & The object's position \\
+\hline
+\mbox{\tt out}  & {\em textures} & The list to add the sprite's texture to \\
+\hline
+\mbox{\tt in}  & {\em parent} & The object's parent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the new Object 
+\end{DoxyReturn}
+\hypertarget{object_8h_a5d391824ea3c17d74675c530f3803615}{\index{object.\-h@{object.\-h}!Create\-Object\-From\-J\-S\-O\-N@{Create\-Object\-From\-J\-S\-O\-N}}
+\index{Create\-Object\-From\-J\-S\-O\-N@{Create\-Object\-From\-J\-S\-O\-N}!object.h@{object.\-h}}
+\subsubsection[{Create\-Object\-From\-J\-S\-O\-N}]{\setlength{\rightskip}{0pt plus 5cm}Object$\ast$ Create\-Object\-From\-J\-S\-O\-N (
+\begin{DoxyParamCaption}
+\item[{json\-\_\-t $\ast$}]{root, }
+\item[{S\-D\-L\-\_\-\-Point}]{point, }
+\item[{{\bf Texture\-List} $\ast$$\ast$}]{textures, }
+\item[{Object $\ast$}]{parent}
+\end{DoxyParamCaption}
+)}}\label{object_8h_a5d391824ea3c17d74675c530f3803615}
+
+
+Creates an object from a J\-S\-O\-N object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em root} & The J\-S\-O\-N object \\
+\hline
+\mbox{\tt in}  & {\em point} & The object's position \\
+\hline
+\mbox{\tt out}  & {\em textures} & The list to add the sprite's texture to \\
+\hline
+\mbox{\tt in}  & {\em parent} & The object's parent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the new Object 
+\end{DoxyReturn}
+\hypertarget{object_8h_adbf2062fe54781027f56bc1455ad3db4}{\index{object.\-h@{object.\-h}!Create\-Objects\-From\-J\-S\-O\-N@{Create\-Objects\-From\-J\-S\-O\-N}}
+\index{Create\-Objects\-From\-J\-S\-O\-N@{Create\-Objects\-From\-J\-S\-O\-N}!object.h@{object.\-h}}
+\subsubsection[{Create\-Objects\-From\-J\-S\-O\-N}]{\setlength{\rightskip}{0pt plus 5cm}Object$\ast$ Create\-Objects\-From\-J\-S\-O\-N (
+\begin{DoxyParamCaption}
+\item[{json\-\_\-t $\ast$}]{root, }
+\item[{{\bf Texture\-List} $\ast$$\ast$}]{textures, }
+\item[{Object $\ast$}]{parent}
+\end{DoxyParamCaption}
+)}}\label{object_8h_adbf2062fe54781027f56bc1455ad3db4}
+
+
+Creates a object hierarchy from a J\-S\-O\-N array. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em root} & The J\-S\-O\-N array \\
+\hline
+\mbox{\tt out}  & {\em textures} & The list to add the sprite's texture to \\
+\hline
+\mbox{\tt in}  & {\em parent} & The object's parent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the new Object 
+\end{DoxyReturn}
+\hypertarget{object_8h_ae2524dcf97c8697badd16015254098e3}{\index{object.\-h@{object.\-h}!Destroy\-Object@{Destroy\-Object}}
+\index{Destroy\-Object@{Destroy\-Object}!object.h@{object.\-h}}
+\subsubsection[{Destroy\-Object}]{\setlength{\rightskip}{0pt plus 5cm}void Destroy\-Object (
+\begin{DoxyParamCaption}
+\item[{Object $\ast$}]{object}
+\end{DoxyParamCaption}
+)}}\label{object_8h_ae2524dcf97c8697badd16015254098e3}
+
+
+Deallocates and cleans an Object. 
+
+Destroys the object and its children. Not its siblings.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em object} & The object to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{object_8h_a8b0f3c0e32252cc3b30e9f6604ecba03}{\index{object.\-h@{object.\-h}!Destroy\-Object\-List@{Destroy\-Object\-List}}
+\index{Destroy\-Object\-List@{Destroy\-Object\-List}!object.h@{object.\-h}}
+\subsubsection[{Destroy\-Object\-List}]{\setlength{\rightskip}{0pt plus 5cm}void Destroy\-Object\-List (
+\begin{DoxyParamCaption}
+\item[{{\bf Object\-List} $\ast$}]{list}
+\end{DoxyParamCaption}
+)}}\label{object_8h_a8b0f3c0e32252cc3b30e9f6604ecba03}
+
+
+Deallocates and cleans the list. 
+
+Destroys the list, but not the objects.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em list} & The list to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{object_8h_ad0878d5dde8b9e6598817d11051f80f0}{\index{object.\-h@{object.\-h}!Draw\-Object@{Draw\-Object}}
+\index{Draw\-Object@{Draw\-Object}!object.h@{object.\-h}}
+\subsubsection[{Draw\-Object}]{\setlength{\rightskip}{0pt plus 5cm}void Draw\-Object (
+\begin{DoxyParamCaption}
+\item[{Object $\ast$}]{object, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{object_8h_ad0878d5dde8b9e6598817d11051f80f0}
+
+
+Draws the Object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em object} & The object to draw \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use \\
+\hline
+\end{DoxyParams}
+\hypertarget{object_8h_a95cad1d8486235e90c1b5110024dd238}{\index{object.\-h@{object.\-h}!Draw\-Object\-Collisions@{Draw\-Object\-Collisions}}
+\index{Draw\-Object\-Collisions@{Draw\-Object\-Collisions}!object.h@{object.\-h}}
+\subsubsection[{Draw\-Object\-Collisions}]{\setlength{\rightskip}{0pt plus 5cm}void Draw\-Object\-Collisions (
+\begin{DoxyParamCaption}
+\item[{Object $\ast$}]{object, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{object_8h_a95cad1d8486235e90c1b5110024dd238}
+
+
+Draws the Object's collision box. 
+
+\begin{DoxyWarning}{Warning}
+This function will most likely be replaced with a generic collision draw function
+\end{DoxyWarning}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em object} & The object's collision box to draw \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use \\
+\hline
+\end{DoxyParams}
+\hypertarget{object_8h_a331cd928e81a8bdf9d9013cfbbf9d8d9}{\index{object.\-h@{object.\-h}!Find\-Object\-By\-Name@{Find\-Object\-By\-Name}}
+\index{Find\-Object\-By\-Name@{Find\-Object\-By\-Name}!object.h@{object.\-h}}
+\subsubsection[{Find\-Object\-By\-Name}]{\setlength{\rightskip}{0pt plus 5cm}Object$\ast$ Find\-Object\-By\-Name (
+\begin{DoxyParamCaption}
+\item[{Object $\ast$}]{root, }
+\item[{const char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{object_8h_a331cd928e81a8bdf9d9013cfbbf9d8d9}
+
+
+Finds first object with name. 
+
+\begin{DoxyWarning}{Warning}
+Only returns the first Object with name 
+\end{DoxyWarning}
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000002}{Todo}]Change to use Object\-List\end{DoxyRefDesc}
+
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em root} & The Object hierarchy to search through \\
+\hline
+\mbox{\tt in}  & {\em name} & The name to search for\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The first Object with {\itshape name}. N\-U\-L\-L if not found. 
+\end{DoxyReturn}
+\hypertarget{object_8h_a82f72d195ed3decf622c2d0224d4bf14}{\index{object.\-h@{object.\-h}!Find\-Object\-In\-Point@{Find\-Object\-In\-Point}}
+\index{Find\-Object\-In\-Point@{Find\-Object\-In\-Point}!object.h@{object.\-h}}
+\subsubsection[{Find\-Object\-In\-Point}]{\setlength{\rightskip}{0pt plus 5cm}Object$\ast$ Find\-Object\-In\-Point (
+\begin{DoxyParamCaption}
+\item[{Object $\ast$}]{root, }
+\item[{S\-D\-L\-\_\-\-Point}]{point}
+\end{DoxyParamCaption}
+)}}\label{object_8h_a82f72d195ed3decf622c2d0224d4bf14}
+
+
+Finds one object in point. 
+
+\begin{DoxyWarning}{Warning}
+Does not handle overlapping objects properly. 
+\end{DoxyWarning}
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000001}{Todo}]Change to use Object\-List\end{DoxyRefDesc}
+
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em root} & The Object hierarchy to search through \\
+\hline
+\mbox{\tt in}  & {\em point} & The point to check for\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The first object that contains the {\itshape point}. N\-U\-L\-L if not found. 
+\end{DoxyReturn}
+\hypertarget{object_8h_a269eee0745375198a3263b31c00dc22b}{\index{object.\-h@{object.\-h}!Find\-Objects\-In\-Rect@{Find\-Objects\-In\-Rect}}
+\index{Find\-Objects\-In\-Rect@{Find\-Objects\-In\-Rect}!object.h@{object.\-h}}
+\subsubsection[{Find\-Objects\-In\-Rect}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Object\-List}$\ast$ Find\-Objects\-In\-Rect (
+\begin{DoxyParamCaption}
+\item[{Object $\ast$}]{root, }
+\item[{S\-D\-L\-\_\-\-Rect}]{rect}
+\end{DoxyParamCaption}
+)}}\label{object_8h_a269eee0745375198a3263b31c00dc22b}
+
+
+Finds objects in that collide with rectangle. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em root} & The Object hierarchy to search through \\
+\hline
+\mbox{\tt in}  & {\em rect} & The rectangle to check for\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+List of objects that collided with {\itshape rect}. N\-U\-L\-L if not found. 
+\end{DoxyReturn}

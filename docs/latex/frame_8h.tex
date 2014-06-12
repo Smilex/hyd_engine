@@ -1,0 +1,119 @@
+\hypertarget{frame_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/frame.h File Reference}
+\label{frame_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/frame.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/frame.\-h}}
+}
+{\ttfamily \#include $<$S\-D\-L.\-h$>$}\\*
+{\ttfamily \#include $<$jansson.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}list.\-h\char`\"{}}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structframe}{frame}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structframe}{frame} $\ast$ \hyperlink{frame_8h_a0ae749c0c4e7c12f24ef14c6d6cfeaee}{frame\-\_\-create} (const char $\ast$name, const S\-D\-L\-\_\-\-Rect rect)
+\item 
+struct \hyperlink{structframe}{frame} $\ast$ \hyperlink{frame_8h_aae27ca72c71fe62d5ee1c692579cc702}{frame\-\_\-create\-\_\-json} (json\-\_\-t $\ast$root)
+\begin{DoxyCompactList}\small\item\em Create a new frame from a J\-S\-O\-N object. \end{DoxyCompactList}\item 
+struct \hyperlink{structframe}{frame} $\ast$$\ast$ \hyperlink{frame_8h_a0900149095672ae89d02ca95ab62ec3f}{frame\-\_\-array\-\_\-create\-\_\-json} (json\-\_\-t $\ast$root, uint32\-\_\-t $\ast$num)
+\begin{DoxyCompactList}\small\item\em Create frames from a J\-S\-O\-N array. \end{DoxyCompactList}\item 
+struct \hyperlink{structframe}{frame} $\ast$ \hyperlink{frame_8h_aa0c7dd834764bddd10378b4b1bcea34f}{frame\-\_\-array\-\_\-find} (struct \hyperlink{structframe}{frame} $\ast$$\ast$frames, uint32\-\_\-t num, const char $\ast$name)
+\item 
+void \hyperlink{frame_8h_a6d0956944bf9cfbe6743b4dd0d682117}{frame\-\_\-destroy} (struct \hyperlink{structframe}{frame} $\ast$\hyperlink{structframe}{frame})
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{frame_8h_a0900149095672ae89d02ca95ab62ec3f}{\index{frame.\-h@{frame.\-h}!frame\-\_\-array\-\_\-create\-\_\-json@{frame\-\_\-array\-\_\-create\-\_\-json}}
+\index{frame\-\_\-array\-\_\-create\-\_\-json@{frame\-\_\-array\-\_\-create\-\_\-json}!frame.h@{frame.\-h}}
+\subsubsection[{frame\-\_\-array\-\_\-create\-\_\-json}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf frame}$\ast$$\ast$ frame\-\_\-array\-\_\-create\-\_\-json (
+\begin{DoxyParamCaption}
+\item[{json\-\_\-t $\ast$}]{root, }
+\item[{uint32\-\_\-t $\ast$}]{num}
+\end{DoxyParamCaption}
+)}}\label{frame_8h_a0900149095672ae89d02ca95ab62ec3f}
+
+
+Create frames from a J\-S\-O\-N array. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em root} & The J\-S\-O\-N array \\
+\hline
+\mbox{\tt out}  & {\em num} & The number of frames created\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new array of frames 
+\end{DoxyReturn}
+\hypertarget{frame_8h_aa0c7dd834764bddd10378b4b1bcea34f}{\index{frame.\-h@{frame.\-h}!frame\-\_\-array\-\_\-find@{frame\-\_\-array\-\_\-find}}
+\index{frame\-\_\-array\-\_\-find@{frame\-\_\-array\-\_\-find}!frame.h@{frame.\-h}}
+\subsubsection[{frame\-\_\-array\-\_\-find}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf frame}$\ast$ frame\-\_\-array\-\_\-find (
+\begin{DoxyParamCaption}
+\item[{struct {\bf frame} $\ast$$\ast$}]{frames, }
+\item[{uint32\-\_\-t}]{num, }
+\item[{const char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{frame_8h_aa0c7dd834764bddd10378b4b1bcea34f}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em frames} & The list of frames to search through \\
+\hline
+\mbox{\tt in}  & {\em num} & The number of frames \\
+\hline
+\mbox{\tt in}  & {\em name} & The name to search for\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The frame or N\-U\-L\-L if not found. 
+\end{DoxyReturn}
+\hypertarget{frame_8h_a0ae749c0c4e7c12f24ef14c6d6cfeaee}{\index{frame.\-h@{frame.\-h}!frame\-\_\-create@{frame\-\_\-create}}
+\index{frame\-\_\-create@{frame\-\_\-create}!frame.h@{frame.\-h}}
+\subsubsection[{frame\-\_\-create}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf frame}$\ast$ frame\-\_\-create (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{name, }
+\item[{const S\-D\-L\-\_\-\-Rect}]{rect}
+\end{DoxyParamCaption}
+)}}\label{frame_8h_a0ae749c0c4e7c12f24ef14c6d6cfeaee}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em name} & The frame's name \\
+\hline
+\mbox{\tt in}  & {\em rect} & The frame's rectangle\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new frame 
+\end{DoxyReturn}
+\hypertarget{frame_8h_aae27ca72c71fe62d5ee1c692579cc702}{\index{frame.\-h@{frame.\-h}!frame\-\_\-create\-\_\-json@{frame\-\_\-create\-\_\-json}}
+\index{frame\-\_\-create\-\_\-json@{frame\-\_\-create\-\_\-json}!frame.h@{frame.\-h}}
+\subsubsection[{frame\-\_\-create\-\_\-json}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf frame}$\ast$ frame\-\_\-create\-\_\-json (
+\begin{DoxyParamCaption}
+\item[{json\-\_\-t $\ast$}]{root}
+\end{DoxyParamCaption}
+)}}\label{frame_8h_aae27ca72c71fe62d5ee1c692579cc702}
+
+
+Create a new frame from a J\-S\-O\-N object. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em root} & The J\-S\-O\-N object\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new frame 
+\end{DoxyReturn}
+\hypertarget{frame_8h_a6d0956944bf9cfbe6743b4dd0d682117}{\index{frame.\-h@{frame.\-h}!frame\-\_\-destroy@{frame\-\_\-destroy}}
+\index{frame\-\_\-destroy@{frame\-\_\-destroy}!frame.h@{frame.\-h}}
+\subsubsection[{frame\-\_\-destroy}]{\setlength{\rightskip}{0pt plus 5cm}void frame\-\_\-destroy (
+\begin{DoxyParamCaption}
+\item[{struct {\bf frame} $\ast$}]{frame}
+\end{DoxyParamCaption}
+)}}\label{frame_8h_a6d0956944bf9cfbe6743b4dd0d682117}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em frame} & The frame to destroy \\
+\hline
+\end{DoxyParams}

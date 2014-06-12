@@ -1,0 +1,130 @@
+\hypertarget{texture_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/texture.h File Reference}
+\label{texture_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/texture.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/texture.\-h}}
+}
+{\ttfamily \#include $<$S\-D\-L.\-h$>$}\\*
+{\ttfamily \#include $<$S\-D\-L\-\_\-image.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}list.\-h\char`\"{}}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structtexture}{texture}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structtexture}{texture} $\ast$ \hyperlink{texture_8h_a67fa462420c762188bacdb50d40b14ad}{texture\-\_\-create} (S\-D\-L\-\_\-\-Texture $\ast$ptr, const char $\ast$name)
+\item 
+struct \hyperlink{structtexture}{texture} $\ast$ \hyperlink{texture_8h_aaf5cff025008077edecd979ab4d78a56}{texture\-\_\-create\-\_\-file} (const char $\ast$filename, S\-D\-L\-\_\-\-Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Creates a new texture using data from the specified file. \end{DoxyCompactList}\item 
+struct \hyperlink{structtexture}{texture} $\ast$ \hyperlink{texture_8h_a5cc991a8075218cb59bc97df659c37ec}{texture\-\_\-copy} (struct \hyperlink{structtexture}{texture} $\ast$\hyperlink{structtexture}{texture})
+\begin{DoxyCompactList}\small\item\em Copy a texture and increment the ref count. \end{DoxyCompactList}\item 
+void \hyperlink{texture_8h_a4a3e87df57923bb6944d67929d1e8883}{texture\-\_\-destroy} (struct \hyperlink{structtexture}{texture} $\ast$\hyperlink{structtexture}{texture})
+\item 
+void \hyperlink{texture_8h_a5be8eac285cdb2b5db100af52dd3381a}{texture\-\_\-list\-\_\-destroy} (struct \hyperlink{structlist}{list} $\ast$textures)
+\item 
+struct \hyperlink{structtexture}{texture} $\ast$ \hyperlink{texture_8h_a505f1600885d6eac99f55e8dd6e8060d}{texture\-\_\-list\-\_\-find} (struct \hyperlink{structlist}{list} $\ast$textures, const char $\ast$name)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{texture_8h_a5cc991a8075218cb59bc97df659c37ec}{\index{texture.\-h@{texture.\-h}!texture\-\_\-copy@{texture\-\_\-copy}}
+\index{texture\-\_\-copy@{texture\-\_\-copy}!texture.h@{texture.\-h}}
+\subsubsection[{texture\-\_\-copy}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf texture}$\ast$ texture\-\_\-copy (
+\begin{DoxyParamCaption}
+\item[{struct {\bf texture} $\ast$}]{texture}
+\end{DoxyParamCaption}
+)}}\label{texture_8h_a5cc991a8075218cb59bc97df659c37ec}
+
+
+Copy a texture and increment the ref count. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em texture} & Texture to copy\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new copy of the texture 
+\end{DoxyReturn}
+\hypertarget{texture_8h_a67fa462420c762188bacdb50d40b14ad}{\index{texture.\-h@{texture.\-h}!texture\-\_\-create@{texture\-\_\-create}}
+\index{texture\-\_\-create@{texture\-\_\-create}!texture.h@{texture.\-h}}
+\subsubsection[{texture\-\_\-create}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf texture}$\ast$ texture\-\_\-create (
+\begin{DoxyParamCaption}
+\item[{S\-D\-L\-\_\-\-Texture $\ast$}]{ptr, }
+\item[{const char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{texture_8h_a67fa462420c762188bacdb50d40b14ad}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em ptr} & The texture pointer \\
+\hline
+\mbox{\tt in}  & {\em name} & The texture name\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new texture 
+\end{DoxyReturn}
+\hypertarget{texture_8h_aaf5cff025008077edecd979ab4d78a56}{\index{texture.\-h@{texture.\-h}!texture\-\_\-create\-\_\-file@{texture\-\_\-create\-\_\-file}}
+\index{texture\-\_\-create\-\_\-file@{texture\-\_\-create\-\_\-file}!texture.h@{texture.\-h}}
+\subsubsection[{texture\-\_\-create\-\_\-file}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf texture}$\ast$ texture\-\_\-create\-\_\-file (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{filename, }
+\item[{S\-D\-L\-\_\-\-Renderer $\ast$}]{renderer}
+\end{DoxyParamCaption}
+)}}\label{texture_8h_aaf5cff025008077edecd979ab4d78a56}
+
+
+Creates a new texture using data from the specified file. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em filename} & The path to the file to read from \\
+\hline
+\mbox{\tt in}  & {\em renderer} & The renderer to use for texture loading\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new texture, or N\-U\-L\-L if there was an error 
+\end{DoxyReturn}
+\hypertarget{texture_8h_a4a3e87df57923bb6944d67929d1e8883}{\index{texture.\-h@{texture.\-h}!texture\-\_\-destroy@{texture\-\_\-destroy}}
+\index{texture\-\_\-destroy@{texture\-\_\-destroy}!texture.h@{texture.\-h}}
+\subsubsection[{texture\-\_\-destroy}]{\setlength{\rightskip}{0pt plus 5cm}void texture\-\_\-destroy (
+\begin{DoxyParamCaption}
+\item[{struct {\bf texture} $\ast$}]{texture}
+\end{DoxyParamCaption}
+)}}\label{texture_8h_a4a3e87df57923bb6944d67929d1e8883}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em texture} & The texture to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{texture_8h_a5be8eac285cdb2b5db100af52dd3381a}{\index{texture.\-h@{texture.\-h}!texture\-\_\-list\-\_\-destroy@{texture\-\_\-list\-\_\-destroy}}
+\index{texture\-\_\-list\-\_\-destroy@{texture\-\_\-list\-\_\-destroy}!texture.h@{texture.\-h}}
+\subsubsection[{texture\-\_\-list\-\_\-destroy}]{\setlength{\rightskip}{0pt plus 5cm}void texture\-\_\-list\-\_\-destroy (
+\begin{DoxyParamCaption}
+\item[{struct {\bf list} $\ast$}]{textures}
+\end{DoxyParamCaption}
+)}}\label{texture_8h_a5be8eac285cdb2b5db100af52dd3381a}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em textures} & The texture list to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{texture_8h_a505f1600885d6eac99f55e8dd6e8060d}{\index{texture.\-h@{texture.\-h}!texture\-\_\-list\-\_\-find@{texture\-\_\-list\-\_\-find}}
+\index{texture\-\_\-list\-\_\-find@{texture\-\_\-list\-\_\-find}!texture.h@{texture.\-h}}
+\subsubsection[{texture\-\_\-list\-\_\-find}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf texture}$\ast$ texture\-\_\-list\-\_\-find (
+\begin{DoxyParamCaption}
+\item[{struct {\bf list} $\ast$}]{textures, }
+\item[{const char $\ast$}]{name}
+\end{DoxyParamCaption}
+)}}\label{texture_8h_a505f1600885d6eac99f55e8dd6e8060d}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em textures} & The texture list to search through \\
+\hline
+\mbox{\tt in}  & {\em name} & The name to search for\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The texture if found, N\-U\-L\-L otherwise 
+\end{DoxyReturn}

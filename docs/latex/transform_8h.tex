@@ -1,0 +1,101 @@
+\hypertarget{transform_8h}{\section{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/transform.h File Reference}
+\label{transform_8h}\index{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/transform.\-h@{/home/ian/\-Development/\-Open\-Hydorah/openhydorah/include/transform.\-h}}
+}
+{\ttfamily \#include $<$stdint.\-h$>$}\\*
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{transform_8h_a2a4dd1d5565120bd0d33c00d8ee6da05}{typedef int32\-\_\-t $\ast$ {\bfseries Transform}}\label{transform_8h_a2a4dd1d5565120bd0d33c00d8ee6da05}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structTransform}{Transform} \hyperlink{transform_8h_a063fd11a900b1e0c29225ba3561e777b}{Create\-Transform} (void)
+\begin{DoxyCompactList}\small\item\em Allocates memory for a new \hyperlink{structTransform}{Transform}. \end{DoxyCompactList}\item 
+void \hyperlink{transform_8h_a340ae7ac92915f3704dbaca364b6e491}{Destroy\-Transform} (\hyperlink{structTransform}{Transform} transform)
+\begin{DoxyCompactList}\small\item\em Deallocate and cleanup a texture. \end{DoxyCompactList}\item 
+\hyperlink{structTransform}{Transform} \hyperlink{transform_8h_a59d51d3b09c8331185a11c77c55b3831}{Multiply\-Transform\-By\-Transform} (\hyperlink{structTransform}{Transform} lhs, \hyperlink{structTransform}{Transform} rhs)
+\begin{DoxyCompactList}\small\item\em Multiply a \hyperlink{structTransform}{Transform} by a \hyperlink{structTransform}{Transform} and return a new \hyperlink{structTransform}{Transform}. \end{DoxyCompactList}\item 
+void \hyperlink{transform_8h_a59216d572ed8015737ce72c6e1b8fe63}{Print\-Transform} (F\-I\-L\-E $\ast$stream, \hyperlink{structTransform}{Transform} transform)
+\begin{DoxyCompactList}\small\item\em Print a \hyperlink{structTransform}{Transform} as text. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Contains structs and functions for Transforms 
+
+\subsection{Function Documentation}
+\hypertarget{transform_8h_a063fd11a900b1e0c29225ba3561e777b}{\index{transform.\-h@{transform.\-h}!Create\-Transform@{Create\-Transform}}
+\index{Create\-Transform@{Create\-Transform}!transform.h@{transform.\-h}}
+\subsubsection[{Create\-Transform}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Transform} Create\-Transform (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{transform_8h_a063fd11a900b1e0c29225ba3561e777b}
+
+
+Allocates memory for a new \hyperlink{structTransform}{Transform}. 
+
+The new transform is made as a identity matrix.
+
+\begin{DoxyReturn}{Returns}
+The new \hyperlink{structTransform}{Transform} 
+\end{DoxyReturn}
+\hypertarget{transform_8h_a340ae7ac92915f3704dbaca364b6e491}{\index{transform.\-h@{transform.\-h}!Destroy\-Transform@{Destroy\-Transform}}
+\index{Destroy\-Transform@{Destroy\-Transform}!transform.h@{transform.\-h}}
+\subsubsection[{Destroy\-Transform}]{\setlength{\rightskip}{0pt plus 5cm}void Destroy\-Transform (
+\begin{DoxyParamCaption}
+\item[{{\bf Transform}}]{transform}
+\end{DoxyParamCaption}
+)}}\label{transform_8h_a340ae7ac92915f3704dbaca364b6e491}
+
+
+Deallocate and cleanup a texture. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em transform} & The transform to destroy \\
+\hline
+\end{DoxyParams}
+\hypertarget{transform_8h_a59d51d3b09c8331185a11c77c55b3831}{\index{transform.\-h@{transform.\-h}!Multiply\-Transform\-By\-Transform@{Multiply\-Transform\-By\-Transform}}
+\index{Multiply\-Transform\-By\-Transform@{Multiply\-Transform\-By\-Transform}!transform.h@{transform.\-h}}
+\subsubsection[{Multiply\-Transform\-By\-Transform}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Transform} Multiply\-Transform\-By\-Transform (
+\begin{DoxyParamCaption}
+\item[{{\bf Transform}}]{lhs, }
+\item[{{\bf Transform}}]{rhs}
+\end{DoxyParamCaption}
+)}}\label{transform_8h_a59d51d3b09c8331185a11c77c55b3831}
+
+
+Multiply a \hyperlink{structTransform}{Transform} by a \hyperlink{structTransform}{Transform} and return a new \hyperlink{structTransform}{Transform}. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em lhs} & The left hand side transform \\
+\hline
+\mbox{\tt in}  & {\em rhs} & The right hand side transform\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+New product transform 
+\end{DoxyReturn}
+\hypertarget{transform_8h_a59216d572ed8015737ce72c6e1b8fe63}{\index{transform.\-h@{transform.\-h}!Print\-Transform@{Print\-Transform}}
+\index{Print\-Transform@{Print\-Transform}!transform.h@{transform.\-h}}
+\subsubsection[{Print\-Transform}]{\setlength{\rightskip}{0pt plus 5cm}void Print\-Transform (
+\begin{DoxyParamCaption}
+\item[{F\-I\-L\-E $\ast$}]{stream, }
+\item[{{\bf Transform}}]{transform}
+\end{DoxyParamCaption}
+)}}\label{transform_8h_a59216d572ed8015737ce72c6e1b8fe63}
+
+
+Print a \hyperlink{structTransform}{Transform} as text. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em transform} & \hyperlink{structTransform}{Transform} to print \\
+\hline
+\mbox{\tt in}  & {\em stream} & Pointer to print to \\
+\hline
+\end{DoxyParams}
