@@ -13,6 +13,8 @@ struct hyd_engine *hyd_engine_create(void)
 	engine->current_mod = NULL;
 	engine->renderer = NULL;
 	engine->window = NULL;
+	engine->call_update = NULL;
+	engine->call_draw = NULL;
 
 	hyd_list_init(&engine->textures);
 	hyd_list_init(&engine->input_presets);
@@ -22,10 +24,15 @@ struct hyd_engine *hyd_engine_create(void)
 
 uint8_t hyd_engine_init(struct hyd_engine *engine, const char *argv[])
 {
+	if (PHYSFS_init(argv[0]) == 0)
+		return 1;
+
 	if (init_sdl(&engine->window, &engine->renderer, 600, 480) != 0)
 		return 1;
 
 	SDL_SetRenderDrawBlendMode(engine->renderer, SDL_BLENDMODE_ADD);
+
+	return 0;
 }
 
 void hyd_engine_events(struct hyd_engine *engine)
@@ -91,6 +98,8 @@ void hyd_engine_destroy(struct hyd_engine *engine)
 	hyd_tex_list_destroy(&engine->textures);
 	hyd_mod_destroy(engine->current_mod);
 
+	if (PHYSFS_isInit() != 0)
+		PHYSFS_deinit();
 	if (engine->renderer != NULL)
 		SDL_DestroyRenderer(engine->renderer);
 	if (engine->window != NULL)
@@ -103,12 +112,18 @@ void hyd_engine_destroy(struct hyd_engine *engine)
 void hyd_engine_draw(struct hyd_engine *engine)
 {
 	hyd_scene_draw(engine->current_scene, engine->renderer);
+
+	if (engine->call_draw != NULL)
+		engine->call_draw(engine);
 }
 
 void hyd_engine_update(struct hyd_engine *engine, uint32_t dt)
 {
 	if (engine == NULL)
 		return;
+
+	if (engine->call_update != NULL)
+		engine->call_update(engine, dt);
 
 	if (engine->current_mod != NULL &&
 			engine->current_mod->update != NULL)
@@ -119,7 +134,7 @@ uint8_t hyd_engine_run(struct hyd_engine *engine)
 {
 	uint32_t last_time = SDL_GetTicks(), current_time, dt;
 	while (engine->running) {
-		engine_events(engine);
+		hyd_engine_events(engine);
 
 		current_time = SDL_GetTicks();
 		dt = (current_time - last_time);
@@ -192,4 +207,14 @@ struct hyd_input_preset *hyd_engine_get_current_input_preset(struct hyd_engine *
 SDL_Renderer *hyd_engine_get_renderer(struct hyd_engine *engine)
 {
 	return engine->renderer;
+}
+
+void hyd_engine_update_func(struct hyd_engine *e, void (*f)(struct hyd_engine*,uint32_t))
+{
+	e->call_update = f;
+}
+
+void hyd_engine_draw_func(struct hyd_engine *e, void (*f)(struct hyd_engine*))
+{
+	e->call_draw = f;
 }
