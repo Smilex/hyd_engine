@@ -79,7 +79,7 @@ void hyd_coll_obj_destroy(struct hyd_coll_obj *col_obj);
  * \param[in] renderer The renderer to use
  */
 void hyd_coll_obj_draw(struct hyd_coll_obj *col_obj,
-		SDL_Renderer *renderer);
+		struct SDL_Renderer *renderer);
 
 /**
  * \param[in] col_obj The collision_object to calculate for

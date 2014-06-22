@@ -96,7 +96,7 @@ void hyd_scene_destroy(struct hyd_scene *scene)
 	struct hyd_ent *next;
 	hyd_list_for_each_entry_safe(iter, next, &scene->entities, branch)
 	{
-		hyd_entity_destroy(iter);
+		hyd_ent_destroy(iter);
 	}
 
 	free(scene);

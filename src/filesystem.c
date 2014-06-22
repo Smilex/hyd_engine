@@ -34,3 +34,8 @@ PHYSFS_sint64 hyd_fs_read_buffer(const char *filename, uint8_t **buf)
 
 	return file_length;
 }
+
+int hyd_fs_add_path(const char *path, const char *as)
+{
+	return PHYSFS_mount(path, as, 1);
+}

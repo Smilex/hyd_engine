@@ -16,8 +16,8 @@
 struct hyd_engine {
 	uint8_t running;
 
-	SDL_Renderer *renderer;
-	SDL_Window *window;
+	struct SDL_Renderer *renderer;
+	struct SDL_Window *window;
 
 	struct hyd_scene *current_scene;
 	struct hyd_mod *current_mod;
@@ -25,6 +25,7 @@ struct hyd_engine {
 	struct hyd_list input_presets;
 	struct hyd_list textures;
 };
+typedef struct hyd_engine hyd_engine;
 
 struct hyd_engine *hyd_engine_create(void);
 
@@ -49,6 +50,6 @@ uint8_t hyd_engine_load_mod(struct hyd_engine *engine, const char *filename);
 /* GETTERS */
 struct hyd_scene *hyd_engine_get_current_scene(struct hyd_engine *engine);
 struct hyd_input_preset *hyd_engine_get_current_input_preset(struct hyd_engine *engine);
-SDL_Renderer *hyd_engine_get_renderer(struct hyd_engine *engine);
+struct SDL_Renderer *hyd_engine_get_renderer(struct hyd_engine *engine);
 
 #endif

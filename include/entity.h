@@ -41,6 +41,7 @@ struct hyd_ent {
 	struct hyd_list properties;
 	struct hyd_list coll_objs;
 };
+typedef struct hyd_ent hyd_ent;
 
 /**
  * \param[in] sprite The entity's sprite
@@ -66,7 +67,7 @@ struct hyd_ent *hyd_ent_create(struct hyd_spr *sprite, const char *name,
  * \return The new entity or NULL on error.
  */
 struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_list *textures,
-		struct hyd_ent *parent, SDL_Renderer *renderer);
+		struct hyd_ent *parent, struct SDL_Renderer *renderer);
 
 /**
  * \brief Creates a entity hierarchy from a JSON array
@@ -81,7 +82,7 @@ struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_list *textures,
  */
 uint8_t hyd_ent_list_create_json(struct hyd_list *ent_list, json_t *root,
 		struct hyd_list *textures, struct hyd_ent *parent,
-		SDL_Renderer *renderer);
+		struct SDL_Renderer *renderer);
 
 /**
  * \brief Creates an entity from a file
@@ -95,14 +96,14 @@ uint8_t hyd_ent_list_create_json(struct hyd_list *ent_list, json_t *root,
  */
 struct hyd_ent *hyd_ent_create_file(const char *filename,
 		struct hyd_list *textures, struct hyd_ent *parent,
-		SDL_Renderer *renderer);
+		struct SDL_Renderer *renderer);
 
 /**
  *
  * \param[in] entity The entity to draw
  * \param[in] renderer The renderer to use
  */
-void hyd_ent_draw(struct hyd_ent *entity, SDL_Renderer *renderer);
+void hyd_ent_draw(struct hyd_ent *entity, struct SDL_Renderer *renderer);
 
 /**
  *

@@ -27,6 +27,7 @@ struct hyd_spr {
 
 	struct hyd_list list;
 };
+typedef struct hyd_spr hyd_spr;
 
 /**
  * \param[in] texture The sprite's texture
@@ -51,7 +52,7 @@ struct hyd_spr *hyd_spr_create(struct hyd_tex *tex, struct hyd_frame **frames,
  * \return The new sprite or NULL on error
  */
 struct hyd_spr *hyd_spr_create_json(json_t *root, struct hyd_list *textures,
-		SDL_Renderer *renderer);
+		struct SDL_Renderer *renderer);
 
 /**
  * \brief Creates a sprite from a file
@@ -63,7 +64,7 @@ struct hyd_spr *hyd_spr_create_json(json_t *root, struct hyd_list *textures,
  * \return The new sprite or NULL on error
  */
 struct hyd_spr *hyd_spr_create_file(const char *filename, struct hyd_list *textures,
-		SDL_Renderer *renderer);
+		struct SDL_Renderer *renderer);
 
 /**
  * \param[in] sprite The sprite to destroy
@@ -82,7 +83,7 @@ void hyd_spr_list_destroy(struct hyd_list *sprites);
  * \param[in] point The point to draw at
  * \param[in] renderer The renderer to use
  */
-void hyd_spr_draw_point(struct hyd_spr *sprite, SDL_Point point,
-		SDL_Renderer *renderer);
+void hyd_spr_draw_point(struct hyd_spr *sprite, struct SDL_Point point,
+		struct SDL_Renderer *renderer);
 
 #endif

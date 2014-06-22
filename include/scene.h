@@ -19,6 +19,7 @@ struct hyd_scene {
 	struct hyd_list entities;
 	struct hyd_list sprites;
 };
+typedef struct hyd_scene hyd_scene;
 
 /**
  * \return The new scene
@@ -35,7 +36,7 @@ struct hyd_scene *hyd_scene_create(void);
  * \return The new scene
  */
 struct hyd_scene *hyd_scene_create_json(json_t *root, struct hyd_list *textures,
-		SDL_Renderer *renderer);
+		struct SDL_Renderer *renderer);
 
 /**
  * \brief Creates a new scene from file
@@ -47,7 +48,7 @@ struct hyd_scene *hyd_scene_create_json(json_t *root, struct hyd_list *textures,
  * \return The new scene
  */
 struct hyd_scene *hyd_scene_create_file(const char *filename, struct hyd_list *textures,
-		SDL_Renderer *renderer);
+		struct SDL_Renderer *renderer);
 
 /**
  * \brief Destroys the scene and its objects
@@ -64,7 +65,7 @@ void hyd_scene_destroy(struct hyd_scene *scene);
  * \param[in] scene The scene to draw
  * \param[in] renderer The renderer to use
  */
-void hyd_scene_draw(struct hyd_scene *scene, SDL_Renderer *renderer);
+void hyd_scene_draw(struct hyd_scene *scene, struct SDL_Renderer *renderer);
 
 /* GETTERS */
 struct hyd_list *hyd_scene_get_entities(struct hyd_scene *scene);

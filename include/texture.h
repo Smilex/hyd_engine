@@ -16,12 +16,13 @@
  * either from a file, or memory data.
  */
 struct hyd_tex {
-	SDL_Texture *ptr;
+	struct SDL_Texture *ptr;
 	uint32_t *ref_count;
 	char *name;
 
 	struct hyd_list list;
 };
+typedef struct hyd_tex hyd_tex;
 
 /**
  * \param[in] ptr The texture pointer
@@ -29,7 +30,7 @@ struct hyd_tex {
  *
  * \return The new texture
  */
-struct hyd_tex *hyd_tex_create(SDL_Texture *ptr, const char *name);
+struct hyd_tex *hyd_tex_create(struct SDL_Texture *ptr, const char *name);
 
 /**
  * \brief Creates a new texture using data from the specified file
@@ -39,7 +40,7 @@ struct hyd_tex *hyd_tex_create(SDL_Texture *ptr, const char *name);
  *
  * \return The new texture, or NULL if there was an error
  */
-struct hyd_tex *hyd_tex_create_file(const char *filename, SDL_Renderer *renderer);
+struct hyd_tex *hyd_tex_create_file(const char *filename, struct SDL_Renderer *renderer);
 
 /**
  * \brief Copy a texture and increment the ref count

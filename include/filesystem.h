@@ -18,4 +18,6 @@
  */
 PHYSFS_sint64 hyd_fs_read_buffer(const char *filename, uint8_t **buf);
 
+int hyd_fs_add_path(const char *path, const char *as);
+
 #endif

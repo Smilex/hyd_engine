@@ -31,7 +31,7 @@ struct hyd_input {
 	char *action;
 	uint16_t value;
 	enum hyd_input_type type;
-	SDL_Scancode code;
+	struct SDL_Scancode code;
 	hyd_input_callback callback;
 	struct hyd_list list;
 };
@@ -47,6 +47,7 @@ struct hyd_input_preset {
 	struct hyd_list inputs;
 	struct hyd_list list;
 };
+typedef struct hyd_input_preset hyd_input_preset;
 
 /**
  * \brief Creates an input as a keyboard key
@@ -56,7 +57,7 @@ struct hyd_input_preset {
  *
  * \return The new input. NULL if error.
  */
-struct hyd_input *hyd_input_create_key(const char *action, SDL_Scancode code);
+struct hyd_input *hyd_input_create_key(const char *action, struct SDL_Scancode code);
 
 /**
  * \brief Creates an input from a json object
