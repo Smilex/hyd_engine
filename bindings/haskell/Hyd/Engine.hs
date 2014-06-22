@@ -27,20 +27,20 @@ data HydEngine = HydEngine
 	, current_input_preset'hyd_engine :: Ptr (HydInputPreset)
 	}
 instance Storable HydEngine where
-	sizeOf _ = 80
+	sizeOf _ = 96
 {-# LINE 27 "Engine.chs" #-}
 	alignment _ = 8
 {-# LINE 28 "Engine.chs" #-}
 	peek p = HydEntity
 			<$> ((\ptr -> do {peekByteOff ptr 0 ::IO CUChar}) p)
 			<*> ((\ptr -> do {peekByteOff ptr 8 ::IO (Ptr ())}) p)
-			<*> ((\ptr -> do {peekByteOff ptr 24 ::IO (Ptr ())}) p)
 			<*> ((\ptr -> do {peekByteOff ptr 40 ::IO (Ptr ())}) p)
+			<*> ((\ptr -> do {peekByteOff ptr 56 ::IO (Ptr ())}) p)
 	poke p x = do
 		(\ptr val -> do {pokeByteOff ptr 0 (val::CUChar)}) p (running'hyd_engine x)
 		(\ptr val -> do {pokeByteOff ptr 8 (val::(Ptr ()))}) p (renderer'hyd_engine x)
-		(\ptr val -> do {pokeByteOff ptr 24 (val::(Ptr ()))}) p (current_scene'hyd_engine x)
-		(\ptr val -> do {pokeByteOff ptr 40 (val::(Ptr ()))}) p (current_input_preset'hyd_engine x)
+		(\ptr val -> do {pokeByteOff ptr 40 (val::(Ptr ()))}) p (current_scene'hyd_engine x)
+		(\ptr val -> do {pokeByteOff ptr 56 (val::(Ptr ()))}) p (current_input_preset'hyd_engine x)
 
 type HydEntityPtr = Ptr (HydEntity)
 {-# LINE 40 "Engine.chs" #-}
