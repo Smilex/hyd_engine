@@ -44,18 +44,18 @@ START_TEST (test_collision_object)
 	int ex_area = 2 * 2, ex_radius = 1;
 	int area, radius;
 	float min, max;
-	struct vec2 center;
-	struct vec2 axis = {
+	struct hyd_v2 center;
+	struct hyd_v2 axis = {
 		.x = 1.0f,
 		.y = 0.0f
 	};
-	struct vec2 pos = {
+	struct hyd_v2 pos = {
 		.x = 0.0f,
 		.y = 0.0f
 	};
 	json_t *json_obj = create_json_obj(values, 8);
-	struct collision_object *coll_obj;
-	coll_obj = collision_object_create_json(json_obj, &pos);
+	struct hyd_coll_obj *coll_obj;
+	coll_obj = hyd_coll_obj_create_json(json_obj, &pos);
 	ck_assert_ptr_ne(coll_obj, NULL);
 
 	area = abs(round(coll_obj->area));
@@ -64,41 +64,41 @@ START_TEST (test_collision_object)
 	radius = round(coll_obj->radius);
 	ck_assert_int_eq(ex_radius, radius);
 
-	collision_object_project(coll_obj, axis, &min, &max);
+	hyd_coll_obj_project(coll_obj, axis, &min, &max);
 	ck_assert_int_eq(round(min), 0);
 	ck_assert_int_eq(round(max), 2);
 
-	collision_object_destroy(coll_obj);
+	hyd_coll_obj_destroy(coll_obj);
 }
 END_TEST
 
 START_TEST (test_collision)
 {
-	struct collision_object *obj1, *obj2;
-	struct collision *coll;
+	struct hyd_coll_obj *obj1, *obj2;
+	struct hyd_coll *coll;
 	json_t *json_obj;
 	int values[] = {0,0, 0,2, 2,2, 2,0};
-	struct vec2 pos = {
+	struct hyd_v2 pos = {
 		.x = 0.0f,
 		.y = 0.0f
 	};
 
 	json_obj = create_json_obj(values, 8);
-	obj1 = collision_object_create_json(json_obj, &pos);
-	obj2 = collision_object_create_json(json_obj, &pos);
+	obj1 = hyd_coll_obj_create_json(json_obj, &pos);
+	obj2 = hyd_coll_obj_create_json(json_obj, &pos);
 
 	ck_assert_ptr_ne(obj1, NULL);
 	ck_assert_ptr_ne(obj2, NULL);
 
-	coll = collision_check(obj1, obj2, 0.0f, 0.0f);
+	coll = hyd_coll_check(obj1, obj2, 0.0f, 0.0f);
 	ck_assert_ptr_ne(coll, NULL);
 
-	ck_assert_int_eq(collision_get_intersects(coll), 1);
-	ck_assert_int_eq(collision_get_will_intersect(coll), 1);
+	ck_assert_int_eq(hyd_coll_get_intersects(coll), 1);
+	ck_assert_int_eq(hyd_coll_get_will_intersect(coll), 1);
 
-	collision_destroy(coll);
-	collision_object_destroy(obj1);
-	collision_object_destroy(obj2);
+	hyd_coll_destroy(coll);
+	hyd_coll_obj_destroy(obj1);
+	hyd_coll_obj_destroy(obj2);
 }
 END_TEST
 

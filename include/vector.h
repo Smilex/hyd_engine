@@ -2,15 +2,15 @@
  * \file vector.h
  */
 
-#ifndef OPENHYDORAH_VECTOR_H
-#define OPENHYDORAH_VECTOR_H
+#ifndef HYD_VECTOR_H
+#define HYD_VECTOR_H
 
 /**
- * \struct vec2
+ * \struct hyd_v2
  *
  * A 2-dimensional vector
  */
-struct vec2 {
+struct hyd_v2 {
 	float x;
 	float y;
 };
@@ -23,7 +23,7 @@ struct vec2 {
  *
  * \return The dot product
  */
-float vec2_dot_product(struct vec2 lhs, struct vec2 rhs);
+float hyd_v2_dot_product(struct hyd_v2 lhs, struct hyd_v2 rhs);
 
 /**
  * \brief Returns the normalized 2D vector
@@ -32,12 +32,12 @@ float vec2_dot_product(struct vec2 lhs, struct vec2 rhs);
  *
  * \return The normalized version of vec
  */
-struct vec2 vec2_normalize(struct vec2 vec);
+struct hyd_v2 hyd_v2_normalize(struct hyd_v2 vec);
 
-float vec2_length(struct vec2 vec);
+float hyd_v2_length(struct hyd_v2 vec);
 
-struct vec2 vec2_substract(struct vec2 lhs, struct vec2 rhs);
+struct hyd_v2 hyd_v2_substract(struct hyd_v2 lhs, struct hyd_v2 rhs);
 
-struct vec2 vec2_add(struct vec2 lhs, struct vec2 rhs);
+struct hyd_v2 hyd_v2_add(struct hyd_v2 lhs, struct hyd_v2 rhs);
 
 #endif

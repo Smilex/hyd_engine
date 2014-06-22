@@ -1,9 +1,9 @@
 #include "engine.h"
 #include "init.h"
 
-struct engine *engine_create(void)
+struct hyd_engine *hyd_engine_create(void)
 {
-	struct engine *engine = malloc(sizeof(*engine));
+	struct hyd_engine *engine = malloc(sizeof(*engine));
 	if (engine == NULL)
 		return NULL;
 
@@ -14,24 +14,21 @@ struct engine *engine_create(void)
 	engine->renderer = NULL;
 	engine->window = NULL;
 
-	list_init(&engine->textures);
-	list_init(&engine->input_presets);
+	hyd_list_init(&engine->textures);
+	hyd_list_init(&engine->input_presets);
 
 	return engine;
 }
 
-uint8_t engine_init(struct engine *engine, const char *argv[])
+uint8_t hyd_engine_init(struct hyd_engine *engine, const char *argv[])
 {
 	if (init_sdl(&engine->window, &engine->renderer, 600, 480) != 0)
 		return 1;
 
 	SDL_SetRenderDrawBlendMode(engine->renderer, SDL_BLENDMODE_ADD);
-
-	if (init_fs(NULL) != 0)
-		return 1;
 }
 
-void engine_events(struct engine *engine)
+void hyd_engine_events(struct hyd_engine *engine)
 {
 	if (engine == NULL)
 		return;
@@ -44,8 +41,8 @@ void engine_events(struct engine *engine)
 			if (engine->current_input_preset == NULL)
 				continue;
 
-			struct input *iter;
-			list_for_each_entry(iter,
+			struct hyd_input *iter;
+			hyd_list_for_each_entry(iter,
 					&engine->current_input_preset->inputs,
 					list)
 			{
@@ -59,8 +56,8 @@ void engine_events(struct engine *engine)
 			if (engine->current_input_preset == NULL)
 				continue;
 
-			struct input *iter;
-			list_for_each_entry(iter,
+			struct hyd_input *iter;
+			hyd_list_for_each_entry(iter,
 					&engine->current_input_preset->inputs,
 					list)
 			{
@@ -74,7 +71,7 @@ void engine_events(struct engine *engine)
 	}
 }
 
-void engine_destroy(struct engine *engine)
+void hyd_engine_destroy(struct hyd_engine *engine)
 {
 	if (engine == NULL)
 		return;
@@ -83,19 +80,17 @@ void engine_destroy(struct engine *engine)
 			engine->current_mod->destroy != NULL)
 		engine->current_mod->destroy(engine);
 
-	struct input_preset *preset_iter, *preset_next;
-	list_for_each_entry_safe(preset_iter, preset_next,
+	struct hyd_input_preset *preset_iter, *preset_next;
+	hyd_list_for_each_entry_safe(preset_iter, preset_next,
 			&engine->input_presets, list)
 	{
-		input_preset_destroy(preset_iter);
+		hyd_input_preset_destroy(preset_iter);
 	}
 
-	scene_destroy(engine->current_scene);
-	texture_list_destroy(&engine->textures);
-	mod_destroy(engine->current_mod);
+	hyd_scene_destroy(engine->current_scene);
+	hyd_tex_list_destroy(&engine->textures);
+	hyd_mod_destroy(engine->current_mod);
 
-	if (PHYSFS_isInit() != 0)
-		PHYSFS_deinit();
 	if (engine->renderer != NULL)
 		SDL_DestroyRenderer(engine->renderer);
 	if (engine->window != NULL)
@@ -105,12 +100,12 @@ void engine_destroy(struct engine *engine)
 	free(engine);
 }
 
-void engine_draw(struct engine *engine)
+void hyd_engine_draw(struct hyd_engine *engine)
 {
-	scene_draw(engine->current_scene, engine->renderer);
+	hyd_scene_draw(engine->current_scene, engine->renderer);
 }
 
-void engine_update(struct engine *engine, uint32_t dt)
+void hyd_engine_update(struct hyd_engine *engine, uint32_t dt)
 {
 	if (engine == NULL)
 		return;
@@ -120,7 +115,7 @@ void engine_update(struct engine *engine, uint32_t dt)
 		engine->current_mod->update(engine, dt);
 }
 
-uint8_t engine_run(struct engine *engine)
+uint8_t hyd_engine_run(struct hyd_engine *engine)
 {
 	uint32_t last_time = SDL_GetTicks(), current_time, dt;
 	while (engine->running) {
@@ -132,17 +127,17 @@ uint8_t engine_run(struct engine *engine)
 
 		SDL_RenderClear(engine->renderer);
 
-		engine_update(engine, dt);
+		hyd_engine_update(engine, dt);
 
-		engine_draw(engine);
+		hyd_engine_draw(engine);
 
 		SDL_RenderPresent(engine->renderer);
 	}
 }
 
-uint8_t engine_load_scene(struct engine *engine, const char *filename)
+uint8_t hyd_engine_load_scene(struct hyd_engine *engine, const char *filename)
 {
-	engine->current_scene = scene_create_file(filename,
+	engine->current_scene = hyd_scene_create_file(filename,
 			&engine->textures, engine->renderer);
 
 	if (engine->current_scene == NULL)
@@ -151,12 +146,12 @@ uint8_t engine_load_scene(struct engine *engine, const char *filename)
 	return 0;
 }
 
-uint8_t engine_load_input_preset(struct engine *engine, const char *filename)
+uint8_t hyd_engine_load_input_preset(struct hyd_engine *engine, const char *filename)
 {
-	if (input_preset_list_create_file(&engine->input_presets,
+	if (hyd_input_preset_list_create_file(&engine->input_presets,
 				filename) == 0)
 		engine->current_input_preset =
-			list_entry(engine->input_presets.next,
+			hyd_list_entry(engine->input_presets.next,
 					typeof(*(engine->current_input_preset)),
 					list);
 	else
@@ -168,10 +163,10 @@ uint8_t engine_load_input_preset(struct engine *engine, const char *filename)
 	return 0;
 }
 
-uint8_t engine_load_mod(struct engine *engine, const char *filename)
+uint8_t hyd_engine_load_mod(struct hyd_engine *engine, const char *filename)
 {
-	struct mod_info *info = mod_info_get(filename);
-	engine->current_mod = mod_create(info);
+	struct hyd_mod_info *info = hyd_mod_info_get(filename);
+	engine->current_mod = hyd_mod_create(info);
 	if (engine->current_mod != NULL &&
 			engine->current_mod->init != NULL)
 		engine->current_mod->init(engine);
@@ -184,17 +179,17 @@ uint8_t engine_load_mod(struct engine *engine, const char *filename)
 	return 0;
 }
 
-struct scene *engine_get_current_scene(struct engine *engine)
+struct hyd_scene *hyd_engine_get_current_scene(struct hyd_engine *engine)
 {
 	return engine->current_scene;
 }
 
-struct input_preset *engine_get_current_input_preset(struct engine *engine)
+struct hyd_input_preset *hyd_engine_get_current_input_preset(struct hyd_engine *engine)
 {
 	return engine->current_input_preset;
 }
 
-SDL_Renderer *engine_get_renderer(struct engine *engine)
+SDL_Renderer *hyd_engine_get_renderer(struct hyd_engine *engine)
 {
 	return engine->renderer;
 }

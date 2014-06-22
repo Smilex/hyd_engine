@@ -2,8 +2,8 @@
  * Contains structs and functions for inputs
  */
 
-#ifndef OPENHYDORAH_INPUT_H
-#define OPENHYDORAH_INPUT_H
+#ifndef HYD_INPUT_H
+#define HYD_INPUT_H
 
 #include <SDL.h>
 #include <stdint.h>
@@ -11,42 +11,43 @@
 #include "list.h"
 
 /**
- * \enum input_type
+ * \enum hyd_input_type
  *
  * Defines the type of the input
  */
-enum input_type {
+enum hyd_input_type {
 	KEY
 };
 
-typedef void (*input_callback)(void*, const char*);
+typedef void (*hyd_input_callback)(void*, const char*);
 
 /**
- * \struct input
+ * \struct hyd_input
  *
  * A user input is a association of
  * an action and an input
  */
-struct input {
+struct hyd_input {
 	char *action;
 	uint16_t value;
-	enum input_type type;
-	SDL_Scancode code;
-	input_callback callback;
-	struct list list;
+	enum hyd_input_type type;
+	struct SDL_Scancode code;
+	hyd_input_callback callback;
+	struct hyd_list list;
 };
 
 /**
- * \struct input_preset
+ * \struct hyd_input_preset
  *
  * An input preset is a collection of
  * inputs associated with a name
  */
-struct input_preset {
+struct hyd_input_preset {
 	char *name;
-	struct list inputs;
-	struct list list;
+	struct hyd_list inputs;
+	struct hyd_list list;
 };
+typedef struct hyd_input_preset hyd_input_preset;
 
 /**
  * \brief Creates an input as a keyboard key
@@ -56,7 +57,7 @@ struct input_preset {
  *
  * \return The new input. NULL if error.
  */
-struct input *input_create_key(const char *action, SDL_Scancode code);
+struct hyd_input *hyd_input_create_key(const char *action, struct SDL_Scancode code);
 
 /**
  * \brief Creates an input from a json object
@@ -65,14 +66,14 @@ struct input *input_create_key(const char *action, SDL_Scancode code);
  *
  * \return The new input
  */
-struct input *input_create_json(const char *action, json_t *root);
+struct hyd_input *hyd_input_create_json(const char *action, json_t *root);
 
 /**
  * \param[in] name The name of the preset
  *
  * \return The new input preset. NULL if error.
  */
-struct input_preset *input_preset_create(const char *name);
+struct hyd_input_preset *hyd_input_preset_create(const char *name);
 
 /**
  * \brief Creates input presets from file
@@ -82,7 +83,7 @@ struct input_preset *input_preset_create(const char *name);
  *
  * \return 0 on success. Non-zero on error
  */
-uint8_t input_preset_list_create_file(struct list *list, const char *filename);
+uint8_t hyd_input_preset_list_create_file(struct hyd_list *list, const char *filename);
 
 /**
  * \brief Creates a input preset from a JSON object
@@ -92,7 +93,7 @@ uint8_t input_preset_list_create_file(struct list *list, const char *filename);
  *
  * \return The new input preset
  */
-struct input_preset *input_preset_create_json(const char *name, json_t *root);
+struct hyd_input_preset *hyd_input_preset_create_json(const char *name, json_t *root);
 
 /**
  * \brief Get the value of the input associated with the action
@@ -102,7 +103,7 @@ struct input_preset *input_preset_create_json(const char *name, json_t *root);
  *
  * \return The value or 0 if not found.
  */
-uint16_t input_preset_get_action_value(struct input_preset *preset,
+uint16_t hyd_input_preset_get_action_value(struct hyd_input_preset *preset,
 		const char *action);
 
 /**
@@ -112,24 +113,24 @@ uint16_t input_preset_get_action_value(struct input_preset *preset,
  * \param[in] action The input action
  * \param[in] callback The callback
  */
-void input_preset_add_callback(struct input_preset *preset, const char *action,
-		input_callback callback);
+void hyd_input_preset_add_callback(struct hyd_input_preset *preset, const char *action,
+		hyd_input_callback callback);
 
 /**
  * \param[in] input The input to destroy
  */
-void input_destroy(struct input *input);
+void hyd_input_destroy(struct hyd_input *input);
 
 /**
  * \param[in] preset The input preset to destroy
  */
-void input_preset_destroy(struct input_preset *preset);
+void hyd_input_preset_destroy(struct hyd_input_preset *preset);
 
 /**
  * \brief Get the maximum possible value for any input
  *
  * \return The maximum value
  */
-uint16_t input_get_max_value(void);
+uint16_t hyd_input_get_max_value(void);
 
 #endif // OPENHYDORAH_INPUT_H

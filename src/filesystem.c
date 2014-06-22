@@ -1,7 +1,7 @@
 #include "filesystem.h"
 #include <SDL.h>
 
-PHYSFS_sint64 fs_read_buffer(const char *filename, uint8_t **buf)
+PHYSFS_sint64 hyd_fs_read_buffer(const char *filename, uint8_t **buf)
 {
 	PHYSFS_File* file = NULL;
 	PHYSFS_sint64 file_length = 0;
@@ -33,4 +33,9 @@ PHYSFS_sint64 fs_read_buffer(const char *filename, uint8_t **buf)
 	PHYSFS_close(file);
 
 	return file_length;
+}
+
+int hyd_fs_add_path(const char *path, const char *as)
+{
+	return PHYSFS_mount(path, as, 1);
 }

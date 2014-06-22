@@ -5,10 +5,10 @@
 #include <physfs.h>
 #include <stdio.h>
 
-struct mod_info *mod_info_get(const char *filename)
+struct hyd_mod_info *hyd_mod_info_get(const char *filename)
 {
-	struct mod_info *info = NULL;
-	struct mod *mod = NULL;
+	struct hyd_mod_info *info = NULL;
+	struct hyd_mod *mod = NULL;
 	void *mod_handle = NULL;
 	size_t len = strlen(filename);
 	void (*get_info)(char**, char**) = NULL;
@@ -66,7 +66,7 @@ struct mod_info *mod_info_get(const char *filename)
 	return info;
 }
 
-void mod_info_destroy(struct mod_info *info)
+void hyd_mod_info_destroy(struct hyd_mod_info *info)
 {
 	if (info == NULL) return;
 
@@ -77,7 +77,7 @@ void mod_info_destroy(struct mod_info *info)
 	free(info);
 }
 
-struct mod *mod_create(struct mod_info *info)
+struct hyd_mod *hyd_mod_create(struct hyd_mod_info *info)
 {
 	if (info == NULL)
 	{
@@ -88,7 +88,7 @@ struct mod *mod_create(struct mod_info *info)
 		return NULL;
 	}
 
-	struct mod *mod = NULL;
+	struct hyd_mod *mod = NULL;
 
 	mod = malloc(sizeof(*mod));
 	if (mod == NULL)
@@ -109,12 +109,12 @@ struct mod *mod_create(struct mod_info *info)
 	return mod;
 }
 
-void mod_destroy(struct mod *mod)
+void hyd_mod_destroy(struct hyd_mod *mod)
 {
 	if (mod == NULL) return;
 
 	SDL_Log("Destroying mod: '%s'", mod->info->name);
 
-	mod_info_destroy(mod->info);
+	hyd_mod_info_destroy(mod->info);
 	free(mod);
 }

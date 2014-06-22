@@ -1,26 +1,26 @@
 #include "list.h"
 
-void list_init(struct list *list)
+void hyd_list_init(struct hyd_list *list)
 {
 	list->next = list;
 	list->prev = list;
 }
 
-void list_append(struct list *new, struct list *head)
+void hyd_list_append(struct hyd_list *n, struct hyd_list *h)
 {
-	struct list *iter = head;
+	struct hyd_list *iter = h;
 
-	while (iter->next != head)
+	while (iter->next != h)
 	{
 		iter = iter->next;
 	}
 
-	iter->next = new;
-	new->next = head;
-	new->prev = iter;
+	iter->next = n;
+	n->next = h;
+	n->prev = iter;
 }
 
-void list_remove(struct list *list)
+void hyd_list_remove(struct hyd_list *list)
 {
 	list->prev->next = list->next;
 	list->next->prev = list->prev;

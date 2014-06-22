@@ -3,20 +3,20 @@
 #include <string.h>
 #include <physfs.h>
 
-struct texture *texture_create(SDL_Texture *ptr, const char *name)
+struct hyd_tex *hyd_tex_create(SDL_Texture *ptr, const char *name)
 {
-	struct texture *tex = malloc(sizeof(*tex));
+	struct hyd_tex *tex = malloc(sizeof(*tex));
 	tex->ptr = ptr;
 	tex->name = malloc(strlen(name) + 1);
 	strcpy(tex->name, name);
 	tex->ref_count = malloc(sizeof(uint32_t));
 	*tex->ref_count = 0;
-	list_init(&tex->list);
+	hyd_list_init(&tex->list);
 
 	return tex;
 }
 
-struct texture *texture_create_file(const char *filename, SDL_Renderer *renderer)
+struct hyd_tex *hyd_tex_create_file(const char *filename, SDL_Renderer *renderer)
 {
 	PHYSFS_sint64 file_length = 0;
 	uint8_t *buf = NULL;
@@ -32,7 +32,7 @@ struct texture *texture_create_file(const char *filename, SDL_Renderer *renderer
 		return NULL;
 	}
 
-	file_length = fs_read_buffer(filename, &buf);
+	file_length = hyd_fs_read_buffer(filename, &buf);
 	SDL_Log("Reading texture - %s - size: %i", filename, file_length);
 
 	if (file_length == 0) {
@@ -49,10 +49,10 @@ struct texture *texture_create_file(const char *filename, SDL_Renderer *renderer
 	free(buf);
 	SDL_RWclose(ops);
 
-	return texture_create(tex, filename);
+	return hyd_tex_create(tex, filename);
 }
 
-struct texture *texture_copy(struct texture *texture)
+struct hyd_tex *hyd_tex_copy(struct hyd_tex *texture)
 {
 	if (texture == NULL) {
 		SDL_LogError(
@@ -62,7 +62,7 @@ struct texture *texture_copy(struct texture *texture)
 		return NULL;
 	}
 
-	struct texture *tex = malloc(sizeof(*tex));
+	struct hyd_tex *tex = malloc(sizeof(*tex));
 	tex->ptr = texture->ptr;
 	tex->ref_count = texture->ref_count;
 	tex->name = texture->name;
@@ -73,7 +73,7 @@ struct texture *texture_copy(struct texture *texture)
 	return tex;
 }
 
-void texture_destroy(struct texture *texture)
+void hyd_tex_destroy(struct hyd_tex *texture)
 {
 	if (texture == NULL)
 		return;
@@ -83,30 +83,30 @@ void texture_destroy(struct texture *texture)
 		SDL_DestroyTexture(texture->ptr);
 		free(texture->ref_count);
 		free(texture->name);
-		list_remove(&texture->list);
+		hyd_list_remove(&texture->list);
 	} else
 		*(texture->ref_count) -= 1;
 
 	free(texture);
 }
 
-void texture_list_destroy(struct list *textures)
+void hyd_tex_list_destroy(struct hyd_list *textures)
 {
 	if (textures == NULL)
 		return;
 
-	struct texture *iter;
-	struct texture *next;
-	list_for_each_entry_safe(iter, next, textures, list)
+	struct hyd_tex *iter;
+	struct hyd_tex *next;
+	hyd_list_for_each_entry_safe(iter, next, textures, list)
 	{
-		texture_destroy(iter);
+		hyd_tex_destroy(iter);
 	}
 }
 
-struct texture *texture_list_find(struct list *textures, const char *name)
+struct hyd_tex *hyd_tex_list_find(struct hyd_list *textures, const char *name)
 {
-	struct texture *iter;
-	list_for_each_entry(iter, textures, list)
+	struct hyd_tex *iter;
+	hyd_list_for_each_entry(iter, textures, list)
 	{
 		if (strcmp(iter->name, name) == 0)
 			return iter;

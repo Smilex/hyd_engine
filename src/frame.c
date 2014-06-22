@@ -1,9 +1,9 @@
 #include "frame.h"
 #include <string.h>
 
-struct frame *frame_create(const char *name, const SDL_Rect rect)
+struct hyd_frame *hyd_frame_create(const char *name, const SDL_Rect rect)
 {
-	struct frame* frame = malloc(sizeof(*frame));
+	struct hyd_frame* frame = malloc(sizeof(*frame));
 
 	if (frame == NULL)
 	{
@@ -21,7 +21,7 @@ struct frame *frame_create(const char *name, const SDL_Rect rect)
 	return frame;
 }
 
-struct frame *frame_create_json(json_t *root)
+struct hyd_frame *hyd_frame_create_json(json_t *root)
 {
 	if (!json_is_object(root))
 	{
@@ -98,10 +98,10 @@ struct frame *frame_create_json(json_t *root)
 	else
 		rect.h = json_integer_value(iter_json);
 
-	return frame_create(name, rect);
+	return hyd_frame_create(name, rect);
 }
 
-struct frame **frame_array_create_json(json_t *root, uint32_t *num)
+struct hyd_frame **hyd_frame_array_create_json(json_t *root, uint32_t *num)
 {
 	if (!json_is_array(root))
 	{
@@ -116,7 +116,7 @@ struct frame **frame_array_create_json(json_t *root, uint32_t *num)
 	if (*num == 0)
 		return NULL;
 
-	struct frame **frames = calloc(*num, sizeof(*frames));
+	struct hyd_frame **frames = calloc(*num, sizeof(*frames));
 	uint32_t i = 0;
 
 	for (i = 0; i < *num; i++)
@@ -133,13 +133,14 @@ struct frame **frame_array_create_json(json_t *root, uint32_t *num)
 			continue;
 		}
 
-		frames[i] = frame_create_json(frame_node);
+		frames[i] = hyd_frame_create_json(frame_node);
 	}
 
 	return frames;
 }
 
-struct frame *frame_array_find(struct frame **frames, uint32_t num, const char *name)
+struct hyd_frame *hyd_frame_array_find(struct hyd_frame **frames,
+		uint32_t num, const char *name)
 {
 	uint32_t i;
 	for(i = 0; i < num; i++)
@@ -151,7 +152,7 @@ struct frame *frame_array_find(struct frame **frames, uint32_t num, const char *
 	return NULL;
 }
 
-void frame_destroy(struct frame *frame)
+void hyd_frame_destroy(struct hyd_frame *frame)
 {
 	free(frame->name);
 	free(frame);

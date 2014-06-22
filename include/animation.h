@@ -2,15 +2,15 @@
  * \file animation.h
  */
 
-#ifndef OPENHYDORAH_ANIMATION_H
-#define OPENHYDORAH_ANIMATION_H
+#ifndef HYD_ANIMATION_H
+#define HYD_ANIMATION_H
 
 #include "frame.h"
 #include <stdint.h>
 
-struct animation {
+struct hyd_anim {
 	char *name;
-	struct frame **frames;
+	struct hyd_frame **frames;
 	uint32_t num_frames;
 };
 
@@ -21,7 +21,7 @@ struct animation {
  *
  * \return The new animation
  */
-struct animation *animation_create(const char *name, struct frame **frames,
+struct hyd_anim *hyd_anim_create(const char *name, struct hyd_frame **frames,
 		uint32_t num_frames);
 
 /**
@@ -31,7 +31,7 @@ struct animation *animation_create(const char *name, struct frame **frames,
  *
  * \return The new animation
  */
-struct animation *animation_create_json(json_t *root, struct frame **frames,
+struct hyd_anim *hyd_anim_create_json(json_t *root, struct hyd_frame **frames,
 		uint32_t num_frames);
 
 /**
@@ -42,12 +42,12 @@ struct animation *animation_create_json(json_t *root, struct frame **frames,
  *
  * \return The new array of animations
  */
-struct animation **animation_array_create_json(json_t *root, struct frame **frames,
+struct hyd_anim **hyd_anim_array_create_json(json_t *root, struct hyd_frame **frames,
 		uint32_t num_frames, uint32_t *num);
 
 /**
- * \param[in] animation The animation to destroy
+ * \param[in] anim The animation to destroy
  */
-void animation_destroy(struct animation *animation);
+void hyd_anim_destroy(struct hyd_anim *anim);
 
 #endif
