@@ -20,7 +20,7 @@ struct hyd_engine {
 	SDL_Window *window;
 
 	void (*call_update)(struct hyd_engine*,uint32_t);
-	void (*call_render)(struct hyd_engine*);
+	void (*call_draw)(struct hyd_engine*);
 
 	struct hyd_scene *current_scene;
 	struct hyd_mod *current_mod;
@@ -57,7 +57,7 @@ SDL_Renderer *hyd_engine_get_renderer(struct hyd_engine *engine);
 /* SETTERS */
 void hyd_engine_update_func(struct hyd_engine *e,
 		void (*f)(struct hyd_engine*,uint32_t));
-void hyd_engine_render_func(struct hyd_engine *e,
+void hyd_engine_draw_func(struct hyd_engine *e,
 		void (*f)(struct hyd_engine*));
 
 #endif
