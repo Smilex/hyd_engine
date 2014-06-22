@@ -11,7 +11,7 @@ uint16_t hyd_input_get_max_value(void)
 	return 0x7FFF;
 }
 
-struct hyd_input *hyd_input_create_key(const char *action, SDL_Scancode code)
+struct hyd_input *hyd_input_create_key(const char *action, uint8_t code)
 {
 	struct hyd_input *input = malloc(sizeof(*input));
 	uint32_t len = strlen(action);
