@@ -1,5 +1,6 @@
 #include "tests.h"
 #include "collision.h"
+#include "entity.h"
 #include <jansson.h>
 #include <math.h>
 
@@ -49,13 +50,10 @@ START_TEST (test_collision_object)
 		.x = 1.0f,
 		.y = 0.0f
 	};
-	struct hyd_v2 pos = {
-		.x = 0.0f,
-		.y = 0.0f
-	};
+	struct hyd_ent *ent = hyd_ent_create(NULL, "", NULL);
 	json_t *json_obj = create_json_obj(values, 8);
 	struct hyd_coll_obj *coll_obj;
-	coll_obj = hyd_coll_obj_create_json(json_obj, &pos);
+	coll_obj = hyd_coll_obj_create_json(json_obj, ent);
 	ck_assert_ptr_ne(coll_obj, NULL);
 
 	area = abs(round(coll_obj->area));
@@ -78,14 +76,11 @@ START_TEST (test_collision)
 	struct hyd_coll *coll;
 	json_t *json_obj;
 	int values[] = {0,0, 0,2, 2,2, 2,0};
-	struct hyd_v2 pos = {
-		.x = 0.0f,
-		.y = 0.0f
-	};
+	struct hyd_ent *ent = hyd_ent_create(NULL, "", NULL);
 
 	json_obj = create_json_obj(values, 8);
-	obj1 = hyd_coll_obj_create_json(json_obj, &pos);
-	obj2 = hyd_coll_obj_create_json(json_obj, &pos);
+	obj1 = hyd_coll_obj_create_json(json_obj, ent);
+	obj2 = hyd_coll_obj_create_json(json_obj, ent);
 
 	ck_assert_ptr_ne(obj1, NULL);
 	ck_assert_ptr_ne(obj2, NULL);

@@ -2,9 +2,10 @@
 
 #include <math.h>
 #include <float.h>
+#include "entity.h"
 
 struct hyd_coll_obj *hyd_coll_obj_create_json(json_t *root,
-		struct hyd_v2 *parent)
+		struct hyd_ent *parent)
 {
 	if (!json_is_object(root))
 		return NULL;
@@ -50,7 +51,7 @@ struct hyd_coll_obj *hyd_coll_obj_create_json(json_t *root,
 }
 
 uint8_t hyd_coll_obj_list_create_json(struct hyd_list *list, json_t *root,
-		struct hyd_v2 *parent)
+		struct hyd_ent *parent)
 {
 	if (!json_is_array(root))
 		return 1;
@@ -90,10 +91,10 @@ void hyd_coll_obj_draw(struct hyd_coll_obj *col_obj,
 	SDL_Point p1, p2;
 	for (i = 1; i < col_obj->num_points; i++)
 	{
-		p1.x = (int)round(col_obj->points[i - 1].x + col_obj->parent->x);
-		p1.y = (int)round(col_obj->points[i - 1].y + col_obj->parent->y);
-		p2.x = (int)round(col_obj->points[i].x + col_obj->parent->x);
-		p2.y = (int)round(col_obj->points[i].y + col_obj->parent->y);
+		p1.x = (int)round(col_obj->points[i - 1].x + col_obj->parent->pos.x);
+		p1.y = (int)round(col_obj->points[i - 1].y + col_obj->parent->pos.y);
+		p2.x = (int)round(col_obj->points[i].x + col_obj->parent->pos.x);
+		p2.y = (int)round(col_obj->points[i].y + col_obj->parent->pos.y);
 		SDL_RenderDrawLine(renderer,
 				p1.x, p1.y,
 				p2.x, p2.y
@@ -101,8 +102,8 @@ void hyd_coll_obj_draw(struct hyd_coll_obj *col_obj,
 	}
 
 	p1 = p2;
-	p2.x = (int)round(col_obj->points[0].x + col_obj->parent->x);
-	p2.y = (int)round(col_obj->points[0].y + col_obj->parent->y);
+	p2.x = (int)round(col_obj->points[0].x + col_obj->parent->pos.x);
+	p2.y = (int)round(col_obj->points[0].y + col_obj->parent->pos.y);
 	SDL_RenderDrawLine(renderer,
 			p1.x, p1.y,
 			p2.x, p2.y
@@ -111,8 +112,8 @@ void hyd_coll_obj_draw(struct hyd_coll_obj *col_obj,
 	SDL_SetRenderDrawColor(renderer,
 			0xFF, 0x00, 0x00, 0xFF);
 	SDL_RenderDrawPoint(renderer,
-			(int)round(col_obj->center.x + col_obj->parent->x),
-			(int)round(col_obj->center.y + col_obj->parent->y)
+			(int)round(col_obj->center.x + col_obj->parent->pos.x),
+			(int)round(col_obj->center.y + col_obj->parent->pos.y)
 			);
 
 	SDL_SetRenderDrawColor(renderer,
@@ -198,7 +199,7 @@ void hyd_coll_obj_project(struct hyd_coll_obj *col_obj, struct hyd_v2 axis,
 			col_obj->num_points == 0)
 		return;
 
-	struct hyd_v2 p = hyd_v2_add(col_obj->points[0], *col_obj->parent);
+	struct hyd_v2 p = hyd_v2_add(col_obj->points[0], col_obj->parent->pos);
 	float dot_product = hyd_v2_dot_product(p, axis);
 	uint32_t i;
 	*min = dot_product;
@@ -206,7 +207,7 @@ void hyd_coll_obj_project(struct hyd_coll_obj *col_obj, struct hyd_v2 axis,
 
 	for (i = 1; i < col_obj->num_points; i++)
 	{
-		p = hyd_v2_add(col_obj->points[i], *col_obj->parent);
+		p = hyd_v2_add(col_obj->points[i], col_obj->parent->pos);
 		dot_product = hyd_v2_dot_product(p, axis);
 		if (dot_product < *min)
 			*min = dot_product;
@@ -243,8 +244,8 @@ struct hyd_coll
 	};
 
 	struct hyd_v2 d_vec = hyd_v2_substract(
-			hyd_v2_add(obj2->center, *obj2->parent),
-		   	hyd_v2_add(obj1->center, *obj1->parent)
+			hyd_v2_add(obj2->center, obj2->parent->pos),
+		   	hyd_v2_add(obj1->center, obj1->parent->pos)
 			);
 	float d_vec_len = hyd_v2_length(d_vec);
 

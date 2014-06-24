@@ -15,6 +15,8 @@ enum hyd_coll_type {
 	POLYGON
 };
 
+struct hyd_ent; // forward decl
+
 /**
  * \struct hyd_coll_obj
  *
@@ -23,7 +25,7 @@ enum hyd_coll_type {
  * geometry that is tested for intersections
  */
 struct hyd_coll_obj {
-	struct hyd_v2 *parent;
+	struct hyd_ent *parent;
 	struct hyd_v2 *points;
 	uint32_t num_points;
 	struct hyd_v2 center;
@@ -48,24 +50,24 @@ struct hyd_coll {
  * \brief Creates a hyd_coll_obj from a JSON object
  *
  * \param[in] root The json object
- * \param[in] parent The parent position
+ * \param[in] parent The parent entity
  *
  * \return The new collision_object
  */
 struct hyd_coll_obj *hyd_coll_obj_create_json(json_t *root,
-		struct hyd_v2 *parent);
+		struct hyd_ent *parent);
 
 /**
  * \brief Creates a hyd_coll_obj list from a JSON array
  *
  * \param[out] list The list to fill
  * \param[in] root The json array
- * \param[in] parent The parent position
+ * \param[in] parent The parent entity
  *
  * \return 0 on success, non-zero on error
  */
 uint8_t hyd_coll_obj_list_create_json(struct hyd_list *list, json_t *root,
-		struct hyd_v2 *parent);
+		struct hyd_ent *parent);
 
 /**
  * \param[in] col_obj The collision_object to destroy
