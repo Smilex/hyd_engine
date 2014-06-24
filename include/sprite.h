@@ -27,7 +27,6 @@ struct hyd_spr {
 
 	struct hyd_list list;
 };
-typedef struct hyd_spr hyd_spr;
 
 /**
  * \param[in] texture The sprite's texture

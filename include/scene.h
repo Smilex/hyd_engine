@@ -19,7 +19,6 @@ struct hyd_scene {
 	struct hyd_list entities;
 	struct hyd_list sprites;
 };
-typedef struct hyd_scene hyd_scene;
 
 /**
  * \return The new scene

@@ -47,7 +47,6 @@ struct hyd_input_preset {
 	struct hyd_list inputs;
 	struct hyd_list list;
 };
-typedef struct hyd_input_preset hyd_input_preset;
 
 /**
  * \brief Creates an input as a keyboard key

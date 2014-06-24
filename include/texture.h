@@ -22,7 +22,6 @@ struct hyd_tex {
 
 	struct hyd_list list;
 };
-typedef struct hyd_tex hyd_tex;
 
 /**
  * \param[in] ptr The texture pointer
