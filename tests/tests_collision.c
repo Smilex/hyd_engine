@@ -88,8 +88,8 @@ START_TEST (test_collision)
 	coll = hyd_coll_check(obj1, obj2, 0.0f, 0.0f);
 	ck_assert_ptr_ne(coll, NULL);
 
-	ck_assert_int_eq(hyd_coll_get_intersects(coll), 1);
-	ck_assert_int_eq(hyd_coll_get_will_intersect(coll), 1);
+	ck_assert_int_eq(coll->intersects, 1);
+	ck_assert_int_eq(coll->will_intersect, 1);
 
 	hyd_coll_destroy(coll);
 	hyd_coll_obj_destroy(obj1);

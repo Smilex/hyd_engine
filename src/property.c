@@ -3,75 +3,72 @@
 #include <string.h>
 #include <stdlib.h>
 
-struct hyd_property *hyd_property_create_number(float value, const char *name)
+struct hyd_property *hyd_property_create_number(float v, const char *n)
 {
-	struct hyd_property *property = malloc(sizeof(*property));
-	if (property == NULL)
+	struct hyd_property *p = malloc(sizeof(*p));
+	if (p == NULL)
 		return NULL;
 
-	property->name = malloc(strlen(name) + 1);
-	strcpy(property->name, name);
+	p->name = malloc(strlen(n) + 1);
+	strcpy(p->name, n);
 
-	property->type = NUMBER;
-	property->value.n = value;
+	p->type = NUMBER;
+	p->value.n = v;
+	p->next = p;
 
-	hyd_list_init(&property->list);
-
-	return property;
+	return p;
 }
 
-struct hyd_property *hyd_property_create_string(const char *value, const char *name)
+struct hyd_property *hyd_property_create_string(const char *v, const char *n)
 {
-	struct hyd_property *property = malloc(sizeof(*property));
-	if (property == NULL)
+	struct hyd_property *p = malloc(sizeof(*p));
+	if (p == NULL)
 		return NULL;
 
-	property->name = malloc(strlen(name) + 1);
-	strcpy(property->name, name);
+	p->name = malloc(strlen(n) + 1);
+	strcpy(p->name, n);
 
-	property->type = STRING;
-	property->value.s = malloc(strlen(value) + 1);
-	strcpy(property->value.s, value);
+	p->type = STRING;
+	p->value.s = malloc(strlen(v) + 1);
+	strcpy(p->value.s, v);
 
-	return property;
+	return p;
 }
 
-struct hyd_property *hyd_property_create_bool(uint8_t value, const char *name)
+struct hyd_property *hyd_property_create_bool(uint8_t v, const char *n)
 {
-	struct hyd_property *property = malloc(sizeof(*property));
-	if (property == NULL)
+	struct hyd_property *p = malloc(sizeof(*p));
+	if (p == NULL)
 		return NULL;
 
-	property->name = malloc(strlen(name) + 1);
-	strcpy(property->name, name);
+	p->name = malloc(strlen(n) + 1);
+	strcpy(p->name, n);
 
-	property->type = BOOL;
-	property->value.b = value;
+	p->type = BOOL;
+	p->value.b = v;
 
-	return property;
+	return p;
 }
 
-void hyd_property_destroy(struct hyd_property *property)
+void hyd_property_destroy(struct hyd_property *p)
 {
-	free(property->name);
-	if (property->type == STRING)
-		free(property->value.s);
-	free(property);
+	free(p->name);
+	if (p->type == STRING)
+		free(p->value.s);
+	free(p);
 }
 
-uint8_t hyd_property_list_create_json(struct hyd_list *list, json_t *root)
+uint8_t hyd_property_create_json(struct hyd_property *l, json_t *root)
 {
 	if (!json_is_object(root))
 		return 1;
 
 	const char *key;
 	json_t *value;
-	struct hyd_property *iter;
-	struct hyd_property *list_iter;
+	struct hyd_property *iter, *ck_iter;
 	uint8_t found;
 
 	json_object_foreach(root, key, value) {
-		iter = NULL;
 		found = 0;
 		if (json_is_number(value))
 			iter = hyd_property_create_number(json_number_value(value), key);
@@ -85,18 +82,20 @@ uint8_t hyd_property_list_create_json(struct hyd_list *list, json_t *root)
 			iter = hyd_property_create_string(json_string_value(value), key);
 
 		if (iter != NULL) {
-			hyd_list_for_each_entry(list_iter, list, list)
+			for (ck_iter = l->next; ck_iter != l; ck_iter = ck_iter->next)
 			{
-				if (strcmp(list_iter->name, key) == 0) {
-					if (list_iter->type == STRING)
-						free(list_iter->value.s);
-					list_iter->type = iter->type;
-					list_iter->value = iter->value;
+				if (strcmp(ck_iter->name, key) == 0) {
+					if (ck_iter->type == STRING)
+						free(ck_iter->value.s);
+					ck_iter->type = iter->type;
+					ck_iter->value = iter->value;
 					found = 1;
 				}
 			}
-			if (!found)
-				hyd_list_append(&iter->list, list);
+			if (!found) {
+				iter->next = l->next;
+				l->next = iter;
+			}
 		}
 	}
 

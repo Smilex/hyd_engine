@@ -8,7 +8,6 @@
 #include <SDL.h>
 #include <stdint.h>
 #include <jansson.h>
-#include "list.h"
 
 /**
  * \enum hyd_input_type
@@ -33,7 +32,6 @@ struct hyd_input {
 	enum hyd_input_type type;
 	uint8_t code;
 	hyd_input_callback callback;
-	struct hyd_list list;
 };
 
 /**
@@ -42,10 +40,12 @@ struct hyd_input {
  * An input preset is a collection of
  * inputs associated with a name
  */
-struct hyd_input_preset {
+struct hyd_ip {
 	char *name;
-	struct hyd_list inputs;
-	struct hyd_list list;
+	uint32_t count;
+	struct hyd_input *inputs;
+	struct hyd_ip *next;
+	struct hyd_ip *prev;
 };
 
 /**
@@ -56,7 +56,7 @@ struct hyd_input_preset {
  *
  * \return The new input. NULL if error.
  */
-struct hyd_input *hyd_input_create_key(const char *action, uint8_t code);
+struct hyd_input hyd_input_create_key(const char *a, uint8_t code);
 
 /**
  * \brief Creates an input from a json object
@@ -65,14 +65,14 @@ struct hyd_input *hyd_input_create_key(const char *action, uint8_t code);
  *
  * \return The new input
  */
-struct hyd_input *hyd_input_create_json(const char *action, json_t *root);
+struct hyd_input hyd_input_create_json(const char *a, json_t *root);
 
 /**
  * \param[in] name The name of the preset
  *
  * \return The new input preset. NULL if error.
  */
-struct hyd_input_preset *hyd_input_preset_create(const char *name);
+struct hyd_ip *hyd_ip_create(const char *n);
 
 /**
  * \brief Creates input presets from file
@@ -82,7 +82,7 @@ struct hyd_input_preset *hyd_input_preset_create(const char *name);
  *
  * \return 0 on success. Non-zero on error
  */
-uint8_t hyd_input_preset_list_create_file(struct hyd_list *list, const char *filename);
+uint8_t hyd_ip_create_file(struct hyd_ip *l, const char *fname);
 
 /**
  * \brief Creates a input preset from a JSON object
@@ -92,7 +92,7 @@ uint8_t hyd_input_preset_list_create_file(struct hyd_list *list, const char *fil
  *
  * \return The new input preset
  */
-struct hyd_input_preset *hyd_input_preset_create_json(const char *name, json_t *root);
+struct hyd_ip *hyd_ip_create_json(const char *n, json_t *root);
 
 /**
  * \brief Get the value of the input associated with the action
@@ -102,8 +102,8 @@ struct hyd_input_preset *hyd_input_preset_create_json(const char *name, json_t *
  *
  * \return The value or 0 if not found.
  */
-uint16_t hyd_input_preset_get_action_value(struct hyd_input_preset *preset,
-		const char *action);
+uint16_t hyd_ip_get_value(struct hyd_ip *p,
+		const char *a);
 
 /**
  * \brief Adds a callback to an action
@@ -112,18 +112,13 @@ uint16_t hyd_input_preset_get_action_value(struct hyd_input_preset *preset,
  * \param[in] action The input action
  * \param[in] callback The callback
  */
-void hyd_input_preset_add_callback(struct hyd_input_preset *preset, const char *action,
+void hyd_ip_add_callback(struct hyd_ip *p, const char *a,
 		hyd_input_callback callback);
-
-/**
- * \param[in] input The input to destroy
- */
-void hyd_input_destroy(struct hyd_input *input);
 
 /**
  * \param[in] preset The input preset to destroy
  */
-void hyd_input_preset_destroy(struct hyd_input_preset *preset);
+void hyd_ip_destroy(struct hyd_ip *p);
 
 /**
  * \brief Get the maximum possible value for any input

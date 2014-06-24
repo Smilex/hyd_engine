@@ -9,7 +9,6 @@
 #include <jansson.h>
 #include <SDL.h>
 #include "vector.h"
-#include "list.h"
 
 enum hyd_coll_type {
 	POLYGON
@@ -32,7 +31,7 @@ struct hyd_coll_obj {
 	float area;
 	float radius;
 	enum hyd_coll_type type;
-	struct hyd_list list;
+	struct hyd_coll_obj *next;
 };
 
 /**
@@ -66,7 +65,7 @@ struct hyd_coll_obj *hyd_coll_obj_create_json(json_t *root,
  *
  * \return 0 on success, non-zero on error
  */
-uint8_t hyd_coll_obj_list_create_json(struct hyd_list *list, json_t *root,
+uint8_t hyd_coll_obj_create_json_arr(struct hyd_coll_obj *l, json_t *root,
 		struct hyd_ent *parent);
 
 /**
@@ -118,19 +117,6 @@ struct hyd_coll
 *hyd_coll_check(struct hyd_coll_obj *obj1, struct hyd_coll_obj *obj2,
 		float rel_x, float rel_y);
 
-struct hyd_coll
-*hyd_coll_list_check(struct hyd_list *list, struct hyd_coll_obj *obj,
-		float rel_x, float rel_y);
-
-struct hyd_coll
-*hyd_coll_list_check_list(struct hyd_list *list1, struct hyd_list *list2,
-		float rel_x, float rel_y);
-
 void hyd_coll_destroy(struct hyd_coll *coll);
-
-uint8_t hyd_coll_get_intersects(struct hyd_coll *coll);
-uint8_t hyd_coll_get_will_intersect(struct hyd_coll *coll);
-float hyd_coll_get_mtv_x(struct hyd_coll *coll);
-float hyd_coll_get_mtv_y(struct hyd_coll *coll);
 
 #endif

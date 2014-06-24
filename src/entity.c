@@ -5,91 +5,102 @@
 #include <math.h>
 #include <stdlib.h>
 
-struct hyd_ent *hyd_ent_create(struct hyd_spr *sprite, const char *name,
+struct hyd_ent *hyd_ent_create(struct hyd_spr *spr, const char *n,
 		struct hyd_ent *parent
 		)
 {
 	struct hyd_ent *ent = malloc(sizeof(*ent));
-	ent->spr = sprite;
-	if (name != NULL) {
-		size_t len = strlen(name);
+	ent->spr = spr;
+	if (n != NULL) {
+		size_t len = strlen(n);
 		ent->name = malloc(len + 1);
-		strcpy(ent->name, name);
+		strcpy(ent->name, n);
 	} else
 		ent->name = NULL;
 
-	hyd_list_init(&ent->children);
-	hyd_list_init(&ent->branch);
-	hyd_list_init(&ent->properties);
-	hyd_list_init(&ent->coll_objs);
-
+	ent->children = malloc(sizeof(*ent->children));
+	ent->children->next = ent->children;
+	ent->properties = malloc(sizeof(*ent->properties));
+	ent->properties->next = ent->properties;
+	ent->coll_objs = malloc(sizeof(*ent->coll_objs));
+	ent->coll_objs->next = ent->coll_objs;
+	ent->next = NULL;
 	ent->pos.x = 0.0f;
 	ent->pos.y = 0.0f;
 	ent->parent = parent;
 	if (parent != NULL) {
-		hyd_list_append(&ent->branch, &ent->parent->children);
+		ent->next = ent->parent->children->next;
+		ent->parent->children->next = ent;
 	}
 
 	return ent;
 }
 
-void hyd_ent_draw(struct hyd_ent *entity, SDL_Renderer *renderer)
+void hyd_ent_draw(struct hyd_ent *ent, SDL_Renderer *renderer)
 {
-	if (entity == NULL)
+	if (ent == NULL)
 		return;
 
-	SDL_Point position;
-	position.x = round(entity->pos.x);
-	position.y = round(entity->pos.y);
-	hyd_spr_draw_point(entity->spr, position, renderer);
+	SDL_Point pos;
+	pos.x = round(ent->pos.x);
+	pos.y = round(ent->pos.y);
+	hyd_spr_draw_point(ent->spr, pos, renderer);
 
-	struct hyd_ent *iter;
+	struct hyd_ent *i;
 
-	hyd_list_for_each_entry(iter, &entity->children, children)
+	for (i = ent->children->next; i != ent->children; i = i->next)
 	{
-		hyd_ent_draw(iter, renderer);
+		hyd_ent_draw(i, renderer);
 	}
 
-	struct hyd_coll_obj *col_iter;
-	hyd_list_for_each_entry(col_iter, &entity->coll_objs, list)
+	struct hyd_coll_obj *col_i;
+	for (col_i = ent->coll_objs->next;
+			col_i != ent->coll_objs;
+			col_i = col_i->next)
 	{
-		hyd_coll_obj_draw(col_iter, renderer);
+		hyd_coll_obj_draw(col_i, renderer);
 	}
 }
 
-void hyd_ent_destroy(struct hyd_ent *entity)
+void hyd_ent_destroy(struct hyd_ent *e)
 {
-	if (entity == NULL)
+	if (e == NULL)
 		return;
 
-	struct hyd_ent *child_iter;
-	struct hyd_ent *child_next;
-	hyd_list_for_each_entry_safe(child_iter, child_next, &entity->children, branch)
+	struct hyd_ent *ch_i, *ch_n;
+	for (ch_i = e->children->next, ch_n = ch_i->next;
+			ch_i != e->children;
+			ch_i = ch_n, ch_n = ch_i->next)
 	{
-		hyd_ent_destroy(child_iter);
+		hyd_ent_destroy(ch_i);
 	}
 
-	struct hyd_property *p_iter;
-	struct hyd_property *p_next;
-	hyd_list_for_each_entry_safe(p_iter, p_next, &entity->properties, list)
+	struct hyd_property *p_i, *p_n;
+	for (p_i = e->properties->next, p_n = p_i->next;
+			p_i != e->properties;
+			p_i = p_n, p_n = p_i->next)
 	{
-		hyd_property_destroy(p_iter);
+		hyd_property_destroy(p_i);
 	}
 
-	struct hyd_coll_obj *col_iter;
-	struct hyd_coll_obj *col_next;
-	hyd_list_for_each_entry_safe(col_iter, col_next, &entity->coll_objs, list)
+	struct hyd_coll_obj *c_i, *c_n;
+	for (c_i = e->coll_objs->next, c_n = c_i->next;
+			c_i != e->coll_objs;
+			c_i = c_n, c_n = c_i->next)
 	{
-		hyd_coll_obj_destroy(col_iter);
+		hyd_coll_obj_destroy(c_i);
 	}
 
-	hyd_spr_destroy(entity->spr);
-	free(entity->name);
-	free(entity);
+	hyd_spr_destroy(e->spr);
+	free(e->children);
+	free(e->properties);
+	free(e->coll_objs);
+	free(e->name);
+	free(e);
 }
 
-uint8_t hyd_ent_list_create_json(struct hyd_list *ent_list, json_t *root,
-		struct hyd_list *textures, struct hyd_ent *parent, SDL_Renderer *renderer)
+uint8_t hyd_ent_create_json_arr(struct hyd_ent *ent_list, json_t *root,
+		struct hyd_tex_list *tex_l, struct hyd_ent *parent, SDL_Renderer *renderer)
 {
 	if (!json_is_array(root)) {
 		SDL_LogError(
@@ -119,43 +130,45 @@ uint8_t hyd_ent_list_create_json(struct hyd_list *ent_list, json_t *root,
 		obj_json = json_object_get(arr_json, "entity");
 		if (json_is_string(obj_json)) {
 			ent = hyd_ent_create_file(json_string_value(obj_json),
-						textures, parent, renderer);
+						tex_l, parent, renderer);
 
-			hyd_list_append(&ent->branch, ent_list);
+			ent->next = ent_list->next;
+			ent_list->next = ent;
 		} else if (json_is_object(obj_json)) {
 			ent = hyd_ent_create_json(obj_json,
-					textures, parent, renderer);
+					tex_l, parent, renderer);
 
-			hyd_list_append(&ent->branch, ent_list);
+			ent->next = ent_list->next;
+			ent_list->next = ent;
 		}
 		else
 			continue;
 
 		obj_json = json_object_get(arr_json, "x");
 		if (json_is_number(obj_json))
-			hyd_ent_set_position_x(ent, json_number_value(obj_json));
+			ent->pos.x = json_number_value(obj_json);
 
 		obj_json = json_object_get(arr_json, "y");
 		if (json_is_number(obj_json))
-			hyd_ent_set_position_y(ent, json_number_value(obj_json));
+			ent->pos.y = json_number_value(obj_json);
 
 		obj_json = json_object_get(arr_json, "sprite");
 		if (json_is_string(obj_json)) {
 			if (ent->spr != NULL)
 				hyd_spr_destroy(ent->spr);
 			ent->spr = hyd_spr_create_file(json_string_value(obj_json),
-					textures, renderer);
+					tex_l, renderer);
 		}
 
 		obj_json = json_object_get(arr_json, "properties");
 		if (json_is_object(obj_json))
-			hyd_property_list_create_json(&ent->properties, obj_json);
+			hyd_property_create_json(ent->properties, obj_json);
 	}
 
 	return 0;
 }
 
-struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_list *textures,
+struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_tex_list *tex_l,
 		struct hyd_ent *parent, SDL_Renderer *renderer)
 {
 	if (!json_is_object(root)) {
@@ -170,7 +183,7 @@ struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_list *textures,
 
 	const char *name = NULL;
 	struct hyd_ent *ent = NULL;
-	struct hyd_spr *sprite = NULL;
+	struct hyd_spr *spr = NULL;
 
 	iter_json = json_object_get(root, "name");
 	if (json_is_string(iter_json))
@@ -178,200 +191,151 @@ struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_list *textures,
 
 	iter_json = json_object_get(root, "sprite");
 	if (json_is_string(iter_json))
-		sprite = hyd_spr_create_file(json_string_value(iter_json),
-				textures, renderer);
+		spr = hyd_spr_create_file(json_string_value(iter_json),
+				tex_l, renderer);
 
-	ent = hyd_ent_create(sprite, name, parent);
+	ent = hyd_ent_create(spr, name, parent);
 
 	iter_json = json_object_get(root, "children");
 	if (json_is_array(iter_json))
-		hyd_ent_list_create_json(&ent->children,
-				iter_json, textures, ent, renderer);
+		hyd_ent_create_json_arr(ent->children,
+				iter_json, tex_l, ent, renderer);
 
 	iter_json = json_object_get(root, "properties");
 	if (json_is_object(iter_json))
-		hyd_property_list_create_json(&ent->properties, iter_json);
+		hyd_property_create_json(ent->properties, iter_json);
 
 	iter_json = json_object_get(root, "collisions");
 	if (json_is_array(iter_json))
-		hyd_coll_obj_list_create_json(&ent->coll_objs, iter_json,
+		hyd_coll_obj_create_json_arr(ent->coll_objs, iter_json,
 				ent);
 
 	return ent;
 }
 
-struct hyd_ent *hyd_ent_create_file(const char *filename,
-		struct hyd_list *textures, struct hyd_ent *parent, SDL_Renderer *renderer)
+struct hyd_ent *hyd_ent_create_file(const char *fname,
+		struct hyd_tex_list *tex_l, struct hyd_ent *parent, SDL_Renderer *renderer)
 {
 	uint8_t *buf = NULL;
-	PHYSFS_sint64 read_length = 0;
-	json_t *root_node = NULL;
-	json_error_t error;
+	PHYSFS_sint64 read_len = 0;
+	json_t *root = NULL;
+	json_error_t err;
 	struct hyd_ent *ent = NULL;
 
-	read_length = hyd_fs_read_buffer(filename, &buf);
-	if (read_length == 0) {
+	read_len = hyd_fs_read_buffer(fname, &buf);
+	if (read_len == 0) {
 		SDL_LogError(
 				SDL_LOG_CATEGORY_APPLICATION,
 				"Got no data from '%s'",
-				filename
+				fname
 				);
 		return NULL;
 	}
 
-	SDL_Log("Reading object - %s - size: %i", filename, read_length);
+	SDL_Log("Reading object - %s - size: %i", fname, read_len);
 
-	root_node = json_loadb(buf, read_length, 0, &error);
+	root = json_loadb(buf, read_len, 0, &err);
 	free(buf);
 
-	if (root_node == NULL) {
+	if (root == NULL) {
 		SDL_LogError(
 				SDL_LOG_CATEGORY_APPLICATION,
 				"JSON error for file '%s' - line: %d - message: %s.",
-				filename, error.line, error.text
+				fname, err.line, err.text
 				);
 		return NULL;
 	}
 
-	ent = hyd_ent_create_json(root_node, textures, parent, renderer);
-	json_decref(root_node);
+	ent = hyd_ent_create_json(root, tex_l, parent, renderer);
+	json_decref(root);
 	return ent;
 }
 
-struct hyd_ent *hyd_ent_list_find_first(struct hyd_list *entities, const char *name)
+float hyd_ent_get_number_property(struct hyd_ent *ent, const char *n)
 {
-	struct hyd_ent *iter;
-	hyd_list_for_each_entry(iter, entities, branch)
+	struct hyd_property *i;
+	for (i = ent->properties->next; i != ent->properties; i = i->next)
 	{
-		if (strcmp(iter->name, name) == 0)
-			return iter;
-	}
-
-	return NULL;
-}
-
-float hyd_ent_get_number_property(struct hyd_ent *ent, const char *name)
-{
-	struct hyd_property *iter;
-	hyd_list_for_each_entry(iter, &ent->properties, list)
-	{
-		if (strcmp(iter->name, name) == 0)
-			return iter->value.n;
+		if (strcmp(i->name, n) == 0)
+			return i->value.n;
 	}
 
 	return 0.0f;
 }
 
-uint8_t hyd_ent_get_bool_property(struct hyd_ent *ent, const char *name)
+uint8_t hyd_ent_get_bool_property(struct hyd_ent *ent, const char *n)
 {
-	struct hyd_property *iter;
-	hyd_list_for_each_entry(iter, &ent->properties, list)
+	struct hyd_property *i;
+	for (i = ent->properties->next; i != ent->properties; i = i->next)
 	{
-		if (strcmp(iter->name, name) == 0)
-			return iter->value.b;
+		if (strcmp(i->name, n) == 0)
+			return i->value.b;
 	}
 
 	return 0;
 }
 
-const char *hyd_ent_get_string_property(struct hyd_ent *ent, const char *name)
+const char *hyd_ent_get_string_property(struct hyd_ent *ent, const char *n)
 {
-	struct hyd_property *iter;
-	hyd_list_for_each_entry(iter, &ent->properties, list)
+	struct hyd_property *i;
+	for (i = ent->properties->next; i != ent->properties; i = i->next)
 	{
-		if (strcmp(iter->name, name) == 0)
-			return iter->value.s;
+		if (strcmp(i->name, n) == 0)
+			return i->value.s;
 	}
 
 	return "";
 }
 
-struct hyd_spr *hyd_ent_get_sprite(struct hyd_ent *entity)
+void hyd_ent_set_number_property(struct hyd_ent *ent, float value, const char *n)
 {
-	return entity->spr;
-}
-
-const char *hyd_ent_get_name(struct hyd_ent *entity)
-{
-	return entity->name;
-}
-
-struct hyd_ent *hyd_ent_get_parent(struct hyd_ent *entity)
-{
-	return entity->parent;
-}
-
-float hyd_ent_get_position_x(struct hyd_ent *entity)
-{
-	return entity->pos.x;
-}
-
-float hyd_ent_get_position_y(struct hyd_ent *entity)
-{
-	return entity->pos.y;
-}
-
-struct hyd_list *hyd_ent_get_coll_objs(struct hyd_ent *ent)
-{
-	return &ent->coll_objs;
-}
-
-void hyd_ent_set_position_x(struct hyd_ent *entity, float x)
-{
-	entity->pos.x = x;
-}
-
-void hyd_ent_set_position_y(struct hyd_ent *entity, float y)
-{
-	entity->pos.y = y;
-}
-
-void hyd_ent_set_number_property(struct hyd_ent *ent, float value, const char *name)
-{
-	struct hyd_property *iter;
-	hyd_list_for_each_entry(iter, &ent->properties, list)
+	struct hyd_property *i;
+	for (i = ent->properties->next; i != ent->properties; i = i->next)
 	{
-		if (strcmp(iter->name, name) == 0) {
-			iter->type = NUMBER;
-			iter->value.n = value;
+		if (strcmp(i->name, n) == 0) {
+			i->type = NUMBER;
+			i->value.n = value;
 			return;
 		}
 	}
 
-	hyd_list_append(&hyd_property_create_number(value, name)->list,
-			&ent->properties);
+	struct hyd_property *p = hyd_property_create_number(value, n);
+	p->next = ent->properties->next;
+	ent->properties->next = p;
 }
 
-void hyd_ent_set_bool_property(struct hyd_ent *ent, uint8_t value, const char *name)
+void hyd_ent_set_bool_property(struct hyd_ent *ent, uint8_t value, const char *n)
 {
-	struct hyd_property *iter;
-	hyd_list_for_each_entry(iter, &ent->properties, list)
+	struct hyd_property *i;
+	for (i = ent->properties->next; i != ent->properties; i = i->next)
 	{
-		if (strcmp(iter->name, name) == 0) {
-			iter->type = BOOL;
-			iter->value.b = value;
+		if (strcmp(i->name, n) == 0) {
+			i->type = BOOL;
+			i->value.b = value;
 			return;
 		}
 	}
 
-	hyd_list_append(&hyd_property_create_bool(value, name)->list,
-			&ent->properties);
+	struct hyd_property *p = hyd_property_create_bool(value, n);
+	p->next = ent->properties->next;
+	ent->properties->next = p;
 }
 
-void hyd_ent_set_string_property(struct hyd_ent *ent, const char *value, const char *name)
+void hyd_ent_set_string_property(struct hyd_ent *ent, const char *value, const char *n)
 {
-	struct hyd_property *iter;
-	hyd_list_for_each_entry(iter, &ent->properties, list)
+	struct hyd_property *i;
+	for (i = ent->properties->next; i != ent->properties; i = i->next)
 	{
-		if (strcmp(iter->name, name) == 0) {
-			iter->type = STRING;
-			free(iter->value.s);
-			iter->value.s = malloc(strlen(value) + 1);
-			strcpy(iter->value.s, value);
+		if (strcmp(i->name, n) == 0) {
+			i->type = STRING;
+			free(i->value.s);
+			i->value.s = malloc(strlen(value) + 1);
+			strcpy(i->value.s, value);
 			return;
 		}
 	}
 
-	hyd_list_append(&hyd_property_create_string(value, name)->list,
-			&ent->properties);
+	struct hyd_property *p = hyd_property_create_string(value, n);
+	p->next = ent->properties->next;
+	ent->properties->next = p;
 }

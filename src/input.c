@@ -11,32 +11,33 @@ uint16_t hyd_input_get_max_value(void)
 	return 0x7FFF;
 }
 
-struct hyd_input *hyd_input_create_key(const char *action, uint8_t code)
+struct hyd_input hyd_input_create_key(const char *a, uint8_t code)
 {
-	struct hyd_input *input = malloc(sizeof(*input));
-	uint32_t len = strlen(action);
-	input->action = malloc(len + 1);
-	strcpy(input->action, action);
-	input->value = 0;
+	struct hyd_input input;
+	uint32_t len = strlen(a);
+	input.action = malloc(len + 1);
+	strcpy(input.action, a);
+	input.value = 0;
 
-	input->type = KEY;
-	input->code = code;
-	input->callback = NULL;
+	input.type = KEY;
+	input.code = code;
+	input.callback = NULL;
 
 	return input;
 }
 
-struct hyd_input *hyd_input_create_json(const char *action, json_t *root)
+struct hyd_input hyd_input_create_json(const char *a, json_t *root)
 {
+	struct hyd_input ret = {0,};
 	if (!json_is_object(root))
-		return NULL;
+		return ret;
 
 	json_t *iter;
 	const char *type;
 
 	iter = json_object_get(root, "type");
 	if (!json_is_string(iter))
-		return NULL;
+		return ret;
 
 	type = json_string_value(iter);
 
@@ -44,51 +45,51 @@ struct hyd_input *hyd_input_create_json(const char *action, json_t *root)
 	{
 		iter = json_object_get(root, "key");
 		if (!json_is_string(iter))
-			return NULL;
+			return ret;
 
-		return hyd_input_create_key(action,
+		return hyd_input_create_key(a,
 				SDL_GetScancodeFromName(json_string_value(iter)));
 	}
 }
 
-struct hyd_input_preset *hyd_input_preset_create(const char *name)
+struct hyd_ip *hyd_ip_create(const char *n)
 {
-	struct hyd_input_preset *preset = malloc(sizeof(*preset));
-	if (preset == NULL)
+	struct hyd_ip *p = malloc(sizeof(*p));
+	if (p == NULL)
 		return NULL;
 
-	preset->name = malloc(strlen(name) + 1);
-	strcpy(preset->name, name);
+	p->name = malloc(strlen(n) + 1);
+	strcpy(p->name, n);
+	p->next = p;
+	p->prev = p;
+	p->inputs = NULL;
 
-	hyd_list_init(&preset->inputs);
-	hyd_list_init(&preset->list);
-
-	return preset;
+	return p;
 }
 
-uint8_t hyd_input_preset_list_create_file(struct hyd_list *list, const char *filename)
+uint8_t hyd_ip_create_file(struct hyd_ip *l, const char *fname)
 {
-	struct hyd_input_preset *preset = NULL;
+	struct hyd_ip *p = NULL;
 	uint8_t* buf = NULL;
 	PHYSFS_sint64 read_len = 0;
 	json_t* root = NULL;
-	json_error_t json_error;
-	const char* preset_key;
-	json_t* preset_value = NULL;
+	json_error_t err;
+	const char* p_key;
+	json_t* p_val = NULL;
 
-	read_len = hyd_fs_read_buffer(filename, &buf);
+	read_len = hyd_fs_read_buffer(fname, &buf);
 
 	if (read_len == 0)
 	{
 		SDL_LogError(
 				SDL_LOG_CATEGORY_APPLICATION,
 				"Failed to read keymap from file: '%s'\n",
-				filename
+				fname
 				);
 		return 1;
 	}
 
-	root = json_loadb(buf, read_len, 0, &json_error);
+	root = json_loadb(buf, read_len, 0, &err);
 	free(buf);
 
 	if (root == NULL)
@@ -96,57 +97,60 @@ uint8_t hyd_input_preset_list_create_file(struct hyd_list *list, const char *fil
 		SDL_LogError(
 				SDL_LOG_CATEGORY_APPLICATION,
 				"Failed to read keymap file as JSON: '%s'\n",
-				json_error.text
+				err.text
 				);
 		return 1;
 	}
 
-	json_object_foreach(root, preset_key, preset_value)
+	json_object_foreach(root, p_key, p_val)
 	{
-		preset = hyd_input_preset_create_json(preset_key, preset_value);
-		if (preset != NULL)
-			hyd_list_append(&preset->list, list);
+		p = hyd_ip_create_json(p_key, p_val);
+		if (p != NULL) {
+			p->next = l->next;
+			l->next = p;
+			p->prev = l;
+		}
 	}
 
 	json_decref(root);
 	return 0;
 }
 
-struct hyd_input_preset *hyd_input_preset_create_json(const char *name, json_t *root)
+struct hyd_ip *hyd_ip_create_json(const char *n, json_t *root)
 {
 	if (!json_is_object(root))
 		return NULL;
 
 	const char *key;
 	json_t *value;
-	struct hyd_input *input = NULL;
-	struct hyd_input_preset *preset = NULL;
+	struct hyd_ip *p = hyd_ip_create(n);
+	uint32_t i = 0;
 
-	preset = hyd_input_preset_create(name);
+	p->count = json_object_size(root);
+	p->inputs = calloc(p->count, sizeof(*p->inputs));
 
 	json_object_foreach(root, key, value)
 	{
-		input = hyd_input_create_json(key, value);
-		if (input != NULL)
-			hyd_list_append(&input->list, &preset->inputs);
+		p->inputs[i] = hyd_input_create_json(key, value);
+		i++;
 	}
 
-	return preset;
+	return p;
 }
 
-uint16_t hyd_input_preset_get_action_value(struct hyd_input_preset *preset,
-		const char *action)
+uint16_t hyd_ip_get_value(struct hyd_ip *p,
+		const char *a)
 {
-	if (preset == NULL)
+	if (p == NULL)
 		return 0;
 
 	const uint8_t* state = SDL_GetKeyboardState(NULL);
-	struct hyd_input *iter;
-	hyd_list_for_each_entry(iter, &preset->inputs, list)
+	uint32_t i;
+	for (i = 0; i < p->count; i++)
 	{
-		if (strcmp(iter->action, action) == 0)
+		if (strcmp(p->inputs[i].action, a) == 0)
 		{
-			if (iter->type == KEY && state[iter->code])
+			if (p->inputs[i].type == KEY && state[p->inputs[i].code])
 			{
 				return hyd_input_get_max_value();
 			}
@@ -156,34 +160,31 @@ uint16_t hyd_input_preset_get_action_value(struct hyd_input_preset *preset,
 	return 0;
 }
 
-void hyd_input_preset_add_callback(struct hyd_input_preset *preset, const char *action,
+void hyd_ip_add_callback(struct hyd_ip *p, const char *a,
 		hyd_input_callback callback)
 {
-	if (preset == NULL && callback == NULL)
+	if (p == NULL && callback == NULL)
 		return;
 
-	struct hyd_input *iter;
-	hyd_list_for_each_entry(iter, &preset->inputs, list)
+	uint32_t i;
+	for (i = 0; i < p->count; i++)
 	{
-		if (strcmp(iter->action, action) == 0)
-			iter->callback = callback;
+		if (strcmp(p->inputs[i].action, a) == 0)
+			p->inputs[i].callback = callback;
 	}
 }
 
-void hyd_input_destroy(struct hyd_input *input)
+void hyd_ip_destroy(struct hyd_ip *p)
 {
-	free(input->action);
-	free(input);
-}
-
-void hyd_input_preset_destroy(struct hyd_input_preset *preset)
-{
-	struct hyd_input *iter, *next;
-	hyd_list_for_each_entry_safe(iter, next, &preset->inputs, list)
-	{
-		hyd_input_destroy(iter);
+	struct hyd_ip *i, *n;
+	uint32_t j;
+	for (i = p->next, n = i->next;
+			i != p;
+			i = n, n = i->next) {
+		for (j = 0; j < i->count; j++)
+			free(i->inputs[j].action);
+		free(i->name);
+		free(i->inputs);
+		free(i);
 	}
-
-	free(preset->name);
-	free(preset);
 }
