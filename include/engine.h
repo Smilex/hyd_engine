@@ -28,7 +28,6 @@ struct hyd_engine {
 	struct hyd_list input_presets;
 	struct hyd_list textures;
 };
-typedef struct hyd_engine hyd_engine;
 
 struct hyd_engine *hyd_engine_create(void);
 

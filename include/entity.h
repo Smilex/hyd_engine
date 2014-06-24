@@ -41,7 +41,6 @@ struct hyd_ent {
 	struct hyd_list properties;
 	struct hyd_list coll_objs;
 };
-typedef struct hyd_ent hyd_ent;
 
 /**
  * \param[in] sprite The entity's sprite
