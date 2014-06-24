@@ -195,7 +195,7 @@ struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_list *textures,
 	iter_json = json_object_get(root, "collisions");
 	if (json_is_array(iter_json))
 		hyd_coll_obj_list_create_json(&ent->coll_objs, iter_json,
-				&ent->pos);
+				ent);
 
 	return ent;
 }
