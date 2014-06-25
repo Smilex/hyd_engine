@@ -15,7 +15,10 @@ struct hyd_engine *hyd_engine_create(void)
 	engine->window = NULL;
 	engine->call_update = NULL;
 	engine->call_draw = NULL;
-	engine->ip_head = NULL;
+	engine->ip_head = malloc(sizeof(*engine->ip_head));
+	engine->ip_head->next = engine->ip_head;
+	engine->tex_head = malloc(sizeof(*engine->tex_head));
+	engine->tex_head->next = engine->tex_head;
 
 	return engine;
 }

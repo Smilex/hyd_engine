@@ -176,15 +176,10 @@ void hyd_ip_add_callback(struct hyd_ip *p, const char *a,
 
 void hyd_ip_destroy(struct hyd_ip *p)
 {
-	struct hyd_ip *i, *n;
 	uint32_t j;
-	for (i = p->next, n = i->next;
-			i != p;
-			i = n, n = i->next) {
-		for (j = 0; j < i->count; j++)
-			free(i->inputs[j].action);
-		free(i->name);
-		free(i->inputs);
-		free(i);
-	}
+	for (j = 0; j < p->count; j++)
+		free(p->inputs[j].action);
+	free(p->name);
+	free(p->inputs);
+	free(p);
 }

@@ -14,6 +14,7 @@ struct hyd_scene *hyd_scene_create(void)
 		return NULL;
 	}
 	s->ent_head = malloc(sizeof(*s->ent_head));
+	s->ent_head->next = s->ent_head;
 
 	return s;
 }
@@ -76,7 +77,7 @@ struct hyd_scene *hyd_scene_create_json(json_t *root, struct hyd_tex_list *tex_l
 				"No objects array in scene file."
 				);
 	} else {
-		hyd_ent_list_create_json(s->ent_head,
+		hyd_ent_create_json_arr(s->ent_head,
 				ent_json, tex_l, NULL, renderer);
 	}
 
