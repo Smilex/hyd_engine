@@ -4,15 +4,13 @@ int main(int argc, char* argv[])
 {
 	int number_failed;
 
-	Suite *list = list_suite();
 	Suite *texture = texture_suite();
 	Suite *entity = entity_suite();
 	Suite *sprite = sprite_suite();
 	Suite *property = property_suite();
 	Suite *collision = collision_suite();
 
-	SRunner* sr = srunner_create(list);
-	srunner_add_suite(sr, texture);
+	SRunner* sr = srunner_create(texture);
 	srunner_add_suite(sr, entity);
 	srunner_add_suite(sr, sprite);
 	srunner_add_suite(sr, property);
