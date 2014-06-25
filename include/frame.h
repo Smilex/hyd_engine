@@ -7,7 +7,6 @@
 
 #include <SDL.h>
 #include <jansson.h>
-#include "list.h"
 
 /**
  * \struct hyd_frame

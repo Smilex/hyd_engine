@@ -7,7 +7,6 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-#include "list.h"
 
 /**
  * \struct hyd_tex
@@ -19,8 +18,16 @@ struct hyd_tex {
 	struct SDL_Texture *ptr;
 	uint32_t *ref_count;
 	char *name;
+};
 
-	struct hyd_list list;
+/**
+ * \struct hyd_tex_list
+ *
+ * A list of textures
+ */
+struct hyd_tex_list {
+	struct hyd_tex *tex;
+	struct hyd_tex_list *next;
 };
 
 /**
@@ -58,7 +65,7 @@ void hyd_tex_destroy(struct hyd_tex *texture);
 /**
  * \param[in] textures The texture list to destroy
  */
-void hyd_tex_list_destroy(struct hyd_list *textures);
+void hyd_tex_list_destroy(struct hyd_tex_list *l);
 
 /**
  * \param[in] textures The texture list to search through
@@ -66,6 +73,6 @@ void hyd_tex_list_destroy(struct hyd_list *textures);
  *
  * \return The texture if found, NULL otherwise
  */
-struct hyd_tex *hyd_tex_list_find(struct hyd_list *textures, const char *name);
+struct hyd_tex *hyd_tex_list_find(struct hyd_tex_list *l, const char *n);
 
 #endif

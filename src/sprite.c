@@ -27,11 +27,11 @@ struct hyd_spr *hyd_spr_create(struct hyd_tex *tex, struct hyd_frame **frames,
 	return spr;
 }
 
-struct hyd_spr *hyd_spr_create_json(json_t *root, struct hyd_list *textures,
+struct hyd_spr *hyd_spr_create_json(json_t *root, struct hyd_tex_list *tex_l,
 		SDL_Renderer *renderer)
 {
 	uint32_t i = 0;
-	struct hyd_tex *texture = NULL;
+	struct hyd_tex *tex = NULL;
 	struct hyd_frame **frames;
 	struct hyd_anim **anims;
 	uint32_t num_frames;
@@ -55,10 +55,13 @@ struct hyd_spr *hyd_spr_create_json(json_t *root, struct hyd_list *textures,
 		return NULL;
 	}
 
-	texture = hyd_tex_list_find(textures, json_string_value(iter_json));
-	if (texture == NULL) {
-		texture = hyd_tex_create_file(json_string_value(iter_json), renderer);
-		hyd_list_append(&texture->list, textures);
+	tex = hyd_tex_list_find(tex_l, json_string_value(iter_json));
+	if (tex == NULL) {
+		tex = hyd_tex_create_file(json_string_value(iter_json), renderer);
+		struct hyd_tex_list *l = malloc(sizeof(l));
+		l->tex = tex;
+		l->next = tex_l->next;
+		tex_l->next = l;
 	}
 
 	iter_json = json_object_get(root, "frames");
@@ -78,99 +81,85 @@ struct hyd_spr *hyd_spr_create_json(json_t *root, struct hyd_list *textures,
 				frames, num_frames, &num_anims);
 
 	json_decref(root);
-	return hyd_spr_create(hyd_tex_copy(texture),
+	return hyd_spr_create(hyd_tex_copy(tex),
 			frames, num_frames, anims, num_anims);
 }
 
-struct hyd_spr *hyd_spr_create_file(const char *filename, struct hyd_list *textures,
+struct hyd_spr *hyd_spr_create_file(const char *fname, struct hyd_tex_list *tex_l,
 		SDL_Renderer *renderer)
 {
-	PHYSFS_sint64 file_length = 0;
+	PHYSFS_sint64 file_len = 0;
 	uint8_t *buf = NULL;
-	json_t *root_node = NULL;
-	json_error_t error;
+	json_t *root = NULL;
+	json_error_t err;
 
-	file_length = hyd_fs_read_buffer(filename, &buf);
-	if (file_length == 0) {
+	file_len = hyd_fs_read_buffer(fname, &buf);
+	if (file_len == 0) {
 		SDL_LogError(
 				SDL_LOG_CATEGORY_APPLICATION,
 				"Failed to read sprite from file: '%s'\n",
-				filename
+				fname
 				);
 		return NULL;
 	}
 
-	SDL_Log("Reading sprite - %s - size: %i", filename, file_length);
+	SDL_Log("Reading sprite - %s - size: %i", fname, file_len);
 
-	root_node = json_loadb(buf, file_length, 0, &error);
+	root = json_loadb(buf, file_len, 0, &err);
 	free(buf);
-	buf = NULL;
 
-	if (root_node == NULL) {
+	if (root == NULL) {
 		SDL_LogError(
 				SDL_LOG_CATEGORY_APPLICATION,
 				"JSON error for file '%s' - line: %d - message: %s.",
-				filename, error.line, error.text
+				fname, err.line, err.text
 				);
 		return NULL;
 	}
 
-	return hyd_spr_create_json(root_node, textures, renderer);
+	return hyd_spr_create_json(root, tex_l, renderer);
 }
 
-void hyd_spr_destroy(struct hyd_spr *sprite)
+void hyd_spr_destroy(struct hyd_spr *s)
 {
-	if (sprite == NULL)
+	if (s == NULL)
 		return;
 
 	SDL_Log("Destroying sprite");
 	uint32_t i;
-	for (i = 0; i < sprite->num_anims; i++)
-		hyd_anim_destroy(sprite->anims[i]);
+	for (i = 0; i < s->num_anims; i++)
+		hyd_anim_destroy(s->anims[i]);
 
-	free(sprite->anims);
+	free(s->anims);
 
-	for (i = 0; i < sprite->num_frames; i++)
-		hyd_frame_destroy(sprite->frames[i]);
+	for (i = 0; i < s->num_frames; i++)
+		hyd_frame_destroy(s->frames[i]);
 
-	free(sprite->frames);
+	free(s->frames);
 
-	hyd_tex_destroy(sprite->tex);
-	free(sprite);
+	hyd_tex_destroy(s->tex);
+	free(s);
 }
 
-void hyd_spr_list_destroy(struct hyd_list *sprites)
-{
-	if (sprites == NULL)
-		return;
-
-	struct hyd_spr *iter;
-	struct hyd_spr *next;
-	hyd_list_for_each_entry_safe(iter, next, sprites, list)
-	{
-		hyd_spr_destroy(iter);
-	}
-}
-
-void hyd_spr_draw_point(struct hyd_spr *sprite, SDL_Point point,
+void hyd_spr_draw_point(struct hyd_spr *spr, SDL_Point point,
 		SDL_Renderer *renderer)
 {
-	if (sprite == NULL)
+	if (spr == NULL)
 		return;
 
 	SDL_Rect rect;
 	rect.x = point.x;
 	rect.y = point.y;
-	rect.w = sprite->frames[0]->rect.w;
-	rect.h = sprite->frames[0]->rect.h;
+	rect.w = spr->frames[0]->rect.w;
+	rect.h = spr->frames[0]->rect.h;
 
-	if (sprite->tex == NULL) {
+	if (spr->tex == NULL) {
 		SDL_SetRenderDrawColor(renderer, 255, 105, 180, 255);
 		SDL_RenderFillRect(renderer, &rect);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		return;
 	}
 
-	SDL_Texture *tex = sprite->tex->ptr;
-	SDL_RenderCopy(renderer, tex, &(sprite->frames[0]->rect), &rect);
+	SDL_Texture *tex = spr->tex->ptr;
+	SDL_RenderCopy(renderer, tex, &(spr->frames[0]->rect), &rect);
 }

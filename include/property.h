@@ -5,7 +5,6 @@
 #ifndef HYD_PROPERTY_H
 #define HYD_PROPERTY_H
 
-#include "list.h"
 #include <stdint.h>
 #include <jansson.h>
 
@@ -28,23 +27,23 @@ struct hyd_property {
 		uint8_t b;
 		char *s;
 	} value;
-	struct hyd_list list;
+	struct hyd_property *next;
 };
 
 /**
  * \return A new number property
  */
-struct hyd_property *hyd_property_create_number(float value, const char *name);
+struct hyd_property *hyd_property_create_number(float v, const char *n);
 
 /**
  * \return A new string property
  */
-struct hyd_property *hyd_property_create_string(const char *value, const char *name);
+struct hyd_property *hyd_property_create_string(const char *v, const char *n);
 
 /**
  * \return A new boolean property
  */
-struct hyd_property *hyd_property_create_bool(uint8_t value, const char *name);
+struct hyd_property *hyd_property_create_bool(uint8_t v, const char *n);
 
 /**
  * \param[in] property The property to destroy
@@ -59,6 +58,6 @@ void hyd_property_destroy(struct hyd_property *property);
  *
  * \return 0 if success. Non-zero if failure
  */
-uint8_t hyd_property_list_create_json(struct hyd_list *list, json_t *root);
+uint8_t hyd_property_create_json(struct hyd_property *l, json_t *root);
 
 #endif

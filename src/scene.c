@@ -5,60 +5,59 @@
 
 struct hyd_scene *hyd_scene_create(void)
 {
-	struct hyd_scene *scene = malloc(sizeof(*scene));
-	if (scene == NULL) {
+	struct hyd_scene *s = malloc(sizeof(*s));
+	if (s == NULL) {
 		SDL_LogError(
 				SDL_LOG_CATEGORY_APPLICATION,
 				"Failed to allocate memory for scene"
 				);
 		return NULL;
 	}
+	s->ent_head = malloc(sizeof(*s->ent_head));
+	s->ent_head->next = s->ent_head;
 
-	hyd_list_init(&scene->entities);
-	hyd_list_init(&scene->sprites);
-
-	return scene;
+	return s;
 }
 
-struct hyd_scene *hyd_scene_create_file(const char *filename, struct hyd_list *textures,
+struct hyd_scene *hyd_scene_create_file(const char *fname, struct hyd_tex_list *tex_l,
 		SDL_Renderer *renderer)
 {
 	uint8_t *buf = NULL;
-	PHYSFS_sint64 read_length = 0;
-	json_t *root_node = NULL;
+	PHYSFS_sint64 read_len = 0;
+	json_t *root = NULL;
 	json_error_t error;
-	struct hyd_scene *scene = NULL;
+	struct hyd_scene *s = NULL;
 
-	read_length = hyd_fs_read_buffer(filename, &buf);
-	if (read_length == 0) {
+	read_len = hyd_fs_read_buffer(fname, &buf);
+	if (read_len == 0) {
 		SDL_LogError(
 				SDL_LOG_CATEGORY_APPLICATION,
 				"Got no data from '%s'",
-				filename
+				fname
 				);
 		return NULL;
 	}
 
-	SDL_Log("Reading scene - %s - size: %i", filename, read_length);
+	SDL_Log("Reading scene - %s - size: %i", fname, read_len);
 
-	root_node = json_loadb(buf, read_length, 0, &error);
+	root = json_loadb(buf, read_len, 0, &error);
 	free(buf);
 
-	if (root_node == NULL) {
+	if (root == NULL) {
 		SDL_LogError(
 				SDL_LOG_CATEGORY_APPLICATION,
 				"JSON error for file '%s' - line: %d - message: %s.",
-				filename, error.line, error.text
+				fname, error.line, error.text
 				);
 		return NULL;
 	}
 
-	scene = hyd_scene_create_json(root_node, textures, renderer);
-	json_decref(root_node);
-	return scene;
+	s = hyd_scene_create_json(root, tex_l, renderer);
+	json_decref(root);
+	return s;
 }
 
-struct hyd_scene *hyd_scene_create_json(json_t *root, struct hyd_list *textures,
+struct hyd_scene *hyd_scene_create_json(json_t *root, struct hyd_tex_list *tex_l,
 		SDL_Renderer *renderer)
 {
 	if (!json_is_object(root)) {
@@ -69,7 +68,7 @@ struct hyd_scene *hyd_scene_create_json(json_t *root, struct hyd_list *textures,
 		return NULL;
 	}
 
-	struct hyd_scene *scene = hyd_scene_create();
+	struct hyd_scene *s = hyd_scene_create();
 
 	json_t *ent_json = json_object_get(root, "entities");
 	if (!json_is_array(ent_json)) {
@@ -78,43 +77,39 @@ struct hyd_scene *hyd_scene_create_json(json_t *root, struct hyd_list *textures,
 				"No objects array in scene file."
 				);
 	} else {
-		hyd_ent_list_create_json(&scene->entities,
-				ent_json, textures, NULL, renderer);
+		hyd_ent_create_json_arr(s->ent_head,
+				ent_json, tex_l, NULL, renderer);
 	}
 
-	return scene;
+	return s;
 }
 
-void hyd_scene_destroy(struct hyd_scene *scene)
+void hyd_scene_destroy(struct hyd_scene *s)
 {
-	if (scene == NULL)
+	if (s == NULL)
 		return;
 
 	SDL_Log("Destroying scene");
 
-	struct hyd_ent *iter;
-	struct hyd_ent *next;
-	hyd_list_for_each_entry_safe(iter, next, &scene->entities, branch)
+	struct hyd_ent *i,*n;
+	for (i = s->ent_head->next, n = i->next;
+			i != s->ent_head;
+			i = n, n = i->next)
 	{
-		hyd_ent_destroy(iter);
+		hyd_ent_destroy(i);
 	}
 
-	free(scene);
+	free(s);
 }
 
-void hyd_scene_draw(struct hyd_scene *scene, SDL_Renderer *renderer)
+void hyd_scene_draw(struct hyd_scene *s, SDL_Renderer *r)
 {
-	if (scene == NULL)
+	if (s == NULL)
 		return;
 
-	struct hyd_ent *iter;
-	hyd_list_for_each_entry(iter, &scene->entities, branch)
+	struct hyd_ent *i;
+	for (i = s->ent_head->next; i != s->ent_head; i = i->next)
 	{
-		hyd_ent_draw(iter, renderer);
+		hyd_ent_draw(i, r);
 	}
-}
-
-struct hyd_list *hyd_scene_get_entities(struct hyd_scene *scene)
-{
-	return &scene->entities;
 }

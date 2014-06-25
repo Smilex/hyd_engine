@@ -24,8 +24,6 @@ struct hyd_spr {
 	struct hyd_anim **anims;
 	uint32_t num_frames;
 	uint32_t num_anims;
-
-	struct hyd_list list;
 };
 
 /**
@@ -45,35 +43,30 @@ struct hyd_spr *hyd_spr_create(struct hyd_tex *tex, struct hyd_frame **frames,
  * \brief Creates a sprite from a JSON object
  *
  * \param[in] root The JSON object
- * \param[out] textures The list to add the sprite textures to
+ * \param[out] tex_l The list to add the sprite textures to
  * \param[in] renderer The renderer to use for texture loading
  *
  * \return The new sprite or NULL on error
  */
-struct hyd_spr *hyd_spr_create_json(json_t *root, struct hyd_list *textures,
+struct hyd_spr *hyd_spr_create_json(json_t *root, struct hyd_tex_list *tex_l,
 		struct SDL_Renderer *renderer);
 
 /**
  * \brief Creates a sprite from a file
  *
  * \param[in] filename The file to read from
- * \param[out] textures The list to add the sprite textures to
+ * \param[out] tex_l The list to add the sprite textures to
  * \param[in] renderer The renderer to use for texture loading
  *
  * \return The new sprite or NULL on error
  */
-struct hyd_spr *hyd_spr_create_file(const char *filename, struct hyd_list *textures,
+struct hyd_spr *hyd_spr_create_file(const char *fname, struct hyd_tex_list *tex_l,
 		struct SDL_Renderer *renderer);
 
 /**
  * \param[in] sprite The sprite to destroy
  */
 void hyd_spr_destroy(struct hyd_spr *sprite);
-
-/**
- * \param[in] sprites The list of sprites to destroy
- */
-void hyd_spr_list_destroy(struct hyd_list *sprites);
 
 /**
  * \brief Draws the sprite at the specified point

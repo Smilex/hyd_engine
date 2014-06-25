@@ -28,7 +28,7 @@ struct hyd_coll_obj *hyd_coll_obj_create_json(json_t *root,
 	col_obj->parent = parent;
 	col_obj->area = 0.0f;
 	col_obj->radius = 0.0f;
-	hyd_list_init(&col_obj->list);
+	col_obj->next = col_obj;
 
 	json_array_foreach(json_points, i, json_iter) {
 		if (!json_is_array(json_iter) &&
@@ -50,7 +50,7 @@ struct hyd_coll_obj *hyd_coll_obj_create_json(json_t *root,
 	return col_obj;
 }
 
-uint8_t hyd_coll_obj_list_create_json(struct hyd_list *list, json_t *root,
+uint8_t hyd_coll_obj_create_json_arr(struct hyd_coll_obj *l, json_t *root,
 		struct hyd_ent *parent)
 {
 	if (!json_is_array(root))
@@ -63,8 +63,10 @@ uint8_t hyd_coll_obj_list_create_json(struct hyd_list *list, json_t *root,
 	json_array_foreach(root, index, iter_json)
 	{
 		obj = hyd_coll_obj_create_json(iter_json, parent);
-		if (obj != NULL)
-			hyd_list_append(&obj->list, list);
+		if (obj != NULL) {
+			obj->next = l->next;
+			l->next = obj;
+		}
 	}
 
 	return 0;
@@ -328,58 +330,7 @@ struct hyd_coll
 	return coll;
 }
 
-struct hyd_coll
-*hyd_coll_list_check(struct hyd_list *list, struct hyd_coll_obj *obj,
-		float rel_x, float rel_y)
-{
-	struct hyd_coll *coll = NULL;
-	struct hyd_coll_obj *iter;
-
-	hyd_list_for_each_entry(iter, list, list)
-	{
-		coll = hyd_coll_check(iter, obj, rel_x, rel_y);
-	}
-
-	return coll;
-}
-
-struct hyd_coll
-*hyd_coll_list_check_list(struct hyd_list *list1, struct hyd_list *list2,
-		float rel_x, float rel_y)
-{
-	struct hyd_coll *coll = NULL;
-	struct hyd_coll_obj *iter;
-
-	hyd_list_for_each_entry(iter, list2, list)
-	{
-		coll = hyd_coll_list_check(list1, iter,
-				rel_x, rel_y);
-	}
-
-	return coll;
-}
-
 void hyd_coll_destroy(struct hyd_coll *coll)
 {
 	free(coll);
-}
-
-uint8_t hyd_coll_get_intersects(struct hyd_coll *coll)
-{
-	return coll->intersects;
-}
-
-uint8_t hyd_coll_get_will_intersect(struct hyd_coll *coll)
-{
-	return coll->will_intersect;
-}
-
-float hyd_coll_get_mtv_x(struct hyd_coll *coll)
-{
-	return coll->minimum_translation_vector.x;
-}
-
-float hyd_coll_get_mtv_y(struct hyd_coll *coll)
-{
-	return coll->minimum_translation_vector.y;
 }

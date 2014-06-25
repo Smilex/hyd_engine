@@ -9,15 +9,16 @@ struct hyd_engine *hyd_engine_create(void)
 
 	engine->running = 1;
 	engine->current_scene = NULL;
-	engine->current_input_preset = NULL;
+	engine->curr_ip = NULL;
 	engine->current_mod = NULL;
 	engine->renderer = NULL;
 	engine->window = NULL;
 	engine->call_update = NULL;
 	engine->call_draw = NULL;
-
-	hyd_list_init(&engine->textures);
-	hyd_list_init(&engine->input_presets);
+	engine->ip_head = malloc(sizeof(*engine->ip_head));
+	engine->ip_head->next = engine->ip_head;
+	engine->tex_head = malloc(sizeof(*engine->tex_head));
+	engine->tex_head->next = engine->tex_head;
 
 	return engine;
 }
@@ -40,39 +41,34 @@ void hyd_engine_events(struct hyd_engine *engine)
 	if (engine == NULL)
 		return;
 
+	struct hyd_ip *ip = engine->curr_ip;
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		if (event.type == SDL_QUIT)
 			engine->running = 0;
 		else if (event.type == SDL_KEYDOWN) {
-			if (engine->current_input_preset == NULL)
+			if (engine->curr_ip == NULL)
 				continue;
 
-			struct hyd_input *iter;
-			hyd_list_for_each_entry(iter,
-					&engine->current_input_preset->inputs,
-					list)
-			{
-				if (iter->callback != NULL &&
-						iter->type == KEY &&
-						iter->code == event.key.keysym.scancode
+			uint32_t i;
+			for(i = 0;i < ip->count;i++) {
+				if (ip->inputs[i].callback != NULL &&
+						ip->inputs[i].type == KEY &&
+						ip->inputs[i].code == event.key.keysym.scancode
 				   )
-					iter->callback(engine, "down");
+					ip->inputs[i].callback(engine, "down");
 			}
 		} else if (event.type == SDL_KEYUP) {
-			if (engine->current_input_preset == NULL)
+			if (engine->curr_ip == NULL)
 				continue;
 
-			struct hyd_input *iter;
-			hyd_list_for_each_entry(iter,
-					&engine->current_input_preset->inputs,
-					list)
-			{
-				if (iter->callback != NULL &&
-						iter->type == KEY &&
-						iter->code == event.key.keysym.scancode
-					)
-					iter->callback(engine, "up");
+			uint32_t i;
+			for(i = 0;i < ip->count;i++) {
+				if (ip->inputs[i].callback != NULL &&
+						ip->inputs[i].type == KEY &&
+						ip->inputs[i].code == event.key.keysym.scancode
+				   )
+					ip->inputs[i].callback(engine, "down");
 			}
 		}
 	}
@@ -87,15 +83,16 @@ void hyd_engine_destroy(struct hyd_engine *engine)
 			engine->current_mod->destroy != NULL)
 		engine->current_mod->destroy(engine);
 
-	struct hyd_input_preset *preset_iter, *preset_next;
-	hyd_list_for_each_entry_safe(preset_iter, preset_next,
-			&engine->input_presets, list)
+	struct hyd_ip *preset_iter, *preset_next;
+	for (preset_iter = engine->ip_head->next, preset_next = preset_iter->next;
+			preset_iter != engine->ip_head;
+			preset_iter = preset_next, preset_next = preset_iter->next) 
 	{
-		hyd_input_preset_destroy(preset_iter);
+		hyd_ip_destroy(preset_iter);
 	}
 
 	hyd_scene_destroy(engine->current_scene);
-	hyd_tex_list_destroy(&engine->textures);
+	hyd_tex_list_destroy(engine->tex_head);
 	hyd_mod_destroy(engine->current_mod);
 
 	if (PHYSFS_isInit() != 0)
@@ -153,7 +150,7 @@ uint8_t hyd_engine_run(struct hyd_engine *engine)
 uint8_t hyd_engine_load_scene(struct hyd_engine *engine, const char *filename)
 {
 	engine->current_scene = hyd_scene_create_file(filename,
-			&engine->textures, engine->renderer);
+			engine->tex_head, engine->renderer);
 
 	if (engine->current_scene == NULL)
 		return 1;
@@ -161,18 +158,28 @@ uint8_t hyd_engine_load_scene(struct hyd_engine *engine, const char *filename)
 	return 0;
 }
 
-uint8_t hyd_engine_load_input_preset(struct hyd_engine *engine, const char *filename)
+uint8_t hyd_engine_load_ip(struct hyd_engine *engine, const char *filename)
 {
-	if (hyd_input_preset_list_create_file(&engine->input_presets,
+	if (engine->ip_head != NULL) {
+		struct hyd_ip *i, *n;
+		for (i = engine->ip_head->next, n = i->next;
+				i != engine->ip_head;
+				i = n, n = i->next) 
+		{
+			hyd_ip_destroy(i);
+		}
+	}
+
+	engine->ip_head = malloc(sizeof(*engine->ip_head));
+	engine->ip_head->next = engine->ip_head;
+
+	if (hyd_ip_create_file(engine->ip_head,
 				filename) == 0)
-		engine->current_input_preset =
-			hyd_list_entry(engine->input_presets.next,
-					typeof(*(engine->current_input_preset)),
-					list);
+		engine->curr_ip = engine->ip_head->next;
 	else
 		return 1;
 
-	if (engine->current_input_preset == NULL)
+	if (engine->curr_ip == NULL)
 		return 1;
 
 	return 0;
@@ -192,21 +199,6 @@ uint8_t hyd_engine_load_mod(struct hyd_engine *engine, const char *filename)
 		return 1;
 
 	return 0;
-}
-
-struct hyd_scene *hyd_engine_get_current_scene(struct hyd_engine *engine)
-{
-	return engine->current_scene;
-}
-
-struct hyd_input_preset *hyd_engine_get_current_input_preset(struct hyd_engine *engine)
-{
-	return engine->current_input_preset;
-}
-
-SDL_Renderer *hyd_engine_get_renderer(struct hyd_engine *engine)
-{
-	return engine->renderer;
 }
 
 void hyd_engine_update_func(struct hyd_engine *e, void (*f)(struct hyd_engine*,uint32_t))
