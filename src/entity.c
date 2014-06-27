@@ -1,9 +1,10 @@
 #include "entity.h"
 
-#include "filesystem.h"
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
+#include "filesystem.h"
+#include "stretchy_buffer.h"
 
 struct hyd_ent *hyd_ent_create(struct hyd_spr *spr, const char *n,
 		struct hyd_ent *parent
@@ -338,4 +339,22 @@ void hyd_ent_set_string_property(struct hyd_ent *ent, const char *value, const c
 	struct hyd_property *p = hyd_property_create_string(value, n);
 	p->next = ent->properties->next;
 	ent->properties->next = p;
+}
+
+struct hyd_ent **hyd_ent_list_find(struct hyd_ent *l, const char *n, uint32_t *num)
+{
+	struct hyd_ent **ret = NULL;
+	struct hyd_ent *i;
+	*num = 0;
+
+	for (i = l->next; i != l; i = i->next) {
+		if (i->name == NULL)
+			continue;
+		if (strcmp(i->name, n) == 0) {
+			sb_push(ret, i);
+			(*num)++;
+		}
+	}
+
+	return ret;
 }

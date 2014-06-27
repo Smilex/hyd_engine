@@ -117,10 +117,11 @@ void hyd_ent_destroy(struct hyd_ent *e);
  *
  * \param[in] l The entity list to search through
  * \param[in] name The name to search for
+ * \param[out] num The number of entities found
  *
- * \return The entities with \em name.
+ * \return The entities array with \em name.
  */
-struct hyd_ent *hyd_ent_list_find(struct hyd_ent *l, const char *n);
+struct hyd_ent **hyd_ent_list_find(struct hyd_ent *l, const char *n, uint32_t *num);
 
 float hyd_ent_get_number_property(struct hyd_ent *ent, const char *n);
 
