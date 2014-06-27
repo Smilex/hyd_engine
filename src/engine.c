@@ -207,3 +207,8 @@ void hyd_engine_draw_func(struct hyd_engine *e, void (*f)(struct hyd_engine*))
 {
 	e->call_draw = f;
 }
+
+uint32_t hyd_engine_get_time(void)
+{
+	return SDL_GetTicks();
+}
