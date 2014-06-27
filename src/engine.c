@@ -68,7 +68,7 @@ void hyd_engine_events(struct hyd_engine *engine)
 						ip->inputs[i].type == KEY &&
 						ip->inputs[i].code == event.key.keysym.scancode
 				   )
-					ip->inputs[i].callback(engine, "down");
+					ip->inputs[i].callback(engine, "up");
 			}
 		}
 	}
@@ -169,9 +169,6 @@ uint8_t hyd_engine_load_ip(struct hyd_engine *engine, const char *filename)
 			hyd_ip_destroy(i);
 		}
 	}
-
-	engine->ip_head = malloc(sizeof(*engine->ip_head));
-	engine->ip_head->next = engine->ip_head;
 
 	if (hyd_ip_create_file(engine->ip_head,
 				filename) == 0)
