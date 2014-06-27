@@ -49,6 +49,10 @@ uint8_t hyd_engine_load_ip(struct hyd_engine *engine, const char *filename);
 
 uint8_t hyd_engine_load_mod(struct hyd_engine *engine, const char *filename);
 
+/* \brief Get time since engine was started, in milliseconds
+ */
+uint32_t hyd_engine_get_time(void);
+
 void hyd_engine_update_func(struct hyd_engine *e,
 		void (*f)(struct hyd_engine*,uint32_t));
 
