@@ -15,6 +15,8 @@
  */
 struct hyd_engine {
 	uint8_t running;
+	uint8_t quit;
+	uint8_t pause;
 
 	struct SDL_Renderer *renderer;
 	struct SDL_Window *window;
@@ -40,6 +42,10 @@ void hyd_engine_events(struct hyd_engine *engine);
 void hyd_engine_update(struct hyd_engine *engine, uint32_t dt);
 
 void hyd_engine_draw(struct hyd_engine *engine);
+
+void hyd_engine_begin_draw(struct hyd_engine *e);
+
+void hyd_engine_end_draw(struct hyd_engine *e);
 
 uint8_t hyd_engine_run(struct hyd_engine *engine);
 

@@ -8,6 +8,8 @@ struct hyd_engine *hyd_engine_create(void)
 		return NULL;
 
 	engine->running = 1;
+	engine->quit = 0;
+	engine->pause = 0;
 	engine->current_scene = NULL;
 	engine->curr_ip = NULL;
 	engine->current_mod = NULL;
@@ -44,8 +46,10 @@ void hyd_engine_events(struct hyd_engine *engine)
 	struct hyd_ip *ip = engine->curr_ip;
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
-		if (event.type == SDL_QUIT)
+		if (event.type == SDL_QUIT) {
 			engine->running = 0;
+			engine->quit = 1;
+		}
 		else if (event.type == SDL_KEYDOWN) {
 			if (engine->curr_ip == NULL)
 				continue;
@@ -145,6 +149,14 @@ uint8_t hyd_engine_run(struct hyd_engine *engine)
 
 		SDL_RenderPresent(engine->renderer);
 	}
+}
+
+void hyd_engine_begin_draw(struct hyd_engine *e) {
+	SDL_RenderClear(e->renderer);
+}
+
+void hyd_engine_end_draw(struct hyd_engine *e) {
+	SDL_RenderPresent(e->renderer);
 }
 
 uint8_t hyd_engine_load_scene(struct hyd_engine *engine, const char *filename)
