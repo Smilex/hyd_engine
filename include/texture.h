@@ -18,6 +18,8 @@ struct hyd_tex {
 	struct SDL_Texture *ptr;
 	uint32_t *ref_count;
 	char *name;
+	SDL_Rect size;
+	uint32_t format;
 };
 
 /**

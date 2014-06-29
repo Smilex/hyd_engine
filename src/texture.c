@@ -11,6 +11,10 @@ struct hyd_tex *hyd_tex_create(SDL_Texture *ptr, const char *name)
 	strcpy(tex->name, name);
 	tex->ref_count = malloc(sizeof(uint32_t));
 	*tex->ref_count = 0;
+	tex->size.x = 0;
+	tex->size.y = 0;
+
+	SDL_QueryTexture(ptr, &tex->format, NULL, &tex->size.w, &tex->size.h);
 
 	return tex;
 }
