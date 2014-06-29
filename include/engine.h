@@ -9,6 +9,7 @@
 #include "mod.h"
 #include "input.h"
 #include "texture.h"
+#include "text.h"
 
 /**
  * \struct hyd_engine
@@ -29,6 +30,7 @@ struct hyd_engine {
 	struct hyd_ip *curr_ip;
 	struct hyd_ip *ip_head;
 	struct hyd_tex_list *tex_head;
+	struct hyd_locale *locale_head;
 };
 
 struct hyd_engine *hyd_engine_create(void);
@@ -54,6 +56,8 @@ uint8_t hyd_engine_load_scene(struct hyd_engine *engine, const char *filename);
 uint8_t hyd_engine_load_ip(struct hyd_engine *engine, const char *filename);
 
 uint8_t hyd_engine_load_mod(struct hyd_engine *engine, const char *filename);
+
+uint8_t hyd_engine_load_locale(struct hyd_engine *engine, const char *filename);
 
 /* \brief Get time since engine was started, in milliseconds
  */

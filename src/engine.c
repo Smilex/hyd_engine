@@ -1,6 +1,8 @@
 #include "engine.h"
 #include "init.h"
 
+#include <SDL_ttf.h>
+
 struct hyd_engine *hyd_engine_create(void)
 {
 	struct hyd_engine *engine = malloc(sizeof(*engine));
@@ -21,6 +23,8 @@ struct hyd_engine *hyd_engine_create(void)
 	engine->ip_head->next = engine->ip_head;
 	engine->tex_head = malloc(sizeof(*engine->tex_head));
 	engine->tex_head->next = engine->tex_head;
+	engine->locale_head = malloc(sizeof(*engine->locale_head));
+	engine->locale_head->next = engine->locale_head;
 
 	return engine;
 }
@@ -31,6 +35,9 @@ uint8_t hyd_engine_init(struct hyd_engine *engine, const char *argv[])
 		return 1;
 
 	if (init_sdl(&engine->window, &engine->renderer, 600, 480) != 0)
+		return 1;
+
+	if (TTF_Init() == -1)
 		return 1;
 
 	SDL_SetRenderDrawBlendMode(engine->renderer, SDL_BLENDMODE_ADD);
@@ -99,6 +106,9 @@ void hyd_engine_destroy(struct hyd_engine *engine)
 	hyd_tex_list_destroy(engine->tex_head);
 	hyd_mod_destroy(engine->current_mod);
 
+
+	if (TTF_WasInit())
+		TTF_Quit();
 	if (PHYSFS_isInit() != 0)
 		PHYSFS_deinit();
 	if (engine->renderer != NULL)
@@ -205,6 +215,14 @@ uint8_t hyd_engine_load_mod(struct hyd_engine *engine, const char *filename)
 		return 1;
 
 	if (engine->current_mod == NULL)
+		return 1;
+
+	return 0;
+}
+
+uint8_t hyd_engine_load_locale(struct hyd_engine *engine, const char *filename)
+{
+	if (hyd_locale_create_file(engine->locale_head, filename))
 		return 1;
 
 	return 0;

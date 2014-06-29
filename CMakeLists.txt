@@ -27,6 +27,12 @@ if (${SDL_IMAGE_FOUND})
 	target_link_libraries(hyd ${SDL_IMAGE_LIBRARIES})
 endif ()
 
+find_package(SDL2_ttf REQUIRED)
+if (${SDL_TTF_FOUND})
+	include_directories(${SDL_TTF_INCLUDE_DIRS})
+	target_link_libraries(hyd ${SDL_TTF_LIBRARIES})
+endif ()
+
 find_package(PhysFS REQUIRED)
 if (${PHYSFS_FOUND})
 	include_directories(${PHYSFS_INCLUDE_DIR})
