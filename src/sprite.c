@@ -160,6 +160,5 @@ void hyd_spr_draw_point(struct hyd_spr *spr, SDL_Point point,
 		return;
 	}
 
-	SDL_Texture *tex = spr->tex->ptr;
-	SDL_RenderCopy(renderer, tex, &(spr->frames[0]->rect), &rect);
+	hyd_tex_draw(spr->tex, renderer, spr->frames[0]->rect, rect);
 }

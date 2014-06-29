@@ -75,4 +75,11 @@ void hyd_tex_list_destroy(struct hyd_tex_list *l);
  */
 struct hyd_tex *hyd_tex_list_find(struct hyd_tex_list *l, const char *n);
 
+/**
+ * \param[in] tex The texture to draw
+ * \param[in] src The rect from the texture to draw
+ * \param[in] dest The rect on screen to draw to
+ */
+void hyd_tex_draw(struct hyd_tex *tex, SDL_Renderer *rend, SDL_Rect src, SDL_Rect dest);
+
 #endif

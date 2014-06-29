@@ -113,3 +113,7 @@ struct hyd_tex *hyd_tex_list_find(struct hyd_tex_list *l, const char *n)
 
 	return NULL;
 }
+
+void hyd_tex_draw(struct hyd_tex *tex, SDL_Renderer *rend, SDL_Rect src, SDL_Rect dest) {
+	SDL_RenderCopy(rend, tex->ptr, &src, &dest);
+}
