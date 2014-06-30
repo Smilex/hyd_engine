@@ -5,9 +5,10 @@ option (BUILD_TESTS "Build tests" ON)
 
 set (CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 
-include_directories(include jansson)
+include_directories(include jansson/src)
 file (GLOB SRC src/*.c src/init/*.c src/editor/*.c)
 
+add_subdirectory(jansson)
 add_library(hyd SHARED ${SRC})
 target_link_libraries(hyd jansson)
 
