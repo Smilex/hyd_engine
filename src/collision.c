@@ -81,14 +81,11 @@ void hyd_coll_obj_destroy(struct hyd_coll_obj *col_obj)
 	free(col_obj);
 }
 
-void hyd_coll_obj_draw(struct hyd_coll_obj *col_obj,
-		SDL_Renderer *renderer)
+void hyd_coll_obj_draw(struct hyd_coll_obj *col_obj)
 {
 	if (col_obj == NULL || col_obj->num_points < 2)
 		return;
 
-	SDL_SetRenderDrawColor(renderer,
-			0x00, 0xFF, 0x00, 0xFF);
 	uint32_t i;
 	SDL_Point p1, p2;
 	for (i = 1; i < col_obj->num_points; i++)
@@ -97,29 +94,11 @@ void hyd_coll_obj_draw(struct hyd_coll_obj *col_obj,
 		p1.y = (int)round(col_obj->points[i - 1].y + col_obj->parent->pos.y);
 		p2.x = (int)round(col_obj->points[i].x + col_obj->parent->pos.x);
 		p2.y = (int)round(col_obj->points[i].y + col_obj->parent->pos.y);
-		SDL_RenderDrawLine(renderer,
-				p1.x, p1.y,
-				p2.x, p2.y
-				);
 	}
 
 	p1 = p2;
 	p2.x = (int)round(col_obj->points[0].x + col_obj->parent->pos.x);
 	p2.y = (int)round(col_obj->points[0].y + col_obj->parent->pos.y);
-	SDL_RenderDrawLine(renderer,
-			p1.x, p1.y,
-			p2.x, p2.y
-			);
-
-	SDL_SetRenderDrawColor(renderer,
-			0xFF, 0x00, 0x00, 0xFF);
-	SDL_RenderDrawPoint(renderer,
-			(int)round(col_obj->center.x + col_obj->parent->pos.x),
-			(int)round(col_obj->center.y + col_obj->parent->pos.y)
-			);
-
-	SDL_SetRenderDrawColor(renderer,
-			0x00, 0x00, 0x00, 0xFF);
 }
 
 float hyd_coll_obj_calc_area(struct hyd_coll_obj *col_obj)

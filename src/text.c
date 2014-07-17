@@ -4,22 +4,34 @@
 #include <stdlib.h>
 
 #include "filesystem.h"
-#include "geom.h"
+#include "texture.h"
+#include "quad.h"
+#include "color.h"
+#define STB_TRUETYPE_IMPLEMENTATION
+#include "stb_truetype.h"
 
-TTF_Font *hyd_font_create_file(const char *fname) {
+stbtt_bakedchar cdata[96];
+
+struct hyd_font *hyd_font_create_file(const char *fname) {
 	uint8_t *buf;
 	PHYSFS_sint64 read_len;
-	TTF_Font *font;
+	struct hyd_font *font;
 
 	read_len = hyd_fs_read_buffer(fname, &buf);
 	if (read_len == 0)
 		return NULL;
 
-	SDL_RWops *ops = SDL_RWFromMem(buf, read_len);
-	if (ops == NULL)
-		return NULL;
+	font = malloc(sizeof(*font));
+	unsigned char temp_bitmap[512 * 512];
+	stbtt_BakeFontBitmap(buf,0, 32.0, temp_bitmap,512,512, 32,96, cdata);
+	free(buf);
 
-	font = TTF_OpenFontRW(ops, 1, 16);
+	font->tex = hyd_tex_create("font");
+	glBindTexture(GL_TEXTURE_2D, font->tex->ptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, 512, 512, 0, GL_RED, GL_UNSIGNED_BYTE, temp_bitmap);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	return font;
 }
@@ -30,12 +42,7 @@ struct hyd_text
 	if (text == NULL)
 		return NULL;
 
-	text->tex = NULL;
 	text->font = NULL;
-	text->src.x = 0;
-	text->src.y = 0;
-	text->src.w = 0;
-	text->src.h = 0;
 	text->ready = 0;
 
 	text->text = malloc(strlen(str) + 1);
@@ -45,6 +52,7 @@ struct hyd_text
 	}
 
 	strcpy(text->text, str);
+	text->uvs = NULL;
 
 	text->name = malloc(strlen(name) + 1);
 	if (text->name == NULL) {
@@ -58,25 +66,34 @@ struct hyd_text
 	return text;
 }
 
-uint8_t hyd_text_render(struct hyd_text *t, SDL_Renderer *rend, TTF_Font *font, uint32_t hex) {
-	hyd_hex_color(hex, &t->color.r, &t->color.g, &t->color.b);
-	t->color.a = 255;
-
+uint8_t hyd_text_render(struct hyd_text *t, struct hyd_font *font) {
+	t->uvs = calloc(strlen(t->text), sizeof(*t->uvs));
+	t->pos = calloc(strlen(t->text), sizeof(*t->pos));
 	t->font = font;
-	SDL_Surface *surf = TTF_RenderUTF8_Solid(t->font, t->text, t->color);
-	if (surf == NULL)
-		return 1;
 
-	t->tex = SDL_CreateTextureFromSurface(rend, surf);
-	SDL_FreeSurface(surf);
+	char const *str = t->text;
+	float x = 0, y = 0;
+	uint32_t i = 0;
+	while (*str) {
+		if (*str >= 32 && *str < 128) {
+			stbtt_aligned_quad q;
+			stbtt_GetBakedQuad(cdata, 512,512, *str-32, &x, &y, &q, 1);
+			t->pos[i].x1 = q.x0;
+			t->pos[i].y1 = q.y0;
+			t->pos[i].x2 = q.x1;
+			t->pos[i].y2 = q.y1;
 
-	if (t->tex == NULL)
-		return 1;
-
-	if (TTF_SizeUTF8(t->font, t->text, &t->src.w, &t->src.h) == -1)
-		return 1;
+			t->uvs[i].x1 = q.s0;
+			t->uvs[i].y1 = q.t1;
+			t->uvs[i].x2 = q.s1;
+			t->uvs[i].y2 = q.t0;
+		}
+		++i;
+		++str;
+	}
 
 	t->ready = 1;
+
 	return 0;
 }
 
@@ -187,78 +204,68 @@ struct hyd_text *hyd_locale_find_text(struct hyd_locale *l, const char *name) {
 	return NULL;
 }
 
-uint8_t hyd_locale_render(struct hyd_locale *l, SDL_Renderer *rend, TTF_Font *font, uint32_t hex) {
+uint8_t hyd_locale_render(struct hyd_locale *l, struct hyd_font *font) {
 	uint32_t i;
 	uint8_t r = 0;
 
 	for (i = 0; i < l->num_texts; i++) {
-		if (hyd_text_render(l->texts[i], rend, font, hex) != 0)
+		if (hyd_text_render(l->texts[i], font) != 0)
 			r = 1;
 	}
 
 	return r;
 }
 
-uint8_t hyd_text_draw(	struct SDL_Renderer *rend,
-						struct hyd_text *text,
-						SDL_Point pos)
+uint8_t hyd_text_draw(struct hyd_text *text, float x, float y, struct hyd_color c)
 {
 	if (!text->ready)
 		return 1;
 
-	SDL_Rect dest = text->src;
-	dest.x = pos.x;
-	dest.y = pos.y;
-
-	SDL_RenderCopy(rend, text->tex, &text->src, &dest);
+	uint32_t i, n = strlen(text->text);
+	for (i = 0; i < n; i++) {
+		struct hyd_quad p = text->pos[i];
+		p.x1 += x;
+		p.y1 += y;
+		p.x2 += x;
+		p.y2 += y;
+		hyd_quad_tex_draw(&p, &c, text->font->tex, &text->uvs[i]);
+	}
 
 	return 0;
 }
 
-uint8_t hyd_text_draw_str(	struct SDL_Renderer *rend,
-							TTF_Font *font,
+uint8_t hyd_text_draw_str(	struct hyd_font *font,
 							const char *str,
-							SDL_Point pos,
-							uint32_t hex)
+							float x, float y,
+							struct hyd_color c)
 {
-	SDL_Color color;
-
-	hyd_hex_color(hex, &color.r, &color.g, &color.b);
-
-	SDL_Surface *surf = TTF_RenderUTF8_Solid(font, str, color);
-	SDL_Texture *tex;
-	SDL_Rect src, dest;
-	src.x = 0;
-	src.y = 0;
-	dest.x = pos.x;
-	dest.y = pos.y;
-
-	if (surf == NULL)
-		return 1;
-
-	tex = SDL_CreateTextureFromSurface(rend, surf);
-	SDL_FreeSurface(surf);
-
-	if (tex == NULL)
-		return 1;
-
-	if (TTF_SizeUTF8(font, str, &src.w, &src.h) == -1)
-		return 1;
-
-	dest.w = src.w;
-	dest.h = src.h;
-
-	SDL_RenderCopy(rend, tex, &src, &dest);
-
+	while (*str) {
+		if (*str >= 32 && *str < 128) {
+			stbtt_aligned_quad q;
+			stbtt_GetBakedQuad(cdata, 512,512, *str-32, &x, &y, &q, 1);
+			struct hyd_quad p = {
+				q.x0, q.y0, q.x1, q.y1
+			};
+			struct hyd_quad uv = {
+				q.s0, q.t1, q.s1, q.t0
+			};
+			
+			hyd_quad_tex_draw(&p, &c, font->tex, &uv);
+		}
+		++str;
+	}
 	return 0;
 }
 
-void hyd_font_destroy(TTF_Font *font) {
-	TTF_CloseFont(font);
+void hyd_font_destroy(struct hyd_font *font) {
+	hyd_tex_destroy(font->tex);
+	free(font);
 }
 
 void hyd_text_destroy(struct hyd_text *text) {
 	free(text->text);
-	free(text->tex);
+	free(text->name);
+	free(text->uvs);
+	free(text->pos);
 	free(text);
 }

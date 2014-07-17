@@ -19,7 +19,7 @@ struct hyd_v2 hyd_v2_normalize(struct hyd_v2 vec)
 
 float hyd_v2_length(struct hyd_v2 vec)
 {
-	return sqrt((vec.x * vec.x) + (vec.y * vec.y));
+	return sqrtf((vec.x * vec.x) + (vec.y * vec.y));
 }
 
 struct hyd_v2 hyd_v2_substract(struct hyd_v2 lhs, struct hyd_v2 rhs)

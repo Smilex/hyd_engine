@@ -19,7 +19,7 @@
  *
  * \return Non zero if there was an error.
  */
-int hyd_init_sdl(SDL_Window **window, SDL_Renderer **renderer,
+int hyd_init_sdl(SDL_Window **window, SDL_GLContext *context,
 		const int width, const int height);
 
 #endif

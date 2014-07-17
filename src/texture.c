@@ -2,29 +2,39 @@
 #include "globals.h"
 #include <string.h>
 #include <physfs.h>
+#include "graphics.h"
+#include "matrix.h"
 
-struct hyd_tex *hyd_tex_create(SDL_Texture *ptr, const char *name)
+#define STB_IMAGE_IMPLEMENTATION
+#define STBI_NO_STDIO
+#include "stb_image.h"
+
+struct hyd_tex *hyd_tex_create(const char *name)
 {
 	struct hyd_tex *tex = malloc(sizeof(*tex));
-	tex->ptr = ptr;
+	if (tex == NULL)
+		return NULL;
+
 	tex->name = malloc(strlen(name) + 1);
+	if (tex->name == NULL)
+		return NULL;
 	strcpy(tex->name, name);
 	tex->ref_count = malloc(sizeof(uint32_t));
 	*tex->ref_count = 0;
-	tex->size.x = 0;
-	tex->size.y = 0;
+	tex->w = 0;
+	tex->h = 0;
 
-	SDL_QueryTexture(ptr, &tex->format, NULL, &tex->size.w, &tex->size.h);
+	glGenTextures(1, &tex->ptr);
 
 	return tex;
 }
 
-struct hyd_tex *hyd_tex_create_file(const char *filename, SDL_Renderer *renderer)
+struct hyd_tex *hyd_tex_create_file(const char *filename)
 {
-	PHYSFS_sint64 file_length = 0;
-	uint8_t *buf = NULL;
-	SDL_RWops *ops = NULL;
-	SDL_Texture *tex;
+	PHYSFS_sint64 read_len = 0;
+	uint8_t *buf, *data;
+	struct hyd_tex *tex;
+	int w, h, comp;
 
 	if (PHYSFS_exists(filename) == 0) {
 		SDL_LogWarn(
@@ -35,10 +45,10 @@ struct hyd_tex *hyd_tex_create_file(const char *filename, SDL_Renderer *renderer
 		return NULL;
 	}
 
-	file_length = hyd_fs_read_buffer(filename, &buf);
-	SDL_Log("Reading texture - %s - size: %i", filename, file_length);
+	read_len = hyd_fs_read_buffer(filename, &buf);
+	SDL_Log("Reading texture - %s - size: %i", filename, read_len);
 
-	if (file_length == 0) {
+	if (read_len == 0) {
 		SDL_LogError(
 				SDL_LOG_CATEGORY_APPLICATION,
 				"Failed to read texture from file: '%s'\n",
@@ -47,12 +57,18 @@ struct hyd_tex *hyd_tex_create_file(const char *filename, SDL_Renderer *renderer
 		return NULL;
 	}
 
-	ops = SDL_RWFromMem(buf, file_length);
-	tex = IMG_LoadTexture_RW(renderer, ops, 0);
+	data = stbi_load_from_memory(buf, read_len, &w, &h, &comp, 4);
 	free(buf);
-	SDL_RWclose(ops);
 
-	return hyd_tex_create(tex, filename);
+	if (data == NULL || comp != 4)
+		return NULL;
+
+	tex = hyd_tex_create(filename);
+
+	hyd_tex_data(tex, data, w, h);
+	free(data);
+
+	return tex;
 }
 
 struct hyd_tex *hyd_tex_copy(struct hyd_tex *texture)
@@ -69,6 +85,8 @@ struct hyd_tex *hyd_tex_copy(struct hyd_tex *texture)
 	tex->ptr = texture->ptr;
 	tex->ref_count = texture->ref_count;
 	tex->name = texture->name;
+	tex->w = texture->w;
+	tex->h = texture->h;
 
 	(*tex->ref_count) += 1;
 
@@ -82,7 +100,7 @@ void hyd_tex_destroy(struct hyd_tex *texture)
 
 	if (*(texture->ref_count) == 0) {
 		SDL_Log("Destroying texture.");
-		SDL_DestroyTexture(texture->ptr);
+		glDeleteTextures(1, &texture->ptr);
 		free(texture->ref_count);
 		free(texture->name);
 	} else
@@ -118,6 +136,17 @@ struct hyd_tex *hyd_tex_list_find(struct hyd_tex_list *l, const char *n)
 	return NULL;
 }
 
-void hyd_tex_draw(struct hyd_tex *tex, SDL_Renderer *rend, SDL_Rect src, SDL_Rect dest) {
-	SDL_RenderCopy(rend, tex->ptr, &src, &dest);
+void hyd_tex_data(struct hyd_tex *tex, uint8_t *data, int w, int h) {
+	glBindTexture(GL_TEXTURE_2D, tex->ptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	tex->w = w;
+	tex->h = h;
 }

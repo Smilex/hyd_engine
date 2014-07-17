@@ -6,8 +6,16 @@
 #define HYD_TEXT_H
 
 #include <SDL.h>
-#include <SDL_ttf.h>
 #include <jansson.h>
+#include "texture.h"
+#include "quad.h"
+#include "stb_truetype.h"
+#include "gl_core_3_3.h"
+#include "color.h"
+
+struct hyd_font {
+	struct hyd_tex *tex;
+};
 
 /*
  * \struct hyd_text
@@ -18,10 +26,9 @@ struct hyd_text {
 	uint8_t ready;
 	char *name;
 	char *text;
-	SDL_Color color;
-	SDL_Texture *tex;
-	TTF_Font *font;
-	SDL_Rect src;
+	struct hyd_font *font;
+	struct hyd_quad *uvs;
+	struct hyd_quad *pos;
 };
 
 /*
@@ -38,7 +45,7 @@ struct hyd_locale {
 	struct hyd_locale *children;
 };
 
-TTF_Font *hyd_font_create_file(const char *fname);
+struct hyd_font *hyd_font_create_file(const char *fname);
 
 struct hyd_text
 *hyd_text_create(const char *str, const char *name);
@@ -47,7 +54,7 @@ struct hyd_text
  * This doesn't draw on screen, but prepares
  * the text for drawing
  */
-uint8_t hyd_text_render(struct hyd_text *t, SDL_Renderer *rend, TTF_Font *font, uint32_t hex);
+uint8_t hyd_text_render(struct hyd_text *t, struct hyd_font *font);
 
 /*
  * Parses the file so that names are
@@ -64,19 +71,16 @@ struct hyd_text *hyd_locale_find_text(struct hyd_locale *l, const char *name);
 /*
  * Prepares all hyd_texts in locale
  */
-uint8_t hyd_locale_render(struct hyd_locale *l, SDL_Renderer *rend, TTF_Font *font, uint32_t hex);
+uint8_t hyd_locale_render(struct hyd_locale *l, struct hyd_font *font);
 
-uint8_t hyd_text_draw(	struct SDL_Renderer *rend,
-						struct hyd_text *text,
-						SDL_Point pos);
+uint8_t hyd_text_draw(struct hyd_text *text, float x, float y, struct hyd_color c);
 
-uint8_t hyd_text_draw_str(	struct SDL_Renderer *rend,
-							TTF_Font *font,
+uint8_t hyd_text_draw_str(	struct hyd_font *font,
 							const char *str,
-							SDL_Point pos,
-							uint32_t hex);
+							float x, float y,
+							struct hyd_color c);
 
-void hyd_font_destroy(TTF_Font *font);
+void hyd_font_destroy(struct hyd_font *font);
 
 void hyd_text_destroy(struct hyd_text *text);
 

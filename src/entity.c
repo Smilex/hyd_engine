@@ -37,7 +37,7 @@ struct hyd_ent *hyd_ent_create(struct hyd_spr *spr, const char *n,
 	return ent;
 }
 
-void hyd_ent_draw(struct hyd_ent *ent, SDL_Renderer *renderer)
+void hyd_ent_draw(struct hyd_ent *ent)
 {
 	if (ent == NULL)
 		return;
@@ -45,13 +45,13 @@ void hyd_ent_draw(struct hyd_ent *ent, SDL_Renderer *renderer)
 	SDL_Point pos;
 	pos.x = round(ent->pos.x);
 	pos.y = round(ent->pos.y);
-	hyd_spr_draw_point(ent->spr, pos, renderer);
+	hyd_spr_draw_point(ent->spr, pos);
 
 	struct hyd_ent *i;
 
 	for (i = ent->children->next; i != ent->children; i = i->next)
 	{
-		hyd_ent_draw(i, renderer);
+		hyd_ent_draw(i);
 	}
 
 	struct hyd_coll_obj *col_i;
@@ -59,7 +59,7 @@ void hyd_ent_draw(struct hyd_ent *ent, SDL_Renderer *renderer)
 			col_i != ent->coll_objs;
 			col_i = col_i->next)
 	{
-		hyd_coll_obj_draw(col_i, renderer);
+		hyd_coll_obj_draw(col_i);
 	}
 }
 
@@ -101,7 +101,7 @@ void hyd_ent_destroy(struct hyd_ent *e)
 }
 
 uint8_t hyd_ent_create_json_arr(struct hyd_ent *ent_list, json_t *root,
-		struct hyd_tex_list *tex_l, struct hyd_ent *parent, SDL_Renderer *renderer)
+		struct hyd_tex_list *tex_l, struct hyd_ent *parent)
 {
 	if (!json_is_array(root)) {
 		SDL_LogError(
@@ -131,13 +131,13 @@ uint8_t hyd_ent_create_json_arr(struct hyd_ent *ent_list, json_t *root,
 		obj_json = json_object_get(arr_json, "entity");
 		if (json_is_string(obj_json)) {
 			ent = hyd_ent_create_file(json_string_value(obj_json),
-						tex_l, parent, renderer);
+						tex_l, parent);
 
 			ent->next = ent_list->next;
 			ent_list->next = ent;
 		} else if (json_is_object(obj_json)) {
 			ent = hyd_ent_create_json(obj_json,
-					tex_l, parent, renderer);
+					tex_l, parent);
 
 			ent->next = ent_list->next;
 			ent_list->next = ent;
@@ -158,7 +158,7 @@ uint8_t hyd_ent_create_json_arr(struct hyd_ent *ent_list, json_t *root,
 			if (ent->spr != NULL)
 				hyd_spr_destroy(ent->spr);
 			ent->spr = hyd_spr_create_file(json_string_value(obj_json),
-					tex_l, renderer);
+					tex_l);
 		}
 
 		obj_json = json_object_get(arr_json, "properties");
@@ -170,7 +170,7 @@ uint8_t hyd_ent_create_json_arr(struct hyd_ent *ent_list, json_t *root,
 }
 
 struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_tex_list *tex_l,
-		struct hyd_ent *parent, SDL_Renderer *renderer)
+		struct hyd_ent *parent)
 {
 	if (!json_is_object(root)) {
 		SDL_LogError(
@@ -193,14 +193,14 @@ struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_tex_list *tex_l,
 	iter_json = json_object_get(root, "sprite");
 	if (json_is_string(iter_json))
 		spr = hyd_spr_create_file(json_string_value(iter_json),
-				tex_l, renderer);
+				tex_l);
 
 	ent = hyd_ent_create(spr, name, parent);
 
 	iter_json = json_object_get(root, "children");
 	if (json_is_array(iter_json))
 		hyd_ent_create_json_arr(ent->children,
-				iter_json, tex_l, ent, renderer);
+				iter_json, tex_l, ent);
 
 	iter_json = json_object_get(root, "properties");
 	if (json_is_object(iter_json))
@@ -215,7 +215,7 @@ struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_tex_list *tex_l,
 }
 
 struct hyd_ent *hyd_ent_create_file(const char *fname,
-		struct hyd_tex_list *tex_l, struct hyd_ent *parent, SDL_Renderer *renderer)
+		struct hyd_tex_list *tex_l, struct hyd_ent *parent)
 {
 	uint8_t *buf = NULL;
 	PHYSFS_sint64 read_len = 0;
@@ -247,7 +247,7 @@ struct hyd_ent *hyd_ent_create_file(const char *fname,
 		return NULL;
 	}
 
-	ent = hyd_ent_create_json(root, tex_l, parent, renderer);
+	ent = hyd_ent_create_json(root, tex_l, parent);
 	json_decref(root);
 	return ent;
 }
