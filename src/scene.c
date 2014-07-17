@@ -19,8 +19,7 @@ struct hyd_scene *hyd_scene_create(void)
 	return s;
 }
 
-struct hyd_scene *hyd_scene_create_file(const char *fname, struct hyd_tex_list *tex_l,
-		SDL_Renderer *renderer)
+struct hyd_scene *hyd_scene_create_file(const char *fname, struct hyd_tex_list *tex_l)
 {
 	uint8_t *buf = NULL;
 	PHYSFS_sint64 read_len = 0;
@@ -52,13 +51,12 @@ struct hyd_scene *hyd_scene_create_file(const char *fname, struct hyd_tex_list *
 		return NULL;
 	}
 
-	s = hyd_scene_create_json(root, tex_l, renderer);
+	s = hyd_scene_create_json(root, tex_l);
 	json_decref(root);
 	return s;
 }
 
-struct hyd_scene *hyd_scene_create_json(json_t *root, struct hyd_tex_list *tex_l,
-		SDL_Renderer *renderer)
+struct hyd_scene *hyd_scene_create_json(json_t *root, struct hyd_tex_list *tex_l)
 {
 	if (!json_is_object(root)) {
 		SDL_LogError(
@@ -78,7 +76,7 @@ struct hyd_scene *hyd_scene_create_json(json_t *root, struct hyd_tex_list *tex_l
 				);
 	} else {
 		hyd_ent_create_json_arr(s->ent_head,
-				ent_json, tex_l, NULL, renderer);
+				ent_json, tex_l, NULL);
 	}
 
 	return s;
@@ -102,7 +100,7 @@ void hyd_scene_destroy(struct hyd_scene *s)
 	free(s);
 }
 
-void hyd_scene_draw(struct hyd_scene *s, SDL_Renderer *r)
+void hyd_scene_draw(struct hyd_scene *s)
 {
 	if (s == NULL)
 		return;
@@ -110,6 +108,6 @@ void hyd_scene_draw(struct hyd_scene *s, SDL_Renderer *r)
 	struct hyd_ent *i;
 	for (i = s->ent_head->next; i != s->ent_head; i = i->next)
 	{
-		hyd_ent_draw(i, r);
+		hyd_ent_draw(i);
 	}
 }

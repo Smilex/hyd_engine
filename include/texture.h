@@ -6,7 +6,9 @@
 #define HYD_TEXTURE_H
 
 #include <SDL.h>
-#include <SDL_image.h>
+#include <stdint.h>
+
+#include "gl_core_3_3.h"
 
 /**
  * \struct hyd_tex
@@ -15,11 +17,10 @@
  * either from a file, or memory data.
  */
 struct hyd_tex {
-	struct SDL_Texture *ptr;
+	GLuint ptr;
 	uint32_t *ref_count;
 	char *name;
-	SDL_Rect size;
-	uint32_t format;
+	int w, h;
 };
 
 /**
@@ -38,7 +39,7 @@ struct hyd_tex_list {
  *
  * \return The new texture
  */
-struct hyd_tex *hyd_tex_create(struct SDL_Texture *ptr, const char *name);
+struct hyd_tex *hyd_tex_create(const char *name);
 
 /**
  * \brief Creates a new texture using data from the specified file
@@ -48,7 +49,7 @@ struct hyd_tex *hyd_tex_create(struct SDL_Texture *ptr, const char *name);
  *
  * \return The new texture, or NULL if there was an error
  */
-struct hyd_tex *hyd_tex_create_file(const char *filename, struct SDL_Renderer *renderer);
+struct hyd_tex *hyd_tex_create_file(const char *filename);
 
 /**
  * \brief Copy a texture and increment the ref count
@@ -77,11 +78,6 @@ void hyd_tex_list_destroy(struct hyd_tex_list *l);
  */
 struct hyd_tex *hyd_tex_list_find(struct hyd_tex_list *l, const char *n);
 
-/**
- * \param[in] tex The texture to draw
- * \param[in] src The rect from the texture to draw
- * \param[in] dest The rect on screen to draw to
- */
-void hyd_tex_draw(struct hyd_tex *tex, SDL_Renderer *rend, SDL_Rect src, SDL_Rect dest);
+void hyd_tex_data(struct hyd_tex *tex, uint8_t *data, int w, int h);
 
 #endif

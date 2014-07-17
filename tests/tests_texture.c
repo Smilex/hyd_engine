@@ -3,7 +3,7 @@
 
 START_TEST (test_texture_ref)
 {
-	struct hyd_tex *t1 = hyd_tex_create(NULL, "t1");
+	struct hyd_tex *t1 = hyd_tex_create("t1");
 	ck_assert_int_eq(*t1->ref_count, 0);
 	struct hyd_tex *ref1 = hyd_tex_copy(t1);
 	ck_assert_int_eq(*t1->ref_count, 1);
