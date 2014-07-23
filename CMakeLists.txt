@@ -1,12 +1,14 @@
 cmake_minimum_required (VERSION 2.8)
 project (hyd_engine)
 
-option (BUILD_TESTS "Build tests" ON)
+option (BUILD_TESTS "Build tests" OFF)
 
 set (CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 
-include_directories(include jansson)
+include_directories(include jansson/src)
 file (GLOB SRC src/*.c src/init/*.c src/editor/*.c)
+
+add_subdirectory(jansson)
 
 add_library(hyd SHARED ${SRC})
 target_link_libraries(hyd jansson)
