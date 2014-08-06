@@ -6,7 +6,7 @@ option (BUILD_TESTS "Build tests" OFF)
 set (CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 
 include_directories(include jansson/src)
-file (GLOB SRC src/*.c src/init/*.c src/editor/*.c)
+file (GLOB SRC src/*.c src/editor/*.c src/init/*.c)
 
 add_subdirectory(jansson)
 

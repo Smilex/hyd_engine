@@ -6,6 +6,7 @@
 #define HYD_TRANSFORM_H
 
 #include <stdint.h>
+#include "vector.h"
 
 struct hyd_transform {
 	float mat[16];
@@ -19,6 +20,9 @@ void hyd_transform_ortho(struct hyd_transform *t, float w, float h, float near, 
 
 struct hyd_transform
 hyd_transform_mul(struct hyd_transform *lhs, struct hyd_transform *rhs);
+
+struct hyd_v2
+hyd_transform_mul_v2(struct hyd_transform *lhs, struct hyd_v2 *rhs);
 
 void hyd_transform_translate(struct hyd_transform *t, float dx, float dy, float dz);
 

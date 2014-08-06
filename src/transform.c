@@ -58,6 +58,15 @@ struct hyd_transform hyd_transform_mul(struct hyd_transform *lhs,
 	return out;
 }
 
+struct hyd_v2
+hyd_transform_mul_v2(struct hyd_transform *lhs, struct hyd_v2 *rhs) {
+	struct hyd_v2 ret;
+	ret.x = lhs->mat[0] * rhs->x + lhs->mat[4] * rhs->y + lhs->mat[12];
+	ret.y = lhs->mat[1] * rhs->x + lhs->mat[5] * rhs->y + lhs->mat[13];
+
+	return ret;
+}
+
 void hyd_transform_translate(struct hyd_transform *t, float dx, float dy, float dz) {
 	t->mat[12] += dx;
 	t->mat[13] += dy;

@@ -1,23 +1,24 @@
 #include "ui.h"
 
-#include <SDL.h>
+enum HYD_UI_BUTTON_STATE
+hyd_ui_button(struct hyd_quad q) {
+	int m_x, m_y;
+	uint32_t m_ret;
+	enum HYD_UI_BUTTON_STATE state = NONE;
 
-enum hyd_btn_state hyd_ui_btn(int x1, int y1, int x2, int y2)
-{
-	int x, y;
-	uint32_t state = SDL_GetMouseState(&x, &y);
+	m_ret = SDL_GetMouseState(&m_x, &m_y);
 
-	if ((x1 <= x && x2 >= x) &&
-		(y1 <= y && y2 >= y)) {
-		if (state&SDL_BUTTON(1))
-			return DOWN_L;
-		else if (state&SDL_BUTTON(2))
-			return DOWN_M;
-		else if (state&SDL_BUTTON(3))
-			return DOWN_R;
+	if (m_x > q.x1 && m_x < q.x2 && m_y > q.y1 && m_y < q.y2) {
+		if (m_ret & SDL_BUTTON(SDL_BUTTON_LEFT))
+			state = L_DOWN;
+		else if (m_ret & SDL_BUTTON(SDL_BUTTON_RIGHT))
+			state = R_DOWN;
+		else if (m_ret & SDL_BUTTON(SDL_BUTTON_MIDDLE))
+			state = M_DOWN;
 		else
-			return HOVER;
+			state = HOVER;
 	}
-	else
-		return NONE;
+
+	return state;
 }
+

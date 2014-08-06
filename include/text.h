@@ -29,6 +29,7 @@ struct hyd_text {
 	struct hyd_font *font;
 	struct hyd_quad *uvs;
 	struct hyd_quad *pos;
+	float w, h;
 };
 
 /*
