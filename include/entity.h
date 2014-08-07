@@ -119,6 +119,8 @@ void hyd_ent_destroy(struct hyd_ent *e);
  */
 struct hyd_ent **hyd_ent_list_find(struct hyd_ent *l, const char *n, uint32_t *num);
 
+struct hyd_ent *hyd_ent_list_find_pos(struct hyd_ent *l, float x, float y);
+
 float hyd_ent_get_number_property(struct hyd_ent *ent, const char *n);
 
 uint8_t hyd_ent_get_bool_property(struct hyd_ent *ent, const char *n);

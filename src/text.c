@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include "filesystem.h"
 #include "texture.h"
@@ -27,6 +28,7 @@ struct hyd_font *hyd_font_create_file(const char *fname) {
 	free(buf);
 
 	font->tex = hyd_tex_create("font");
+	assert(font->tex != NULL);
 	glBindTexture(GL_TEXTURE_2D, font->tex->ptr);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, 512, 512, 0, GL_RED, GL_UNSIGNED_BYTE, temp_bitmap);
 
@@ -44,6 +46,8 @@ struct hyd_text
 
 	text->font = NULL;
 	text->ready = 0;
+	text->w = 0;
+	text->h = 0;
 
 	text->text = malloc(strlen(str) + 1);
 	if (text->text == NULL) {
@@ -84,9 +88,13 @@ uint8_t hyd_text_render(struct hyd_text *t, struct hyd_font *font) {
 			t->pos[i].y2 = q.y1;
 
 			t->uvs[i].x1 = q.s0;
-			t->uvs[i].y1 = q.t1;
+			t->uvs[i].y1 = q.t0;
 			t->uvs[i].x2 = q.s1;
-			t->uvs[i].y2 = q.t0;
+			t->uvs[i].y2 = q.t1;
+
+			t->w += q.x1 - q.x0;
+			if (t->h < (q.y1 - q.y0))
+				t->h = (q.y1 - q.y0);
 		}
 		++i;
 		++str;
@@ -247,7 +255,7 @@ uint8_t hyd_text_draw_str(	struct hyd_font *font,
 				q.x0, q.y0, q.x1, q.y1
 			};
 			struct hyd_quad uv = {
-				q.s0, q.t1, q.s1, q.t0
+				q.s0, q.t0, q.s1, q.t1
 			};
 			
 			hyd_quad_tex_draw(&p, &c, font->tex, &uv);

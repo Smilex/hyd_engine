@@ -112,8 +112,10 @@ uint8_t hyd_engine_init(struct hyd_engine *engine, const char *argv[])
 		return 1;
 
 	uint32_t width = 800, height = 600;
-	if (hyd_init_sdl(&engine->window, &engine->context, width, height) != 0)
+	if (hyd_init_sdl(&engine->window, &engine->context, width, height) != 0) {
+		printf("%s", SDL_GetError());
 		return 1;
+	}
 
 	if (ogl_LoadFunctions() == ogl_LOAD_FAILED)
 		return 1;

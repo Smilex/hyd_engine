@@ -2,13 +2,19 @@
  * \file ui.h
  */
 
-#ifndef HYD_ENGINE_H
-#define HYD_ENGINE_H
+#ifndef HYD_UI_H
+#define HYD_UI_H
 
-enum hyd_btn_state {
-	NONE, HOVER, DOWN_L, DOWN_M, DOWN_R
+#include <stdint.h>
+#include "quad.h"
+#include "color.h"
+
+enum HYD_UI_BUTTON_STATE {
+	NONE, HOVER, L_DOWN, R_DOWN, M_DOWN
 };
 
-enum hyd_btn_state hyd_ui_btn(int x1, int y1, int x2, int y2);
+enum HYD_UI_BUTTON_STATE
+hyd_ui_button(struct hyd_quad q);
 
 #endif
+

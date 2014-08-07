@@ -358,3 +358,16 @@ struct hyd_ent **hyd_ent_list_find(struct hyd_ent *l, const char *n, uint32_t *n
 
 	return ret;
 }
+
+struct hyd_ent *hyd_ent_list_find_pos(struct hyd_ent *l, float x, float y) {
+	struct hyd_ent *i;
+	for (i = l->next; i != l; i = i->next) {
+		SDL_Rect r = i->spr->frames[0]->rect;
+		r.x = i->pos.x;
+		r.y = i->pos.y;
+		if ((x > r.x && x < (r.x + r.w)) && (y > r.y && y < (r.y + r.h)))
+			return i;
+	}
+
+	return NULL;
+}
