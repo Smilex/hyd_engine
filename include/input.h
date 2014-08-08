@@ -15,10 +15,8 @@
  * Defines the type of the input
  */
 enum hyd_input_type {
-	KEY
+	KEY, AXIS
 };
-
-typedef void (*hyd_input_callback)(void*, const char*);
 
 /**
  * \struct hyd_input
@@ -28,10 +26,12 @@ typedef void (*hyd_input_callback)(void*, const char*);
  */
 struct hyd_input {
 	char *action;
-	uint16_t value;
 	enum hyd_input_type type;
-	uint8_t code;
-	hyd_input_callback callback;
+	union {
+		uint8_t code;
+		SDL_GameControllerAxis axis;
+	} value;
+	uint8_t neg_mod;
 };
 
 /**
@@ -58,6 +58,8 @@ struct hyd_ip {
  */
 struct hyd_input hyd_input_create_key(const char *a, uint8_t code);
 
+struct hyd_input hyd_input_create_axis(const char *a, SDL_GameControllerAxis axis, uint8_t neg_mod);
+
 /**
  * \brief Creates an input from a json object
  *
@@ -65,7 +67,7 @@ struct hyd_input hyd_input_create_key(const char *a, uint8_t code);
  *
  * \return The new input
  */
-struct hyd_input hyd_input_create_json(const char *a, json_t *root);
+struct hyd_input hyd_input_create_json(json_t *root);
 
 /**
  * \param[in] name The name of the preset
@@ -106,16 +108,6 @@ uint16_t hyd_ip_get_value(struct hyd_ip *p,
 		const char *a);
 
 /**
- * \brief Adds a callback to an action
- *
- * \param[in] preset The input preset
- * \param[in] action The input action
- * \param[in] callback The callback
- */
-void hyd_ip_add_callback(struct hyd_ip *p, const char *a,
-		hyd_input_callback callback);
-
-/**
  * \param[in] preset The input preset to destroy
  */
 void hyd_ip_destroy(struct hyd_ip *p);
@@ -126,5 +118,7 @@ void hyd_ip_destroy(struct hyd_ip *p);
  * \return The maximum value
  */
 uint16_t hyd_input_get_max_value(void);
+
+uint32_t hyd_input_load_controllers(void);
 
 #endif // OPENHYDORAH_INPUT_H
