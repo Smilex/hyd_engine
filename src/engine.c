@@ -1,5 +1,6 @@
 #include "engine.h"
 #include "init.h"
+#include "input.h"
 
 #include "gl_core_3_3.h"
 #include "graphics.h"
@@ -129,6 +130,8 @@ uint8_t hyd_engine_init(struct hyd_engine *engine, const char *argv[])
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 
+	hyd_input_load_controllers();
+
 	return 0;
 }
 
@@ -137,37 +140,11 @@ void hyd_engine_events(struct hyd_engine *engine)
 	if (engine == NULL)
 		return;
 
-	struct hyd_ip *ip = engine->curr_ip;
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		if (event.type == SDL_QUIT) {
 			engine->running = 0;
 			engine->quit = 1;
-		}
-		else if (event.type == SDL_KEYDOWN) {
-			if (engine->curr_ip == NULL)
-				continue;
-
-			uint32_t i;
-			for(i = 0;i < ip->count;i++) {
-				if (ip->inputs[i].callback != NULL &&
-						ip->inputs[i].type == KEY &&
-						ip->inputs[i].code == event.key.keysym.scancode
-				   )
-					ip->inputs[i].callback(engine, "down");
-			}
-		} else if (event.type == SDL_KEYUP) {
-			if (engine->curr_ip == NULL)
-				continue;
-
-			uint32_t i;
-			for(i = 0;i < ip->count;i++) {
-				if (ip->inputs[i].callback != NULL &&
-						ip->inputs[i].type == KEY &&
-						ip->inputs[i].code == event.key.keysym.scancode
-				   )
-					ip->inputs[i].callback(engine, "up");
-			}
 		}
 	}
 }

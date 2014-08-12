@@ -6,6 +6,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+SDL_GameController *_hyd_game_ctrls[50];
+uint32_t _hyd_num_game_ctrls = 0;
+
 uint16_t hyd_input_get_max_value(void)
 {
 	return 0x7FFF;
@@ -17,24 +20,41 @@ struct hyd_input hyd_input_create_key(const char *a, uint8_t code)
 	uint32_t len = strlen(a);
 	input.action = malloc(len + 1);
 	strcpy(input.action, a);
-	input.value = 0;
 
 	input.type = KEY;
-	input.code = code;
-	input.callback = NULL;
+	input.value.code = code;
+	input.neg_mod = 0;
 
 	return input;
 }
 
-struct hyd_input hyd_input_create_json(const char *a, json_t *root)
+struct hyd_input hyd_input_create_axis(const char *a, SDL_GameControllerAxis axis, uint8_t neg_mod) {
+	struct hyd_input input;
+	uint32_t len = strlen(a);
+	input.action = malloc(len + 1);
+	strcpy(input.action, a);
+
+	input.type = AXIS;
+	input.value.axis = axis;
+	input.neg_mod = neg_mod;
+
+	return input;
+}
+
+struct hyd_input hyd_input_create_json(json_t *root)
 {
 	struct hyd_input ret = {0,};
 	if (!json_is_object(root))
 		return ret;
 
 	json_t *iter;
-	const char *type;
+	const char *type, *value, *name;
 
+	iter = json_object_get(root, "name");
+	if (!json_is_string(iter))
+		return ret;
+
+	name = json_string_value(iter);
 	iter = json_object_get(root, "type");
 	if (!json_is_string(iter))
 		return ret;
@@ -43,12 +63,27 @@ struct hyd_input hyd_input_create_json(const char *a, json_t *root)
 
 	if (strcmp(type, "key") == 0)
 	{
-		iter = json_object_get(root, "key");
+		iter = json_object_get(root, "value");
 		if (!json_is_string(iter))
 			return ret;
 
-		return hyd_input_create_key(a,
-				SDL_GetScancodeFromName(json_string_value(iter)));
+		value = json_string_value(iter);
+		return hyd_input_create_key(name,
+				SDL_GetScancodeFromName(value));
+	}
+	else if (strcmp(type, "axis") == 0) {
+		iter = json_object_get(root, "value");
+		if (!json_is_string(iter))
+			return ret;
+
+		value = json_string_value(iter);
+		iter = json_object_get(root, "mod");
+		uint8_t neg_mod = 0;
+		if (json_is_string(iter) && strcmp(json_string_value(iter), "negative") == 0)
+			neg_mod = 1;
+
+		return hyd_input_create_axis(name,
+				SDL_GameControllerGetAxisFromString(value), neg_mod);
 	}
 }
 
@@ -118,20 +153,19 @@ uint8_t hyd_ip_create_file(struct hyd_ip *l, const char *fname)
 
 struct hyd_ip *hyd_ip_create_json(const char *n, json_t *root)
 {
-	if (!json_is_object(root))
+	if (!json_is_array(root))
 		return NULL;
 
-	const char *key;
 	json_t *value;
 	struct hyd_ip *p = hyd_ip_create(n);
-	uint32_t i = 0;
+	uint32_t i = 0, ind;
 
-	p->count = json_object_size(root);
+	p->count = json_array_size(root);
 	p->inputs = calloc(p->count, sizeof(*p->inputs));
 
-	json_object_foreach(root, key, value)
+	json_array_foreach(root, ind, value)
 	{
-		p->inputs[i] = hyd_input_create_json(key, value);
+		p->inputs[i] = hyd_input_create_json(value);
 		i++;
 	}
 
@@ -150,28 +184,29 @@ uint16_t hyd_ip_get_value(struct hyd_ip *p,
 	{
 		if (strcmp(p->inputs[i].action, a) == 0)
 		{
-			if (p->inputs[i].type == KEY && state[p->inputs[i].code])
+			if (p->inputs[i].type == KEY && state[p->inputs[i].value.code])
 			{
 				return hyd_input_get_max_value();
+			}
+			else if (_hyd_num_game_ctrls > 0 && p->inputs[i].type == AXIS) {
+				int v = SDL_GameControllerGetAxis(_hyd_game_ctrls[0], p->inputs[i].value.axis);
+				if (p->inputs[i].neg_mod) {
+					if (v > 0)
+						v = 0;
+					else
+						v *= -1;
+				}
+				else {
+					if (v < 0)
+						v = 0;
+				}
+
+				return v;
 			}
 		}
 	}
 
 	return 0;
-}
-
-void hyd_ip_add_callback(struct hyd_ip *p, const char *a,
-		hyd_input_callback callback)
-{
-	if (p == NULL && callback == NULL)
-		return;
-
-	uint32_t i;
-	for (i = 0; i < p->count; i++)
-	{
-		if (strcmp(p->inputs[i].action, a) == 0)
-			p->inputs[i].callback = callback;
-	}
 }
 
 void hyd_ip_destroy(struct hyd_ip *p)
@@ -182,4 +217,18 @@ void hyd_ip_destroy(struct hyd_ip *p)
 	free(p->name);
 	free(p->inputs);
 	free(p);
+}
+
+uint32_t hyd_input_load_controllers(void) {
+	uint32_t i;
+	SDL_GameController *ctrl;
+	for (i = 0; i < SDL_NumJoysticks(); i++) {
+		if (SDL_IsGameController(i)) {
+			ctrl = SDL_GameControllerOpen(i);
+			if (ctrl) {
+				_hyd_game_ctrls[_hyd_num_game_ctrls] = ctrl;
+				_hyd_num_game_ctrls++;
+			}
+		}
+	}
 }
