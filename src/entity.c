@@ -233,7 +233,7 @@ struct hyd_ent *hyd_ent_create_file(const char *fname,
 		return NULL;
 	}
 
-	SDL_Log("Reading object - %s - size: %i", fname, read_len);
+	//SDL_Log("Reading object - %s - size: %i", fname, read_len);
 
 	root = json_loadb(buf, read_len, 0, &err);
 	free(buf);

@@ -102,7 +102,7 @@ struct hyd_spr *hyd_spr_create_file(const char *fname, struct hyd_tex_list *tex_
 		return NULL;
 	}
 
-	SDL_Log("Reading sprite - %s - size: %i", fname, file_len);
+	//SDL_Log("Reading sprite - %s - size: %i", fname, file_len);
 
 	root = json_loadb(buf, file_len, 0, &err);
 	free(buf);
@@ -124,7 +124,6 @@ void hyd_spr_destroy(struct hyd_spr *s)
 	if (s == NULL)
 		return;
 
-	SDL_Log("Destroying sprite");
 	uint32_t i;
 	for (i = 0; i < s->num_anims; i++)
 		hyd_anim_destroy(s->anims[i]);
