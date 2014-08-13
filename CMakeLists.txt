@@ -14,7 +14,7 @@ add_library(hyd SHARED ${SRC})
 target_link_libraries(hyd jansson)
 
 if (NOT WIN32)
-	target_link_libraries(hyd -lm)
+	target_link_libraries(hyd -lm -Wl,--gdb-index)
 endif ()
 
 find_package(SDL2 REQUIRED)
