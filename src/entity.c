@@ -23,8 +23,6 @@ struct hyd_ent *hyd_ent_create(struct hyd_spr *spr, const char *n,
 	ent->children->next = ent->children;
 	ent->properties = malloc(sizeof(*ent->properties));
 	ent->properties->next = ent->properties;
-	ent->coll_objs = malloc(sizeof(*ent->coll_objs));
-	ent->coll_objs->next = ent->coll_objs;
 	ent->next = NULL;
 	ent->pos.x = 0.0f;
 	ent->pos.y = 0.0f;
@@ -53,14 +51,6 @@ void hyd_ent_draw(struct hyd_ent *ent)
 	{
 		hyd_ent_draw(i);
 	}
-
-	struct hyd_coll_obj *col_i;
-	for (col_i = ent->coll_objs->next;
-			col_i != ent->coll_objs;
-			col_i = col_i->next)
-	{
-		hyd_coll_obj_draw(col_i);
-	}
 }
 
 void hyd_ent_destroy(struct hyd_ent *e)
@@ -84,20 +74,40 @@ void hyd_ent_destroy(struct hyd_ent *e)
 		hyd_property_destroy(p_i);
 	}
 
-	struct hyd_coll_obj *c_i, *c_n;
-	for (c_i = e->coll_objs->next, c_n = c_i->next;
-			c_i != e->coll_objs;
-			c_i = c_n, c_n = c_i->next)
-	{
-		hyd_coll_obj_destroy(c_i);
-	}
-
 	hyd_spr_destroy(e->spr);
 	free(e->children);
 	free(e->properties);
-	free(e->coll_objs);
 	free(e->name);
 	free(e);
+}
+
+struct hyd_ent *hyd_ent_copy(struct hyd_ent *e) {
+	struct hyd_property *p_i, *p;
+	struct hyd_ent *ret = malloc(sizeof(*ret));
+	if (ret == NULL)
+		return NULL;
+
+	memcpy(ret, e, sizeof(*e));
+	ret->spr = hyd_spr_copy(e->spr);
+	ret->next = e->next;
+	e->next = ret;
+	ret->children = malloc(sizeof(*ret->children));
+	ret->children->next = ret->children;
+	ret->name = malloc(strlen(e->name) + 1);
+	strcpy(ret->name, e->name);
+
+	ret->properties = malloc(sizeof(*ret->properties));
+	ret->properties->next = ret->properties;
+	for (p_i = e->properties->next; p_i != e->properties; p_i = p_i->next) {
+		p = malloc(sizeof(*p));
+		memcpy(p, p_i, sizeof(*p_i));
+		p->name = malloc(strlen(p_i->name) + 1);
+		strcpy(p->name, p_i->name);
+		p->next = ret->properties->next;
+		ret->properties->next = p;
+	}
+
+	return ret;
 }
 
 uint8_t hyd_ent_create_json_arr(struct hyd_ent *ent_list, json_t *root,
@@ -206,10 +216,11 @@ struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_tex_list *tex_l,
 	if (json_is_object(iter_json))
 		hyd_property_create_json(ent->properties, iter_json);
 
-	iter_json = json_object_get(root, "collisions");
+	/*iter_json = json_object_get(root, "collisions");
 	if (json_is_array(iter_json))
 		hyd_coll_obj_create_json_arr(ent->coll_objs, iter_json,
 				ent);
+	*/
 
 	return ent;
 }
