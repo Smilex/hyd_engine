@@ -10,7 +10,9 @@
 #include <jansson.h>
 #include "vector.h"
 #include "property.h"
-#include "collision.h"
+#include "quad.h"
+
+enum HYD_ENT_COLL {C_NONE = 0x0, C_LEFT = 0x1, C_RIGHT = 0x2, C_TOP = 0x4, C_BOTTOM = 0x8};
 
 /**
  * \struct hyd_ent
@@ -38,6 +40,7 @@ struct hyd_ent {
 	struct hyd_ent *next;
 	struct hyd_ent *children;
 	struct hyd_property *properties;
+	struct hyd_quad coll;
 };
 
 /**
@@ -111,6 +114,8 @@ void hyd_ent_destroy(struct hyd_ent *e);
  * \brief Copies the entity
  */
 struct hyd_ent *hyd_ent_copy(struct hyd_ent *e);
+
+enum HYD_ENT_COLL hyd_ent_coll(struct hyd_ent *l, struct hyd_ent *r);
 
 /**
  * \brief Finds entities with name
