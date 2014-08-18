@@ -19,6 +19,10 @@ struct hyd_ent *hyd_ent_create(struct hyd_spr *spr, const char *n,
 	} else
 		ent->name = NULL;
 
+	ent->coll.x1 = 0;
+	ent->coll.y1 = 0;
+	ent->coll.x2 = 0;
+	ent->coll.y2 = 0;
 	ent->children = malloc(sizeof(*ent->children));
 	ent->children->next = ent->children;
 	ent->properties = malloc(sizeof(*ent->properties));
@@ -105,6 +109,34 @@ struct hyd_ent *hyd_ent_copy(struct hyd_ent *e) {
 		strcpy(p->name, p_i->name);
 		p->next = ret->properties->next;
 		ret->properties->next = p;
+	}
+
+	return ret;
+}
+
+enum HYD_ENT_COLL hyd_ent_coll(struct hyd_ent *l, struct hyd_ent *r) {
+	struct hyd_v2 l_c = {
+		l->pos.x + l->coll.x1 + (l->coll.x2 - l->coll.x1) / 2,
+		l->pos.y + l->coll.y1 + (l->coll.y2 - l->coll.y1) / 2
+	};
+	struct hyd_v2 r_c = {
+		r->pos.x + r->coll.x1 + (r->coll.x2 - r->coll.x1) / 2,
+		r->pos.y + r->coll.y1 + (r->coll.y2 - r->coll.y1) / 2
+	};
+
+	float w = (l->coll.x2 - l->coll.x1) / 2 + (r->coll.x2 - r->coll.x1) / 2;
+	float h = (l->coll.y2 - l->coll.y1) / 2 + (r->coll.y2 - r->coll.y1) / 2;
+
+	enum HYD_ENT_COLL ret = C_NONE;
+	if (r_c.x > l_c.x - w && r_c.x < l_c.x + w && r_c.y > l_c.y - h && r_c.y < l_c.y + h) {
+		if (r_c.x < l_c.x)
+			ret |= C_LEFT;
+		if (r_c.x > l_c.x)
+			ret |= C_RIGHT;
+		if (r_c.y < l_c.y)
+			ret |= C_TOP;
+		if (r_c.y > l_c.y)
+			ret |= C_BOTTOM;
 	}
 
 	return ret;
@@ -216,11 +248,24 @@ struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_tex_list *tex_l,
 	if (json_is_object(iter_json))
 		hyd_property_create_json(ent->properties, iter_json);
 
-	/*iter_json = json_object_get(root, "collisions");
-	if (json_is_array(iter_json))
-		hyd_coll_obj_create_json_arr(ent->coll_objs, iter_json,
-				ent);
-	*/
+	iter_json = json_object_get(root, "collision");
+	if (json_is_object(iter_json)) {
+		json_t *c_i = json_object_get(iter_json, "x1");
+		if (json_is_number(c_i))
+			ent->coll.x1 = json_number_value(c_i);
+
+		c_i = json_object_get(iter_json, "y1");
+		if (json_is_number(c_i))
+			ent->coll.y1 = json_number_value(c_i);
+
+		c_i = json_object_get(iter_json, "x2");
+		if (json_is_number(c_i))
+			ent->coll.x2 = json_number_value(c_i);
+
+		c_i = json_object_get(iter_json, "y2");
+		if (json_is_number(c_i))
+			ent->coll.y2 = json_number_value(c_i);
+	}
 
 	return ent;
 }
