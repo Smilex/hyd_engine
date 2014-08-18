@@ -169,3 +169,36 @@ void hyd_spr_draw_point(struct hyd_spr *spr, SDL_Point point)
 
 	hyd_quad_tex_draw(&quad, &col, spr->tex, &uv);
 }
+
+struct hyd_spr *hyd_spr_copy(struct hyd_spr *s) {
+	uint32_t i,j;
+	struct hyd_spr *ret = malloc(sizeof(*ret));
+	if (ret == NULL)
+		return NULL;
+
+	memcpy(ret, s, sizeof(*s));
+	ret->tex = hyd_tex_copy(s->tex);
+
+	ret->frames = calloc(s->num_frames, sizeof(struct hyd_frame));
+	ret->num_frames = s->num_frames;
+	for (i = 0; i < ret->num_frames; i++) {
+		ret->frames[i] = malloc(sizeof(struct hyd_frame));
+		memcpy(ret->frames[i], s->frames[i], sizeof(struct hyd_frame));
+		ret->frames[i]->name = malloc(strlen(s->frames[i]->name) + 1);
+		strcpy(ret->frames[i]->name, s->frames[i]->name);
+	}
+
+	ret->anims = calloc(s->num_anims, sizeof(struct hyd_anim));
+	ret->num_anims = s->num_anims;
+	for (i = 0; i < ret->num_anims; i++) {
+		ret->anims[i] = malloc(sizeof(struct hyd_anim));
+		memcpy(ret->anims[i], s->anims[i], sizeof(struct hyd_anim));
+		ret->anims[i]->name = malloc(strlen(s->anims[i]->name) + 1);
+		strcpy(ret->anims[i]->name, s->anims[i]->name);
+
+		ret->anims[i]->frames = calloc(ret->anims[i]->num_frames, sizeof(struct hyd_anim));
+		ret->anims[i]->num_frames = 0;
+	}
+
+	return ret;
+}

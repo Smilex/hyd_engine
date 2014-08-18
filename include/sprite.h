@@ -74,4 +74,9 @@ void hyd_spr_destroy(struct hyd_spr *sprite);
  */
 void hyd_spr_draw_point(struct hyd_spr *sprite, struct SDL_Point point);
 
+/**
+ * \brief Copies the sprite
+ */
+struct hyd_spr *hyd_spr_copy(struct hyd_spr *s);
+
 #endif

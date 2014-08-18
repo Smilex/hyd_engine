@@ -38,7 +38,6 @@ struct hyd_ent {
 	struct hyd_ent *next;
 	struct hyd_ent *children;
 	struct hyd_property *properties;
-	struct hyd_coll_obj *coll_objs;
 };
 
 /**
@@ -107,6 +106,11 @@ void hyd_ent_draw(struct hyd_ent *ent);
  * \param[in] entity The entity to destroy
  */
 void hyd_ent_destroy(struct hyd_ent *e);
+
+/**
+ * \brief Copies the entity
+ */
+struct hyd_ent *hyd_ent_copy(struct hyd_ent *e);
 
 /**
  * \brief Finds entities with name
