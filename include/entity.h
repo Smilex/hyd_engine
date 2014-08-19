@@ -2,8 +2,8 @@
  * \file entity.h
  */
 
-#ifndef HYD_OBJECT_H
-#define HYD_OBJECT_H
+#ifndef HYD_ENTITY_H
+#define HYD_ENTITY_H
 
 #include "sprite.h"
 #include <SDL.h>
@@ -14,6 +14,7 @@
 
 enum HYD_ENT_COLL {C_NONE = 0x0, C_LEFT = 0x1, C_RIGHT = 0x2, C_TOP = 0x4, C_BOTTOM = 0x8};
 
+struct hyd_layer;
 /**
  * \struct hyd_ent
  *
@@ -41,6 +42,7 @@ struct hyd_ent {
 	struct hyd_ent *children;
 	struct hyd_property *properties;
 	struct hyd_quad coll;
+	struct hyd_layer *layer;
 };
 
 /**
@@ -53,7 +55,7 @@ struct hyd_ent {
  * \returns Pointer to the new entity. NULL if error.
  */
 struct hyd_ent *hyd_ent_create(struct hyd_spr *spr, const char *n,
-		struct hyd_ent *parent
+		struct hyd_ent *parent, struct hyd_layer *layer
 		);
 
 /**
@@ -66,7 +68,7 @@ struct hyd_ent *hyd_ent_create(struct hyd_spr *spr, const char *n,
  * \return The new entity or NULL on error.
  */
 struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_tex_list *tex_l,
-		struct hyd_ent *parent);
+		struct hyd_ent *parent, struct hyd_layer *layer);
 
 /**
  * \brief Creates a entity hierarchy from a JSON array
@@ -80,7 +82,7 @@ struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_tex_list *tex_l,
  * \return 0 on success, non-zero on failure.
  */
 uint8_t hyd_ent_create_json_arr(struct hyd_ent *ent_list, json_t *root,
-		struct hyd_tex_list *tex_l, struct hyd_ent *parent);
+		struct hyd_tex_list *tex_l, struct hyd_ent *parent, struct hyd_layer *layer);
 
 /**
  * \brief Creates an entity from a file
@@ -93,7 +95,7 @@ uint8_t hyd_ent_create_json_arr(struct hyd_ent *ent_list, json_t *root,
  * \return The new entity
  */
 struct hyd_ent *hyd_ent_create_file(const char *fname,
-		struct hyd_tex_list *tex_l, struct hyd_ent *parent);
+		struct hyd_tex_list *tex_l, struct hyd_ent *parent, struct hyd_layer *layer);
 
 /**
  *

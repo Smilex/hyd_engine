@@ -5,9 +5,10 @@
 #include <stdlib.h>
 #include "filesystem.h"
 #include "stretchy_buffer.h"
+#include "layer.h"
 
 struct hyd_ent *hyd_ent_create(struct hyd_spr *spr, const char *n,
-		struct hyd_ent *parent
+		struct hyd_ent *parent, struct hyd_layer *layer
 		)
 {
 	struct hyd_ent *ent = malloc(sizeof(*ent));
@@ -30,6 +31,7 @@ struct hyd_ent *hyd_ent_create(struct hyd_spr *spr, const char *n,
 	ent->next = NULL;
 	ent->pos.x = 0.0f;
 	ent->pos.y = 0.0f;
+	ent->layer = layer;
 	ent->parent = parent;
 	if (parent != NULL) {
 		ent->next = ent->parent->children->next;
@@ -143,7 +145,7 @@ enum HYD_ENT_COLL hyd_ent_coll(struct hyd_ent *l, struct hyd_ent *r) {
 }
 
 uint8_t hyd_ent_create_json_arr(struct hyd_ent *ent_list, json_t *root,
-		struct hyd_tex_list *tex_l, struct hyd_ent *parent)
+		struct hyd_tex_list *tex_l, struct hyd_ent *parent, struct hyd_layer *layer)
 {
 	if (!json_is_array(root)) {
 		SDL_LogError(
@@ -173,13 +175,13 @@ uint8_t hyd_ent_create_json_arr(struct hyd_ent *ent_list, json_t *root,
 		obj_json = json_object_get(arr_json, "entity");
 		if (json_is_string(obj_json)) {
 			ent = hyd_ent_create_file(json_string_value(obj_json),
-						tex_l, parent);
+						tex_l, parent, layer);
 
 			ent->next = ent_list->next;
 			ent_list->next = ent;
 		} else if (json_is_object(obj_json)) {
 			ent = hyd_ent_create_json(obj_json,
-					tex_l, parent);
+					tex_l, parent, layer);
 
 			ent->next = ent_list->next;
 			ent_list->next = ent;
@@ -212,7 +214,7 @@ uint8_t hyd_ent_create_json_arr(struct hyd_ent *ent_list, json_t *root,
 }
 
 struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_tex_list *tex_l,
-		struct hyd_ent *parent)
+		struct hyd_ent *parent, struct hyd_layer *layer)
 {
 	if (!json_is_object(root)) {
 		SDL_LogError(
@@ -237,12 +239,12 @@ struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_tex_list *tex_l,
 		spr = hyd_spr_create_file(json_string_value(iter_json),
 				tex_l);
 
-	ent = hyd_ent_create(spr, name, parent);
+	ent = hyd_ent_create(spr, name, parent, layer);
 
 	iter_json = json_object_get(root, "children");
 	if (json_is_array(iter_json))
 		hyd_ent_create_json_arr(ent->children,
-				iter_json, tex_l, ent);
+				iter_json, tex_l, ent, layer);
 
 	iter_json = json_object_get(root, "properties");
 	if (json_is_object(iter_json))
@@ -271,7 +273,7 @@ struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_tex_list *tex_l,
 }
 
 struct hyd_ent *hyd_ent_create_file(const char *fname,
-		struct hyd_tex_list *tex_l, struct hyd_ent *parent)
+		struct hyd_tex_list *tex_l, struct hyd_ent *parent, struct hyd_layer *layer)
 {
 	uint8_t *buf = NULL;
 	PHYSFS_sint64 read_len = 0;
@@ -303,7 +305,7 @@ struct hyd_ent *hyd_ent_create_file(const char *fname,
 		return NULL;
 	}
 
-	ent = hyd_ent_create_json(root, tex_l, parent);
+	ent = hyd_ent_create_json(root, tex_l, parent, layer);
 	json_decref(root);
 	return ent;
 }
