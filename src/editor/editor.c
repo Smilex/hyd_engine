@@ -75,7 +75,7 @@ uint8_t hyd_editor_update(void) {
 		hyd_transform_translate(e->view, r_v.x, r_v.y, 0);
 
 	if (m_state & SDL_BUTTON(SDL_BUTTON_LEFT)) {
-		struct hyd_ent *sel_ent = hyd_ent_list_find_pos(e->scene->ent_head, t_v.x, t_v.y);
+		struct hyd_ent *sel_ent = hyd_ent_list_find_pos(e->scene->layer_head->next->ent_head, t_v.x, t_v.y);
 		if (sel_ent != NULL) {
 			assert(_ed_num_selected < 50);
 			uint8_t found = 0;

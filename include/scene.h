@@ -8,6 +8,7 @@
 #include "texture.h"
 #include "entity.h"
 #include "sprite.h"
+#include "layer.h"
 
 /**
  * \struct hyd_scene
@@ -15,7 +16,7 @@
  * A scene contains a collection of entities and sprites
  */
 struct hyd_scene {
-	struct hyd_ent *ent_head;
+	struct hyd_layer *layer_head;
 };
 
 /**
@@ -58,5 +59,7 @@ void hyd_scene_destroy(struct hyd_scene *s);
  * \param[in] scene The scene to draw
  */
 void hyd_scene_draw(struct hyd_scene *s);
+
+struct hyd_ent **hyd_scene_find_ent_list(struct hyd_scene *s, const char *n, uint32_t *num);
 
 #endif
