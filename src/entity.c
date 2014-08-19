@@ -28,13 +28,15 @@ struct hyd_ent *hyd_ent_create(struct hyd_spr *spr, const char *n,
 	ent->children->next = ent->children;
 	ent->properties = malloc(sizeof(*ent->properties));
 	ent->properties->next = ent->properties;
-	ent->next = NULL;
+	ent->next = ent;
+	ent->prev = ent;
 	ent->pos.x = 0.0f;
 	ent->pos.y = 0.0f;
 	ent->layer = layer;
 	ent->parent = parent;
 	if (parent != NULL) {
 		ent->next = ent->parent->children->next;
+		ent->prev = ent->parent->children;
 		ent->parent->children->next = ent;
 	}
 
@@ -96,9 +98,11 @@ struct hyd_ent *hyd_ent_copy(struct hyd_ent *e) {
 	memcpy(ret, e, sizeof(*e));
 	ret->spr = hyd_spr_copy(e->spr);
 	ret->next = e->next;
+	ret->prev = e;
 	e->next = ret;
 	ret->children = malloc(sizeof(*ret->children));
 	ret->children->next = ret->children;
+	ret->children->prev = ret->children;
 	ret->name = malloc(strlen(e->name) + 1);
 	strcpy(ret->name, e->name);
 
@@ -178,12 +182,15 @@ uint8_t hyd_ent_create_json_arr(struct hyd_ent *ent_list, json_t *root,
 						tex_l, parent, layer);
 
 			ent->next = ent_list->next;
+			ent->next->prev = ent;
+			ent->prev = ent_list;
 			ent_list->next = ent;
 		} else if (json_is_object(obj_json)) {
 			ent = hyd_ent_create_json(obj_json,
 					tex_l, parent, layer);
 
 			ent->next = ent_list->next;
+			ent->prev = ent_list;
 			ent_list->next = ent;
 		}
 		else
