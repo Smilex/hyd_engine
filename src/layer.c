@@ -14,6 +14,7 @@ struct hyd_layer *hyd_layer_create_json(json_t *root, struct hyd_tex_list *tex_l
 	layer->prev = layer;
 	layer->ent_head = malloc(sizeof(*layer->ent_head));
 	layer->ent_head->next = layer->ent_head;
+	layer->ent_head->prev = layer->ent_head;
 	json_t *ent_json = json_object_get(root, "entities");
 	if (!json_is_array(ent_json)) {
 		SDL_LogWarn(

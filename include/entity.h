@@ -39,6 +39,7 @@ struct hyd_ent {
 	struct hyd_ent *parent;
 
 	struct hyd_ent *next;
+	struct hyd_ent *prev;
 	struct hyd_ent *children;
 	struct hyd_property *properties;
 	struct hyd_quad coll;
