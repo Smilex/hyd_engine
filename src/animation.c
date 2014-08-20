@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <SDL.h>
+#include "engine.h"
 
 struct hyd_anim *hyd_anim_create(const char *name, struct hyd_frame **frames,
 		uint32_t num_frames)
@@ -22,6 +23,10 @@ struct hyd_anim *hyd_anim_create(const char *name, struct hyd_frame **frames,
 
 	anim->frames = frames;
 	anim->num_frames = num_frames;
+	anim->repeat = 0;
+	anim->curr_frame = 0;
+	anim->delay = 16;
+	anim->last_time = anim->delay;
 
 	return anim;
 }
@@ -55,6 +60,8 @@ struct hyd_anim *hyd_anim_create_json(json_t *root, struct hyd_frame **frames,
 	}
 	name = json_string_value(iter_json);
 
+	
+
 	iter_json = json_object_get(root, "frames");
 	if (!json_is_array(iter_json))
 	{
@@ -76,7 +83,17 @@ struct hyd_anim *hyd_anim_create_json(json_t *root, struct hyd_frame **frames,
 				json_string_value(name_json));
 	}
 
-	return hyd_anim_create(name, sel_frames, num_sel_frames);
+	struct hyd_anim *ret = hyd_anim_create(name, sel_frames, num_sel_frames);
+
+	iter_json = json_object_get(root, "repeat");
+	if (json_is_true(iter_json))
+		ret->repeat = 1;
+
+	iter_json = json_object_get(root, "delay");
+	if (json_is_number(iter_json))
+		ret->delay = (uint32_t)json_number_value(iter_json);
+
+	return ret;
 }
 
 struct hyd_anim **hyd_anim_array_create_json(json_t *root, struct hyd_frame **frames,
@@ -124,3 +141,32 @@ void hyd_anim_destroy(struct hyd_anim *animation)
 	free(animation->name);
 	free(animation);
 }
+
+struct hyd_frame *hyd_anim_get_next(struct hyd_anim *anim) {
+	uint32_t time = hyd_engine_get_time();
+	if (time >= anim->last_time + anim->delay) {
+		anim->last_time = time;
+		if (anim->curr_frame < anim->num_frames)
+			anim->curr_frame++;
+		if (anim->curr_frame == anim->num_frames)
+			if(anim->repeat)
+				anim->curr_frame = 0;
+			else
+				anim->curr_frame--;
+	}
+
+	return anim->frames[anim->curr_frame];
+}
+
+struct hyd_anim *hyd_anim_array_find(struct hyd_anim **anims,
+		uint32_t num, const char *name) {
+	uint32_t i;
+	for(i = 0; i < num; i++)
+	{
+		if (strcmp(anims[i]->name, name) == 0)
+			return anims[i];
+	}
+
+	return NULL;
+}
+

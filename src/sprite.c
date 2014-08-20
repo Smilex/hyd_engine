@@ -33,11 +33,12 @@ struct hyd_spr *hyd_spr_create_json(json_t *root)
 {
 	uint32_t i = 0;
 	struct hyd_tex *tex = NULL;
-	struct hyd_frame **frames;
-	struct hyd_anim **anims;
+	struct hyd_frame **frames = NULL;
+	struct hyd_anim **anims = NULL;
 	uint32_t num_frames;
 	uint32_t num_anims;
 	json_t *iter_json;
+	struct hyd_spr *ret;
 
 	if (!json_is_object(root)) {
 		SDL_LogError(
@@ -82,9 +83,20 @@ struct hyd_spr *hyd_spr_create_json(json_t *root)
 		anims = hyd_anim_array_create_json(iter_json,
 				frames, num_frames, &num_anims);
 
-	json_decref(root);
-	return hyd_spr_create(hyd_tex_copy(tex),
+	ret = hyd_spr_create(hyd_tex_copy(tex),
 			frames, num_frames, anims, num_anims);
+
+	iter_json = json_object_get(root, "default_frame");
+	if (json_is_string(iter_json))
+		ret->default_frame = hyd_frame_array_find(ret->frames, ret->num_frames, json_string_value(iter_json));
+
+	iter_json = json_object_get(root, "default_animation");
+	if (json_is_string(iter_json))
+		ret->default_anim = hyd_anim_array_find(ret->anims, ret->num_anims, json_string_value(iter_json));
+
+
+	json_decref(root);
+	return ret;
 }
 
 struct hyd_spr *hyd_spr_create_file(const char *fname)
@@ -141,21 +153,21 @@ void hyd_spr_destroy(struct hyd_spr *s)
 	free(s);
 }
 
-void hyd_spr_draw_point(struct hyd_spr *spr, SDL_Point point)
+void hyd_spr_draw_point(struct hyd_spr *spr, struct hyd_frame *frame, SDL_Point point)
 {
-	if (spr == NULL)
+	if (spr == NULL || frame == NULL)
 		return;
 
 	SDL_Rect rect;
 	rect.x = point.x;
 	rect.y = point.y;
-	rect.w = spr->frames[0]->rect.w;
-	rect.h = spr->frames[0]->rect.h;
+	rect.w = frame->rect.w;
+	rect.h = frame->rect.h;
 
 	struct hyd_quad quad = {
 		point.x, point.y,
-		point.x + spr->frames[0]->rect.w,
-		point.y + spr->frames[0]->rect.h
+		point.x + frame->rect.w,
+		point.y + frame->rect.h
 	};
 
 	struct hyd_color col = {
@@ -163,10 +175,10 @@ void hyd_spr_draw_point(struct hyd_spr *spr, SDL_Point point)
 	};
 	
 	struct hyd_quad uv = {
-		((float)spr->frames[0]->rect.x) / ((float)spr->tex->w),
-		((float)spr->frames[0]->rect.y) / ((float)spr->tex->h),
-		((float)spr->frames[0]->rect.x + spr->frames[0]->rect.w) / ((float)spr->tex->w),
-		((float)spr->frames[0]->rect.y + spr->frames[0]->rect.h) / ((float)spr->tex->h)
+		((float)frame->rect.x) / ((float)spr->tex->w),
+		((float)frame->rect.y) / ((float)spr->tex->h),
+		((float)frame->rect.x + frame->rect.w) / ((float)spr->tex->w),
+		((float)frame->rect.y + frame->rect.h) / ((float)spr->tex->h)
 	};
 
 	hyd_quad_tex_draw(&quad, &col, spr->tex, &uv);

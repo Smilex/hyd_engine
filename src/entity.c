@@ -35,12 +35,9 @@ struct hyd_ent *hyd_ent_create(struct hyd_spr *spr, const char *n,
 	ent->pos.y = 0.0f;
 	ent->layer = layer;
 	ent->parent = parent;
-	if (parent != NULL) {
-		/*ent->next = ent->parent->children->next;
-		ent->next->prev = ent;
-		ent->prev = ent->parent->children;
-		ent->parent->children->next = ent;
-		*/
+	if (ent->spr != NULL) {
+		ent->curr_frame = ent->spr->default_frame;
+		ent->curr_anim = ent->spr->default_anim;
 	}
 
 	return ent;
@@ -54,7 +51,8 @@ void hyd_ent_draw(struct hyd_ent *ent)
 	SDL_Point pos;
 	pos.x = round(ent->pos.x);
 	pos.y = round(ent->pos.y);
-	hyd_spr_draw_point(ent->spr, pos);
+	//ent->curr_frame = hyd_anim_get_next(ent->curr_anim);
+	hyd_spr_draw_point(ent->spr, ent->curr_frame, pos);
 
 	struct hyd_ent *i;
 
@@ -213,6 +211,10 @@ uint8_t hyd_ent_create_json_arr(struct hyd_ent *ent_list, json_t *root,
 			if (ent->spr != NULL)
 				hyd_spr_destroy(ent->spr);
 			ent->spr = hyd_spr_create_file(json_string_value(obj_json));
+			if (ent->spr != NULL) {
+				ent->curr_frame = ent->spr->default_frame;
+				ent->curr_anim = ent->spr->default_anim;
+			}
 		}
 
 		obj_json = json_object_get(arr_json, "properties");

@@ -4,6 +4,7 @@ import hyd.sprite;
 import hyd.collision;
 import hyd.layer;
 import hyd.quad;
+import hyd.animation;
 
 extern (C) nothrow {
 
@@ -21,6 +22,8 @@ struct hyd_ent {
 	void *properties;
 	hyd_quad coll;
 	hyd_layer *layer;
+	void *curr_frame;
+	hyd_anim *curr_anim;
 }
 
 hyd_ent *hyd_ent_create_file(const char *fname,
