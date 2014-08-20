@@ -11,6 +11,8 @@
 #include "vector.h"
 #include "property.h"
 #include "quad.h"
+#include "frame.h"
+#include "animation.h"
 
 enum HYD_ENT_COLL {C_NONE = 0x0, C_LEFT = 0x1, C_RIGHT = 0x2, C_TOP = 0x4, C_BOTTOM = 0x8};
 
@@ -44,6 +46,8 @@ struct hyd_ent {
 	struct hyd_property *properties;
 	struct hyd_quad coll;
 	struct hyd_layer *layer;
+	struct hyd_frame *curr_frame;
+	struct hyd_anim *curr_anim;
 };
 
 /**

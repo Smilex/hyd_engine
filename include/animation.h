@@ -12,6 +12,10 @@ struct hyd_anim {
 	char *name;
 	struct hyd_frame **frames;
 	uint32_t num_frames;
+	uint32_t curr_frame;
+	uint8_t repeat;
+	uint32_t delay;
+	uint32_t last_time;
 };
 
 /**
@@ -49,5 +53,10 @@ struct hyd_anim **hyd_anim_array_create_json(json_t *root, struct hyd_frame **fr
  * \param[in] anim The animation to destroy
  */
 void hyd_anim_destroy(struct hyd_anim *anim);
+
+struct hyd_frame *hyd_anim_get_next(struct hyd_anim *anim);
+
+struct hyd_anim *hyd_anim_array_find(struct hyd_anim **anims,
+		uint32_t num, const char *name);
 
 #endif

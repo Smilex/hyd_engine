@@ -26,6 +26,8 @@ struct hyd_spr {
 	struct hyd_anim **anims;
 	uint32_t num_frames;
 	uint32_t num_anims;
+	struct hyd_frame *default_frame;
+	struct hyd_anim *default_anim;
 };
 
 /**
@@ -70,7 +72,7 @@ void hyd_spr_destroy(struct hyd_spr *sprite);
  * \param[in] sprite Sprite to draw
  * \param[in] point The point to draw at
  */
-void hyd_spr_draw_point(struct hyd_spr *sprite, struct SDL_Point point);
+void hyd_spr_draw_point(struct hyd_spr *sprite, struct hyd_frame *frame, struct SDL_Point point);
 
 /**
  * \brief Copies the sprite
