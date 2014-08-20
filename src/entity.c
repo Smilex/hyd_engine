@@ -190,6 +190,7 @@ uint8_t hyd_ent_create_json_arr(struct hyd_ent *ent_list, json_t *root,
 					tex_l, parent, layer);
 
 			ent->next = ent_list->next;
+			ent->next->prev = ent;
 			ent->prev = ent_list;
 			ent_list->next = ent;
 		}

@@ -65,6 +65,7 @@ const GLchar *_hyd_argb_frag =
 	"}";
 
 
+struct hyd_engine *_hyd_engine = NULL;
 GLuint last_id = 0;
 
 void gl_debug(	GLenum source,
@@ -81,39 +82,37 @@ void gl_debug(	GLenum source,
 	}
 }
 
-struct hyd_engine *hyd_engine_create(void)
-{
-	struct hyd_engine *engine = malloc(sizeof(*engine));
-	if (engine == NULL)
-		return NULL;
-
-	engine->running = 1;
-	engine->quit = 0;
-	engine->pause = 0;
-	engine->current_scene = NULL;
-	engine->curr_ip = NULL;
-	engine->current_mod = NULL;
-	engine->context = NULL;
-	engine->window = NULL;
-	engine->call_update = NULL;
-	engine->call_draw = NULL;
-	engine->ip_head = malloc(sizeof(*engine->ip_head));
-	engine->ip_head->next = engine->ip_head;
-	engine->tex_head = malloc(sizeof(*engine->tex_head));
-	engine->tex_head->next = engine->tex_head;
-	engine->locale_head = malloc(sizeof(*engine->locale_head));
-	engine->locale_head->next = engine->locale_head;
-
-	return engine;
+struct hyd_engine *hyd_engine_get(void) {
+	return _hyd_engine;
 }
 
-uint8_t hyd_engine_init(struct hyd_engine *engine, const char *argv[])
+uint8_t hyd_engine_init(const char *argv[])
 {
+	_hyd_engine = malloc(sizeof(*_hyd_engine));
+	if (_hyd_engine == NULL)
+		return 1;
+
+	_hyd_engine->running = 1;
+	_hyd_engine->quit = 0;
+	_hyd_engine->pause = 0;
+	_hyd_engine->current_scene = NULL;
+	_hyd_engine->curr_ip = NULL;
+	_hyd_engine->current_mod = NULL;
+	_hyd_engine->context = NULL;
+	_hyd_engine->window = NULL;
+	_hyd_engine->ip_head = malloc(sizeof(*_hyd_engine->ip_head));
+	_hyd_engine->ip_head->next = _hyd_engine->ip_head;
+	_hyd_engine->tex_head = malloc(sizeof(*_hyd_engine->tex_head));
+	_hyd_engine->tex_head->next = _hyd_engine->tex_head;
+	_hyd_engine->locale_head = malloc(sizeof(*_hyd_engine->locale_head));
+	_hyd_engine->locale_head->next = _hyd_engine->locale_head;
+
+
 	if (PHYSFS_init(argv[0]) == 0)
 		return 1;
 
 	uint32_t width = 800, height = 600;
-	if (hyd_init_sdl(&engine->window, &engine->context, width, height) != 0) {
+	if (hyd_init_sdl(&_hyd_engine->window, &_hyd_engine->context, width, height) != 0) {
 		printf("%s", SDL_GetError());
 		return 1;
 	}
@@ -135,149 +134,116 @@ uint8_t hyd_engine_init(struct hyd_engine *engine, const char *argv[])
 	return 0;
 }
 
-void hyd_engine_events(struct hyd_engine *engine)
+void hyd_engine_events(void)
 {
-	if (engine == NULL)
+	if (_hyd_engine == NULL)
 		return;
 
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		if (event.type == SDL_QUIT) {
-			engine->running = 0;
-			engine->quit = 1;
+			_hyd_engine->running = 0;
+			_hyd_engine->quit = 1;
 		}
 	}
 }
 
-void hyd_engine_destroy(struct hyd_engine *engine)
+void hyd_engine_destroy(void)
 {
-	if (engine == NULL)
+	if (_hyd_engine == NULL)
 		return;
 
-	if (engine->current_mod != NULL &&
-			engine->current_mod->destroy != NULL)
-		engine->current_mod->destroy(engine);
+	if (_hyd_engine->current_mod != NULL &&
+			_hyd_engine->current_mod->destroy != NULL)
+		_hyd_engine->current_mod->destroy(_hyd_engine);
 
 	struct hyd_ip *preset_iter, *preset_next;
-	for (preset_iter = engine->ip_head->next, preset_next = preset_iter->next;
-			preset_iter != engine->ip_head;
+	for (preset_iter = _hyd_engine->ip_head->next, preset_next = preset_iter->next;
+			preset_iter != _hyd_engine->ip_head;
 			preset_iter = preset_next, preset_next = preset_iter->next) 
 	{
 		hyd_ip_destroy(preset_iter);
 	}
 
-	hyd_scene_destroy(engine->current_scene);
-	hyd_tex_list_destroy(engine->tex_head);
-	hyd_mod_destroy(engine->current_mod);
+	hyd_scene_destroy(_hyd_engine->current_scene);
+	hyd_tex_list_destroy(_hyd_engine->tex_head);
+	hyd_mod_destroy(_hyd_engine->current_mod);
 
 
 	if (PHYSFS_isInit() != 0)
 		PHYSFS_deinit();
-	if (engine->context != NULL)
-		SDL_GL_DeleteContext(engine->context);
-	if (engine->window != NULL)
-		SDL_DestroyWindow(engine->window);
+	if (_hyd_engine->context != NULL)
+		SDL_GL_DeleteContext(_hyd_engine->context);
+	if (_hyd_engine->window != NULL)
+		SDL_DestroyWindow(_hyd_engine->window);
 	SDL_Quit();
 
-	free(engine);
+	free(_hyd_engine);
 }
 
-void hyd_engine_draw(struct hyd_engine *engine)
+void hyd_engine_draw(void)
 {
-	hyd_scene_draw(engine->current_scene);
-
-	if (engine->call_draw != NULL)
-		engine->call_draw(engine);
-}
-
-void hyd_engine_update(struct hyd_engine *engine, uint32_t dt)
-{
-	if (engine == NULL)
+	if (_hyd_engine == NULL)
 		return;
 
-	if (engine->call_update != NULL)
-		engine->call_update(engine, dt);
-
-	if (engine->current_mod != NULL &&
-			engine->current_mod->update != NULL)
-		engine->current_mod->update(engine, dt);
+	hyd_scene_draw(_hyd_engine->current_scene);
 }
 
-void hyd_engine_begin_draw(struct hyd_engine *e) {
+void hyd_engine_update(uint32_t dt)
+{
+	if (_hyd_engine == NULL)
+		return;
+}
+
+void hyd_engine_begin_draw(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void hyd_engine_end_draw(struct hyd_engine *e) {
-	SDL_GL_SwapWindow(e->window);
+void hyd_engine_end_draw() {
+	SDL_GL_SwapWindow(_hyd_engine->window);
 }
 
-uint8_t hyd_engine_load_scene(struct hyd_engine *engine, const char *filename)
+uint8_t hyd_engine_load_scene(const char *filename)
 {
-	engine->current_scene = hyd_scene_create_file(filename,
-			engine->tex_head);
+	_hyd_engine->current_scene = hyd_scene_create_file(filename,
+			_hyd_engine->tex_head);
 
-	if (engine->current_scene == NULL)
+	if (_hyd_engine->current_scene == NULL)
 		return 1;
 
 	return 0;
 }
 
-uint8_t hyd_engine_load_ip(struct hyd_engine *engine, const char *filename)
+uint8_t hyd_engine_load_ip(const char *filename)
 {
-	if (engine->ip_head != NULL) {
+	if (_hyd_engine->ip_head != NULL) {
 		struct hyd_ip *i, *n;
-		for (i = engine->ip_head->next, n = i->next;
-				i != engine->ip_head;
+		for (i = _hyd_engine->ip_head->next, n = i->next;
+				i != _hyd_engine->ip_head;
 				i = n, n = i->next) 
 		{
 			hyd_ip_destroy(i);
 		}
 	}
 
-	if (hyd_ip_create_file(engine->ip_head,
+	if (hyd_ip_create_file(_hyd_engine->ip_head,
 				filename) == 0)
-		engine->curr_ip = engine->ip_head->next;
+		_hyd_engine->curr_ip = _hyd_engine->ip_head->next;
 	else
 		return 1;
 
-	if (engine->curr_ip == NULL)
+	if (_hyd_engine->curr_ip == NULL)
 		return 1;
 
 	return 0;
 }
 
-uint8_t hyd_engine_load_mod(struct hyd_engine *engine, const char *filename)
+uint8_t hyd_engine_load_locale(const char *filename)
 {
-	struct hyd_mod_info *info = hyd_mod_info_get(filename);
-	engine->current_mod = hyd_mod_create(info);
-	if (engine->current_mod != NULL &&
-			engine->current_mod->init != NULL)
-		engine->current_mod->init(engine);
-	else
-		return 1;
-
-	if (engine->current_mod == NULL)
+	if (hyd_locale_create_file(_hyd_engine->locale_head, filename))
 		return 1;
 
 	return 0;
-}
-
-uint8_t hyd_engine_load_locale(struct hyd_engine *engine, const char *filename)
-{
-	if (hyd_locale_create_file(engine->locale_head, filename))
-		return 1;
-
-	return 0;
-}
-
-void hyd_engine_update_func(struct hyd_engine *e, void (*f)(struct hyd_engine*,uint32_t))
-{
-	e->call_update = f;
-}
-
-void hyd_engine_draw_func(struct hyd_engine *e, void (*f)(struct hyd_engine*))
-{
-	e->call_draw = f;
 }
 
 uint32_t hyd_engine_get_time(void)
@@ -333,4 +299,24 @@ struct hyd_program *hyd_gray_shdr(void) {
 		hyd_program_bind_attrib("color", 1);
 		hyd_program_bind_attrib("uv", 2);
 	return hyd_program_finish();
+}
+
+struct hyd_scene *hyd_engine_get_scene(void) {
+	return _hyd_engine->current_scene;
+}
+
+struct hyd_ip *hyd_engine_get_ip(void) {
+	return _hyd_engine->curr_ip;
+}
+
+struct hyd_locale *hyd_engine_get_locale(void) {
+	return _hyd_engine->locale_head;
+}
+
+struct hyd_tex_list *hyd_engine_get_tex_list(void) {
+	return _hyd_engine->tex_head;
+}
+
+uint8_t hyd_engine_get_quit() {
+	return _hyd_engine->quit;
 }
