@@ -45,21 +45,19 @@ struct hyd_spr *hyd_spr_create(struct hyd_tex *tex, struct hyd_frame **frames,
  * \brief Creates a sprite from a JSON object
  *
  * \param[in] root The JSON object
- * \param[out] tex_l The list to add the sprite textures to
  *
  * \return The new sprite or NULL on error
  */
-struct hyd_spr *hyd_spr_create_json(json_t *root, struct hyd_tex_list *tex_l);
+struct hyd_spr *hyd_spr_create_json(json_t *root);
 
 /**
  * \brief Creates a sprite from a file
  *
  * \param[in] filename The file to read from
- * \param[out] tex_l The list to add the sprite textures to
  *
  * \return The new sprite or NULL on error
  */
-struct hyd_spr *hyd_spr_create_file(const char *fname, struct hyd_tex_list *tex_l);
+struct hyd_spr *hyd_spr_create_file(const char *fname);
 
 /**
  * \param[in] sprite The sprite to destroy

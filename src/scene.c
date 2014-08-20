@@ -20,7 +20,7 @@ struct hyd_scene *hyd_scene_create(void)
 	return s;
 }
 
-struct hyd_scene *hyd_scene_create_file(const char *fname, struct hyd_tex_list *tex_l)
+struct hyd_scene *hyd_scene_create_file(const char *fname)
 {
 	uint8_t *buf = NULL;
 	PHYSFS_sint64 read_len = 0;
@@ -52,12 +52,12 @@ struct hyd_scene *hyd_scene_create_file(const char *fname, struct hyd_tex_list *
 		return NULL;
 	}
 
-	s = hyd_scene_create_json(root, tex_l);
+	s = hyd_scene_create_json(root);
 	json_decref(root);
 	return s;
 }
 
-struct hyd_scene *hyd_scene_create_json(json_t *root, struct hyd_tex_list *tex_l)
+struct hyd_scene *hyd_scene_create_json(json_t *root)
 {
 	if (!json_is_object(root)) {
 		SDL_LogError(
@@ -78,7 +78,7 @@ struct hyd_scene *hyd_scene_create_json(json_t *root, struct hyd_tex_list *tex_l
 				);
 	} else {
 		json_array_foreach(l_iter, i, iter) {
-			layer = hyd_layer_create_json(iter, tex_l);
+			layer = hyd_layer_create_json(iter);
 			layer->next = s->layer_head->next;
 			layer->prev = s->layer_head;
 			s->layer_head->next = layer;

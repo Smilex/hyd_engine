@@ -205,8 +205,7 @@ void hyd_engine_end_draw() {
 
 uint8_t hyd_engine_load_scene(const char *filename)
 {
-	_hyd_engine->current_scene = hyd_scene_create_file(filename,
-			_hyd_engine->tex_head);
+	_hyd_engine->current_scene = hyd_scene_create_file(filename);
 
 	if (_hyd_engine->current_scene == NULL)
 		return 1;

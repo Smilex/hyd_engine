@@ -63,12 +63,11 @@ struct hyd_ent *hyd_ent_create(struct hyd_spr *spr, const char *n,
  * \brief Creates an entity from a JSON object
  *
  * \param[in] root The JSON object
- * \param[out] tex_l The list to add the sprite's texture to
  * \param[in] parent The entity's parent
  *
  * \return The new entity or NULL on error.
  */
-struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_tex_list *tex_l,
+struct hyd_ent *hyd_ent_create_json(json_t *root,
 		struct hyd_ent *parent, struct hyd_layer *layer);
 
 /**
@@ -76,27 +75,25 @@ struct hyd_ent *hyd_ent_create_json(json_t *root, struct hyd_tex_list *tex_l,
  *
  * \param[out] ent_list The list to add the created entities to
  * \param[in] root The JSON array
- * \param[out] tex_l The list to add the sprite's texture to
  * \param[in] parent The entity's parent
  * \param[in] renderer The renderer to use for texture loading
  *
  * \return 0 on success, non-zero on failure.
  */
 uint8_t hyd_ent_create_json_arr(struct hyd_ent *ent_list, json_t *root,
-		struct hyd_tex_list *tex_l, struct hyd_ent *parent, struct hyd_layer *layer);
+		struct hyd_ent *parent, struct hyd_layer *layer);
 
 /**
  * \brief Creates an entity from a file
  *
  * \param[in] filename Path to the file to read
- * \param[out] tex_l The list to add the sprite's texture to
  * \param[in] parent The entity's parent
  * \param[in] renderer The renderer to use for texture loading
  *
  * \return The new entity
  */
 struct hyd_ent *hyd_ent_create_file(const char *fname,
-		struct hyd_tex_list *tex_l, struct hyd_ent *parent, struct hyd_layer *layer);
+		struct hyd_ent *parent, struct hyd_layer *layer);
 
 /**
  *
