@@ -36,7 +36,7 @@ struct hyd_engine {
 
 struct hyd_engine *hyd_engine_get(void);
 
-uint8_t hyd_engine_init(const char *argv[]);
+uint8_t hyd_engine_init(const char *argv[], uint32_t w, uint32_t h);
 
 void hyd_engine_destroy(void);
 
