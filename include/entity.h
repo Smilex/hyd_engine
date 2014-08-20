@@ -142,4 +142,6 @@ void hyd_ent_set_bool_property(struct hyd_ent *ent, uint8_t value, const char *n
 
 void hyd_ent_set_string_property(struct hyd_ent *ent, const char *value, const char *n);
 
+struct hyd_v2 hyd_ent_get_pos(struct hyd_ent *ent);
+
 #endif

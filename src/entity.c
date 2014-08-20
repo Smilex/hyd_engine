@@ -26,6 +26,7 @@ struct hyd_ent *hyd_ent_create(struct hyd_spr *spr, const char *n,
 	ent->coll.y2 = 0;
 	ent->children = malloc(sizeof(*ent->children));
 	ent->children->next = ent->children;
+	ent->children->prev = ent->children;
 	ent->properties = malloc(sizeof(*ent->properties));
 	ent->properties->next = ent->properties;
 	ent->next = ent;
@@ -35,9 +36,11 @@ struct hyd_ent *hyd_ent_create(struct hyd_spr *spr, const char *n,
 	ent->layer = layer;
 	ent->parent = parent;
 	if (parent != NULL) {
-		ent->next = ent->parent->children->next;
+		/*ent->next = ent->parent->children->next;
+		ent->next->prev = ent;
 		ent->prev = ent->parent->children;
 		ent->parent->children->next = ent;
+		*/
 	}
 
 	return ent;
@@ -407,11 +410,18 @@ void hyd_ent_set_string_property(struct hyd_ent *ent, const char *value, const c
 
 struct hyd_ent **hyd_ent_list_find(struct hyd_ent *l, const char *n, uint32_t *num)
 {
-	struct hyd_ent **ret = NULL;
+	struct hyd_ent **ret = NULL, **children;
 	struct hyd_ent *i;
 	*num = 0;
+	uint32_t c_num = 0, j;
 
 	for (i = l->next; i != l; i = i->next) {
+		children = hyd_ent_list_find(i->children, n, &c_num);
+		if (c_num > 0) {
+			*num += c_num;
+			for (j = 0; j < c_num; j++)
+				sb_push(ret, children[j]);
+		}
 		if (i->name == NULL)
 			continue;
 		if (strcmp(i->name, n) == 0) {
@@ -434,4 +444,12 @@ struct hyd_ent *hyd_ent_list_find_pos(struct hyd_ent *l, float x, float y) {
 	}
 
 	return NULL;
+}
+
+struct hyd_v2 hyd_ent_get_pos(struct hyd_ent *ent) {
+	struct hyd_v2 ret = ent->pos;
+	if (ent->parent != NULL)
+		ret = hyd_v2_add(ret, hyd_ent_get_pos(ent->parent));
+
+	return ret;
 }
