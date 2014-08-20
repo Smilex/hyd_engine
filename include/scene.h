@@ -32,7 +32,7 @@ struct hyd_scene *hyd_scene_create(void);
  *
  * \return The new scene
  */
-struct hyd_scene *hyd_scene_create_json(json_t *root, struct hyd_tex_list *tex_l);
+struct hyd_scene *hyd_scene_create_json(json_t *root);
 
 /**
  * \brief Creates a new scene from file
@@ -42,7 +42,7 @@ struct hyd_scene *hyd_scene_create_json(json_t *root, struct hyd_tex_list *tex_l
  *
  * \return The new scene
  */
-struct hyd_scene *hyd_scene_create_file(const char *fname, struct hyd_tex_list *tex_l);
+struct hyd_scene *hyd_scene_create_file(const char *fname);
 
 /**
  * \brief Destroys the scene and its objects

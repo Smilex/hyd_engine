@@ -2,7 +2,7 @@
 #include <jansson.h>
 #include <stdlib.h>
 
-struct hyd_layer *hyd_layer_create_json(json_t *root, struct hyd_tex_list *tex_l) {
+struct hyd_layer *hyd_layer_create_json(json_t *root) {
 	if (!json_is_object(root))
 		return NULL;
 
@@ -23,7 +23,7 @@ struct hyd_layer *hyd_layer_create_json(json_t *root, struct hyd_tex_list *tex_l
 				);
 	} else {
 		hyd_ent_create_json_arr(layer->ent_head,
-				ent_json, tex_l, NULL, layer);
+				ent_json, NULL, layer);
 	}
 
 	return layer;

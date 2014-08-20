@@ -19,7 +19,7 @@ struct hyd_layer {
 	struct hyd_layer *prev;
 };
 
-struct hyd_layer *hyd_layer_create_json(json_t *root, struct hyd_tex_list *tex_l);
+struct hyd_layer *hyd_layer_create_json(json_t *root);
 
 void hyd_layer_destroy(struct hyd_layer *l);
 

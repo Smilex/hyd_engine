@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "transform.h"
+#include "engine.h"
 
 struct hyd_spr *hyd_spr_create(struct hyd_tex *tex, struct hyd_frame **frames,
 		uint32_t num_frames, struct hyd_anim **anims,
@@ -28,7 +29,7 @@ struct hyd_spr *hyd_spr_create(struct hyd_tex *tex, struct hyd_frame **frames,
 	return spr;
 }
 
-struct hyd_spr *hyd_spr_create_json(json_t *root, struct hyd_tex_list *tex_l)
+struct hyd_spr *hyd_spr_create_json(json_t *root)
 {
 	uint32_t i = 0;
 	struct hyd_tex *tex = NULL;
@@ -55,6 +56,7 @@ struct hyd_spr *hyd_spr_create_json(json_t *root, struct hyd_tex_list *tex_l)
 		return NULL;
 	}
 
+	struct hyd_tex_list *tex_l = hyd_engine_get_tex_list();
 	tex = hyd_tex_list_find(tex_l, json_string_value(iter_json));
 	if (tex == NULL) {
 		tex = hyd_tex_create_file(json_string_value(iter_json));
@@ -85,7 +87,7 @@ struct hyd_spr *hyd_spr_create_json(json_t *root, struct hyd_tex_list *tex_l)
 			frames, num_frames, anims, num_anims);
 }
 
-struct hyd_spr *hyd_spr_create_file(const char *fname, struct hyd_tex_list *tex_l)
+struct hyd_spr *hyd_spr_create_file(const char *fname)
 {
 	PHYSFS_sint64 file_len = 0;
 	uint8_t *buf = NULL;
@@ -116,7 +118,7 @@ struct hyd_spr *hyd_spr_create_file(const char *fname, struct hyd_tex_list *tex_
 		return NULL;
 	}
 
-	return hyd_spr_create_json(root, tex_l);
+	return hyd_spr_create_json(root);
 }
 
 void hyd_spr_destroy(struct hyd_spr *s)
