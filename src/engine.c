@@ -86,7 +86,7 @@ struct hyd_engine *hyd_engine_get(void) {
 	return _hyd_engine;
 }
 
-uint8_t hyd_engine_init(const char *argv[])
+uint8_t hyd_engine_init(const char *argv[], uint32_t w, uint32_t h)
 {
 	_hyd_engine = malloc(sizeof(*_hyd_engine));
 	if (_hyd_engine == NULL)
@@ -111,8 +111,7 @@ uint8_t hyd_engine_init(const char *argv[])
 	if (PHYSFS_init(argv[0]) == 0)
 		return 1;
 
-	uint32_t width = 800, height = 600;
-	if (hyd_init_sdl(&_hyd_engine->window, &_hyd_engine->context, width, height) != 0) {
+	if (hyd_init_sdl(&_hyd_engine->window, &_hyd_engine->context, w, h) != 0) {
 		printf("%s", SDL_GetError());
 		return 1;
 	}
