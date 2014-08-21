@@ -27,6 +27,7 @@ struct hyd_anim *hyd_anim_create(const char *name, struct hyd_frame **frames,
 	anim->curr_frame = 0;
 	anim->delay = 16;
 	anim->last_time = anim->delay;
+	anim->start_frame = 0;
 
 	return anim;
 }
@@ -60,8 +61,6 @@ struct hyd_anim *hyd_anim_create_json(json_t *root, struct hyd_frame **frames,
 	}
 	name = json_string_value(iter_json);
 
-	
-
 	iter_json = json_object_get(root, "frames");
 	if (!json_is_array(iter_json))
 	{
@@ -92,6 +91,18 @@ struct hyd_anim *hyd_anim_create_json(json_t *root, struct hyd_frame **frames,
 	iter_json = json_object_get(root, "delay");
 	if (json_is_number(iter_json))
 		ret->delay = (uint32_t)json_number_value(iter_json);
+
+	iter_json = json_object_get(root, "start");
+	if (json_is_string(iter_json)) {
+		for (i = 0; i < ret->num_frames; i++) {
+			if (strcmp(ret->frames[i]->name, json_string_value(iter_json)) == 0) {
+				ret->curr_frame = i;
+				ret->start_frame = i;
+				break;
+			}
+		}
+	}
+
 
 	return ret;
 }
@@ -153,6 +164,20 @@ struct hyd_frame *hyd_anim_get_next(struct hyd_anim *anim) {
 				anim->curr_frame = 0;
 			else
 				anim->curr_frame--;
+	}
+
+	return anim->frames[anim->curr_frame];
+}
+
+struct hyd_frame *hyd_anim_get_prev(struct hyd_anim *anim) {
+	uint32_t time = hyd_engine_get_time();
+	if (time >= anim->last_time + anim->delay) {
+		anim->last_time = time;
+		if (anim->curr_frame > 0)
+			anim->curr_frame--;
+		if (anim->curr_frame == 0)
+			if(anim->repeat)
+				anim->curr_frame = anim->num_frames - 1;
 	}
 
 	return anim->frames[anim->curr_frame];

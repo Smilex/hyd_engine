@@ -16,6 +16,7 @@ struct hyd_anim {
 	uint8_t repeat;
 	uint32_t delay;
 	uint32_t last_time;
+	uint32_t start_frame;
 };
 
 /**
@@ -55,6 +56,8 @@ struct hyd_anim **hyd_anim_array_create_json(json_t *root, struct hyd_frame **fr
 void hyd_anim_destroy(struct hyd_anim *anim);
 
 struct hyd_frame *hyd_anim_get_next(struct hyd_anim *anim);
+
+struct hyd_frame *hyd_anim_get_prev(struct hyd_anim *anim);
 
 struct hyd_anim *hyd_anim_array_find(struct hyd_anim **anims,
 		uint32_t num, const char *name);
