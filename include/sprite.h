@@ -72,7 +72,7 @@ void hyd_spr_destroy(struct hyd_spr *sprite);
  * \param[in] sprite Sprite to draw
  * \param[in] point The point to draw at
  */
-void hyd_spr_draw_point(struct hyd_spr *sprite, struct hyd_frame *frame, struct SDL_Point point);
+void hyd_spr_draw_point(struct hyd_spr *sprite, struct hyd_frame *frame, SDL_Point point);
 
 /**
  * \brief Copies the sprite
