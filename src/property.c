@@ -12,7 +12,7 @@ struct hyd_property *hyd_property_create_number(float v, const char *n)
 	p->name = malloc(strlen(n) + 1);
 	strcpy(p->name, n);
 
-	p->type = NUMBER;
+	p->type = HYD_PROP_NUMBER;
 	p->value.n = v;
 	p->next = p;
 
@@ -28,7 +28,7 @@ struct hyd_property *hyd_property_create_string(const char *v, const char *n)
 	p->name = malloc(strlen(n) + 1);
 	strcpy(p->name, n);
 
-	p->type = STRING;
+	p->type = HYD_PROP_STRING;
 	p->value.s = malloc(strlen(v) + 1);
 	strcpy(p->value.s, v);
 
@@ -44,7 +44,7 @@ struct hyd_property *hyd_property_create_bool(uint8_t v, const char *n)
 	p->name = malloc(strlen(n) + 1);
 	strcpy(p->name, n);
 
-	p->type = BOOL;
+	p->type = HYD_PROP_BOOL;
 	p->value.b = v;
 
 	return p;
@@ -53,7 +53,7 @@ struct hyd_property *hyd_property_create_bool(uint8_t v, const char *n)
 void hyd_property_destroy(struct hyd_property *p)
 {
 	free(p->name);
-	if (p->type == STRING)
+	if (p->type == HYD_PROP_STRING)
 		free(p->value.s);
 	free(p);
 }
@@ -85,7 +85,7 @@ uint8_t hyd_property_create_json(struct hyd_property *l, json_t *root)
 			for (ck_iter = l->next; ck_iter != l; ck_iter = ck_iter->next)
 			{
 				if (strcmp(ck_iter->name, key) == 0) {
-					if (ck_iter->type == STRING)
+					if (ck_iter->type == HYD_PROP_STRING)
 						free(ck_iter->value.s);
 					ck_iter->type = iter->type;
 					ck_iter->value = iter->value;
