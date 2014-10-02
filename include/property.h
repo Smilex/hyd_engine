@@ -8,6 +8,8 @@
 #include <stdint.h>
 #include <jansson.h>
 
+#undef BOOL
+
 /**
  * \struct hyd_property
  *
@@ -18,9 +20,9 @@
 struct hyd_property {
 	char *name;
 	enum {
-		NUMBER,
-		STRING,
-		BOOL
+		HYD_PROP_NUMBER,
+		HYD_PROP_STRING,
+		HYD_PROP_BOOL
 	} type;
 	union {
 		float n;

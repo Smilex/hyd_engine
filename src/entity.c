@@ -363,7 +363,7 @@ void hyd_ent_set_number_property(struct hyd_ent *ent, float value, const char *n
 	for (i = ent->properties->next; i != ent->properties; i = i->next)
 	{
 		if (strcmp(i->name, n) == 0) {
-			i->type = NUMBER;
+			i->type = HYD_PROP_NUMBER;
 			i->value.n = value;
 			return;
 		}
@@ -380,7 +380,7 @@ void hyd_ent_set_bool_property(struct hyd_ent *ent, uint8_t value, const char *n
 	for (i = ent->properties->next; i != ent->properties; i = i->next)
 	{
 		if (strcmp(i->name, n) == 0) {
-			i->type = BOOL;
+			i->type = HYD_PROP_BOOL;
 			i->value.b = value;
 			return;
 		}
@@ -397,7 +397,7 @@ void hyd_ent_set_string_property(struct hyd_ent *ent, const char *value, const c
 	for (i = ent->properties->next; i != ent->properties; i = i->next)
 	{
 		if (strcmp(i->name, n) == 0) {
-			i->type = STRING;
+			i->type = HYD_PROP_STRING;
 			free(i->value.s);
 			i->value.s = malloc(strlen(value) + 1);
 			strcpy(i->value.s, value);

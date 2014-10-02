@@ -29,13 +29,6 @@ if (${PHYSFS_FOUND})
 	target_link_libraries(hyd ${PHYSFS_LIBRARY})
 endif ()
 
-find_package(PNG REQUIRED)
-if (${PNG_FOUND})
-	include_directories(${PNG_INCLUDE_DIRS})
-	target_link_libraries(hyd ${PNG_LIBRARIES})
-	add_definitions(${PNG_DEFINITIONS})
-endif ()
-
 find_package(OpenGL REQUIRED)
 if (${OPENGL_FOUND})
 	include_directories(${OPENGL_INCLUDE_DIR})
